@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import site from '../data/site.json';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  overlayHeader?: boolean;
+}
+const {
+  title,
+  description = `${site.tagline}: STEG, DLS, Audiocircle, Resolut… Tư vấn cấu hình, ghép hệ thống và tìm đại lý lắp đặt chính hãng.`,
+  image = '/images/s/banner-slide.webp',
+  overlayHeader = false,
+} = Astro.props;
+const fullTitle = title ? `${title} | MASTERTUNE` : `MASTERTUNE — ${site.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:locale" content="vi_VN" />
+    <meta name="theme-color" content="#07090c" />
+    <link rel="icon" href="/brand/favicon-64.png" type="image/png" sizes="64x64" />
+    <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Bỏ qua, tới nội dung chính</a>
+    <Header overlay={overlayHeader} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

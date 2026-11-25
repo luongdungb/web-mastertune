@@ -1,0 +1,214 @@
+---
+import Base from '../layouts/Base.astro';
+import packages from '../data/packages.json';
+import site from '../data/site.json';
+
+const questions = [
+  {
+    id: 'goal', title: 'Bạn muốn chiếc xe nghe thế nào?',
+    options: [
+      { v: 'ro', label: 'Rõ và sạch hơn loa zin', hint: 'Nâng cấp nhẹ, giữ nguyên đầu và nội thất' },
+      { v: 'san-khau', label: 'Hay, có sân khấu trước mặt', hint: 'Giọng ca đứng giữa taplo, nhạc cụ tách bạch' },
+      { v: 'bass', label: 'Đầy đặn, tiếng trầm sâu', hint: 'Nghe đủ dải, có lực ở tiếng bass' },
+      { v: 'thi-dau', label: 'Đỉnh cao, hướng tới thi đấu', hint: 'Đầu tư lâu dài, chuẩn sân khấu EMMA' },
+    ],
+  },
+  {
+    id: 'music', title: 'Bạn hay nghe nhạc gì nhất?',
+    options: [
+      { v: 'pop', label: 'Nhạc trẻ, pop, ballad', hint: 'Cân bằng giọng và nhạc nền' },
+      { v: 'giong', label: 'Bolero, nhạc vàng, acoustic', hint: 'Giọng ca và nhạc cụ mộc là trọng tâm' },
+      { v: 'bass', label: 'EDM, remix, hip-hop', hint: 'Nhiều tiếng trầm và nhịp mạnh' },
+      { v: 'all', label: 'Đủ loại', hint: 'Cần hệ thống dễ nghe với mọi thể loại' },
+    ],
+  },
+  {
+    id: 'trunk', title: 'Bạn có cần giữ nguyên cốp xe?',
+    options: [
+      { v: 'giu', label: 'Giữ nguyên cốp', hint: 'Thiết bị lắp gọn dưới ghế' },
+      { v: 'dung', label: 'Dùng được một phần cốp', hint: 'Cho phép đặt sub hoặc amply trong cốp' },
+    ],
+  },
+  {
+    id: 'level', title: 'Bạn định nâng cấp ở mức nào?',
+    options: [
+      { v: '1', label: 'Cơ bản', hint: 'Thay loa, dùng đầu zin' },
+      { v: '2', label: 'Trung cấp', hint: 'Có DSP để căn chỉnh âm thanh' },
+      { v: '3', label: 'Cao cấp', hint: 'Loa 3-way, amply rời' },
+      { v: '4', label: 'Không giới hạn', hint: 'Thiết bị tốt nhất cho từng vị trí' },
+    ],
+  },
+];
+---
+<Base title="Tìm hệ thống phù hợp" description="Trả lời 4 câu hỏi về xe, gu nhạc và mức nâng cấp để nhận gợi ý cấu hình âm thanh từ thiết bị chính hãng MASTERTUNE.">
+  <div class="quiz-page" data-quiz data-packages={JSON.stringify(packages)} data-zalo={site.zalo}>
+    <div class="wrap narrow">
+      <form class="quiz" data-form onsubmit="return false">
+        {questions.map((q, i) => (
+          <fieldset class="step" data-step={i} hidden={i !== 0}>
+            <legend><span class="progress">Câu {i + 1}/{questions.length}</span><h1 class="display">{q.title}</h1></legend>
+            <div class="opts">
+              {q.options.map((o) => (
+                <label class="opt">
+                  <input type="radio" name={q.id} value={o.v} required />
+                  <span><strong>{o.label}</strong><small>{o.hint}</small></span>
+                </label>
+              ))}
+            </div>
+            <div class="nav">
+              {i > 0 && <button type="button" class="btn btn-ghost" data-back>Quay lại</button>}
+              <button type="button" class="btn btn-primary" data-next disabled>{i === questions.length - 1 ? 'Xem gợi ý' : 'Tiếp tục'}</button>
+            </div>
+          </fieldset>
+        ))}
+      </form>
+
+      <section class="result" data-result hidden aria-live="polite" tabindex="-1">
+        <p class="progress">Gợi ý cho bạn</p>
+        <h1 class="display" data-r-name></h1>
+        <p class="muted" data-r-for></p>
+        <ul class="why" data-r-why></ul>
+        <ul class="items" data-r-items></ul>
+        <div class="nav">
+          <button type="button" class="btn btn-primary" data-r-add>Đưa vào cấu hình và chỉnh</button>
+          <a class="btn btn-light" data-r-zalo target="_blank" rel="noopener">Hỏi kỹ thuật viên qua Zalo</a>
+          <button type="button" class="btn btn-ghost" data-restart>Làm lại</button>
+        </div>
+        <p class="fine">Gợi ý dựa trên danh mục chính hãng. Kỹ thuật viên sẽ điều chỉnh theo xe thực tế và báo giá trọn gói gồm công lắp.</p>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .quiz-page { padding: var(--space-16) 0 var(--space-24); min-height: 70vh; }
+  .narrow { max-width: 760px; }
+  .quiz { margin: 0; }
+  .step { border: 0; margin: 0; padding: 0; min-width: 0; }
+  .progress { display: block; color: var(--signal-hover); font-size: var(--t-sm); font-weight: 600; margin-bottom: var(--space-3); }
+  legend { padding: 0; }
+  .step h1, .result h1 { font-size: var(--t-2xl); }
+  .opts { display: grid; gap: var(--space-3); margin-top: var(--space-8); }
+  .opt { position: relative; cursor: pointer; }
+  .opt input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
+  .opt span {
+    display: grid; gap: 2px; padding: var(--space-4) var(--space-6); border: 1px solid var(--line); border-radius: var(--radius-m);
+    background: var(--panel); transition: border-color 160ms, background-color 160ms;
+  }
+  .opt strong { font-weight: 600; font-size: var(--t-lg); }
+  .opt small { color: var(--chrome); font-size: var(--t-sm); }
+  .opt:hover span { border-color: var(--chrome); }
+  .opt input:checked + span { border-color: var(--signal); background: #0f1a2e; }
+  .opt input:focus-visible + span { outline: 2px solid var(--signal-hover); outline-offset: 2px; }
+  .nav { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--space-8); }
+  .btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+  .result:focus { outline: none; }
+  .result .muted { margin-top: var(--space-4); line-height: 1.6; }
+  .why { margin: var(--space-6) 0 0; padding-left: 1.2em; color: var(--chrome); display: grid; gap: var(--space-2); font-size: var(--t-sm); }
+  .items { list-style: none; margin: var(--space-8) 0 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
+  .fine { margin-top: var(--space-6); font-size: var(--t-xs); color: #6b7380; }
+</style>
+
+<style is:global>
+  /* rows injected by the result script */
+  .quiz-page .items li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: var(--space-4); align-items: center; padding: var(--space-3) 0; border-bottom: 1px solid var(--line); }
+  .quiz-page .items img { width: 64px; height: 64px; object-fit: contain; background: #fff; border-radius: var(--radius-s); }
+  .quiz-page .items .role { font-size: var(--t-xs); color: var(--chrome); }
+  .quiz-page .items a { color: var(--white); font-weight: 600; text-decoration: none; font-size: var(--t-sm); }
+  .quiz-page .items a:hover { text-decoration: underline; }
+  .quiz-page .items .added { color: var(--signal-hover); font-size: var(--t-xs); font-weight: 600; margin-left: 6px; }
+</style>
+
+<script>
+  import { getConfig, setConfig } from '../scripts/config-store';
+  import { loadCatalog, escapeHtml as esc } from '../scripts/catalog-client';
+
+  type Item = { slug: string; qty: number; role: string; added?: boolean };
+  type Pkg = { slug: string; name: string; level: number; tier: string; for: string; items: Item[] };
+
+  const root = document.querySelector<HTMLElement>('[data-quiz]')!;
+  const packages = JSON.parse(root.dataset.packages!) as Pkg[];
+  const form = root.querySelector<HTMLFormElement>('[data-form]')!;
+  const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+  const result = root.querySelector<HTMLElement>('[data-result]')!;
+  let current = 0;
+
+  const show = (i: number) => {
+    steps.forEach((s, k) => { s.hidden = k !== i; });
+    current = i;
+    const first = steps[i].querySelector<HTMLInputElement>('input:checked') ?? steps[i].querySelector<HTMLInputElement>('input');
+    first?.focus();
+  };
+  form.addEventListener('change', (e) => {
+    const step = (e.target as HTMLElement).closest<HTMLElement>('[data-step]')!;
+    step.querySelector<HTMLButtonElement>('[data-next]')!.disabled = false;
+  });
+  root.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    if (t.closest('[data-back]')) show(current - 1);
+    if (t.closest('[data-next]')) current < steps.length - 1 ? show(current + 1) : recommend();
+    if (t.closest('[data-restart]')) { form.reset(); steps.forEach((s) => (s.querySelector<HTMLButtonElement>('[data-next]')!.disabled = true)); result.hidden = true; form.hidden = false; show(0); }
+  });
+
+  // --- recommendation: pick a base package by level, then adapt it to the answers
+  let picked: Item[] = [];
+  async function recommend() {
+    const a = Object.fromEntries(new FormData(form)) as Record<string, string>;
+    const catalog = await loadCatalog();
+    const why: string[] = [];
+    let level = Number(a.level);
+    if (a.goal === 'thi-dau' && level < 4) { level = 4; why.push('Bạn hướng tới thi đấu nên gợi ý cấu hình cao nhất.'); }
+    if ((a.goal === 'san-khau' || a.goal === 'bass') && level < 2) { level = 2; why.push('Để có sân khấu và tiếng trầm đầy cần thêm DSP, nên gợi ý từ mức trung cấp.'); }
+    const pkg = packages.find((p) => p.level === level) ?? packages[0];
+    let items: Item[] = pkg.items.map((i) => ({ ...i }));
+    const cat = (s: string) => catalog.get(s)?.c ?? '';
+
+    const wantsBass = a.goal === 'bass' || a.music === 'bass';
+    const keepTrunk = a.trunk === 'giu';
+    const hasSub = () => items.some((i) => ['subwoofer', 'sub-dien'].includes(cat(i.slug)));
+
+    if (keepTrunk && items.some((i) => cat(i.slug) === 'subwoofer')) {
+      // a powered under-seat sub replaces the trunk sub and its separate amplifier
+      items = items.filter((i) => cat(i.slug) !== 'subwoofer' && i.role !== 'Amply sub');
+      items.push({ slug: level >= 3 ? 'loa-sub-dien-dls-acw10i' : 'loa-sub-dien-steg-sa-8w', qty: 1, role: 'Sub điện gầm ghế', added: true });
+      why.push('Bạn muốn giữ cốp nên thay sub trong cốp bằng sub điện gầm ghế, có sẵn amply.');
+    }
+    if (wantsBass && !hasSub()) {
+      items.push({ slug: 'loa-sub-dien-steg-sa-8w', qty: 1, role: 'Sub điện gầm ghế', added: true });
+      why.push('Bạn thích tiếng trầm nên thêm sub điện, gọn dưới ghế.');
+    }
+    if (a.music === 'giong' && !items.some((i) => cat(i.slug) === 'mid-treble') && level <= 2) {
+      items.push({ slug: 'loa-mid-treble-steg-sff3', qty: 1, role: 'Treble cột A', added: true });
+      why.push('Nhạc thiên về giọng hát nên thêm treble cột A để giọng ca rõ và đứng cao.');
+    }
+    if (!why.length) why.push(`Gói ${pkg.tier.toLowerCase()} khớp với mức nâng cấp bạn chọn.`);
+    picked = items;
+
+    result.querySelector('[data-r-name]')!.textContent = pkg.name;
+    result.querySelector('[data-r-for]')!.textContent = pkg.for;
+    result.querySelector('[data-r-why]')!.innerHTML = why.map((w) => `<li>${esc(w)}</li>`).join('');
+    result.querySelector('[data-r-items]')!.innerHTML = items.map((i) => {
+      const p = catalog.get(i.slug);
+      if (!p) return '';
+      return `<li><img src="${p.i}" alt="" width="64" height="64" loading="lazy">
+        <div><p class="role">${esc(i.role)}${i.added ? '<span class="added">theo câu trả lời</span>' : ''}</p>
+        <a href="/san-pham/${p.s}">${esc(p.n)}</a></div></li>`;
+    }).join('');
+    result.querySelector<HTMLAnchorElement>('[data-r-zalo]')!.href = root.dataset.zalo!;
+    form.hidden = true;
+    result.hidden = false;
+    result.focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  result.querySelector('[data-r-add]')!.addEventListener('click', () => {
+    const cfg = getConfig();
+    for (const it of picked) {
+      const f = cfg.find((c) => c.slug === it.slug);
+      if (f) f.qty += it.qty; else cfg.push({ slug: it.slug, qty: it.qty });
+    }
+    setConfig(cfg);
+    location.href = '/ghep-he-thong';
+  });
+</script>

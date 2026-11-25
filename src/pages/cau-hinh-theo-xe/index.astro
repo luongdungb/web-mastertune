@@ -1,0 +1,93 @@
+---
+import Base from '../../layouts/Base.astro';
+import { cars, carBrands, BODY_LABEL, installsFor } from '../../lib/cars';
+import site from '../../data/site.json';
+const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+---
+<Base title="Cấu hình theo dòng xe" description={`Gợi ý cấu hình âm thanh cho ${cars.length} dòng xe phổ biến tại Việt Nam: Toyota, Honda, Mazda, Hyundai, Kia, VinFast, Ford, Mercedes, BMW… kèm ảnh xe đã lắp thực tế.`}>
+  <header class="page-head">
+    <div class="wrap">
+      <h1 class="display">Cấu hình theo dòng xe</h1>
+      <p class="muted">Chọn xe của bạn để xem lưu ý lắp đặt, cấu hình gợi ý và những chiếc xe cùng dòng đã được lắp.</p>
+    </div>
+  </header>
+
+  <section class="studio finder" aria-label="Chọn dòng xe">
+    <div class="wrap">
+      <form class="filters" data-filters onsubmit="return false">
+        <fieldset class="chips">
+          <legend class="sr-only">Hãng xe</legend>
+          <label><input type="radio" name="hang" value="" checked /><span>Tất cả</span></label>
+          {carBrands.map((b) => <label><input type="radio" name="hang" value={b} /><span>{b}</span></label>)}
+        </fieldset>
+        <label class="search">
+          <span class="sr-only">Tìm dòng xe</span>
+          <input type="search" name="q" placeholder="Tìm dòng xe, ví dụ: Camry, CX-5, VF 8…" autocomplete="off" />
+        </label>
+      </form>
+
+      <ul class="grid" data-grid>
+        {cars.map((c) => {
+          const n = installsFor(c).length;
+          return (
+            <li data-brand={c.brand} data-text={fold(`${c.brand} ${c.model}`)}>
+              <a class="car" href={`/cau-hinh-theo-xe/${c.slug}`}>
+                <span class="brand">{c.brand}</span>
+                <span class="model">{c.model}</span>
+                <span class="meta">{BODY_LABEL[c.body]}{c.ev ? ', xe điện' : ''}{n ? `, ${n} xe đã lắp` : ''}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      <div class="missing">
+        <p>Không thấy xe của bạn? Gửi dòng xe và đời xe, kỹ thuật viên sẽ gợi ý cấu hình phù hợp.</p>
+        <a class="btn btn-ink" href={site.zalo} target="_blank" rel="noopener">Hỏi qua Zalo</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-head { padding: var(--space-16) 0 var(--space-12); }
+  .page-head h1 { font-size: var(--t-3xl); }
+  .page-head p { margin-top: var(--space-4); max-width: 62ch; }
+  .finder { padding-block: var(--space-8) var(--space-24); }
+  .filters {
+    position: sticky; top: var(--header-h); z-index: 5; background: var(--studio); padding-block: var(--space-4);
+    margin-bottom: var(--space-8); border-bottom: 1px solid var(--studio-line); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3);
+  }
+  .filters > * { min-width: 0; }
+  .chips { border: 0; margin: 0; padding: 0; display: flex; gap: var(--space-2); overflow-x: auto; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chips label { position: relative; flex: none; cursor: pointer; }
+  .chips input { position: absolute; opacity: 0; pointer-events: none; }
+  .chips span { display: inline-flex; align-items: center; min-height: 40px; padding: 0 var(--space-4); border-radius: var(--radius-pill); border: 1px solid var(--studio-line); background: var(--studio-card); font-size: var(--t-sm); white-space: nowrap; }
+  .chips label:hover span { border-color: var(--ink); }
+  .chips input:checked + span { background: var(--ink); color: var(--white); border-color: var(--ink); }
+  .chips input:focus-visible + span { outline: 2px solid var(--signal); outline-offset: 2px; }
+  .search input { width: 100%; min-height: 44px; padding: 0 var(--space-4); border-radius: var(--radius-s); border: 1px solid var(--studio-line); background: var(--studio-card); font-size: var(--t-sm); }
+
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: var(--space-3); }
+  .grid li[hidden] { display: none; }
+  .car { display: grid; gap: 2px; padding: var(--space-4) var(--space-6); background: var(--studio-card); border: 1px solid var(--studio-line); border-radius: var(--radius-m); text-decoration: none; color: var(--ink); height: 100%; transition: border-color 160ms; }
+  .car:hover { border-color: var(--ink); }
+  .brand { font-size: var(--t-xs); color: var(--graphite); font-weight: 600; }
+  .model { font-size: var(--t-xl); font-stretch: 112%; font-weight: 600; }
+  .meta { font-size: var(--t-xs); color: var(--graphite); }
+  .missing { margin-top: var(--space-12); display: flex; gap: var(--space-4); align-items: center; flex-wrap: wrap; color: var(--graphite); }
+</style>
+
+<script>
+  const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+  const form = document.querySelector<HTMLFormElement>('[data-filters]')!;
+  const items = [...document.querySelectorAll<HTMLElement>('[data-grid] li')];
+  const apply = () => {
+    const fd = new FormData(form);
+    const hang = String(fd.get('hang') ?? '');
+    const q = fold(String(fd.get('q') ?? '').trim());
+    for (const li of items) li.hidden = !((!hang || li.dataset.brand === hang) && (!q || q.split(/\s+/).every((w) => li.dataset.text!.includes(w))));
+  };
+  form.addEventListener('input', apply);
+  form.addEventListener('change', apply);
+</script>

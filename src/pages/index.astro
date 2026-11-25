@@ -1,0 +1,331 @@
+---
+import Base from '../layouts/Base.astro';
+import CarSound3D from '../components/CarSound3D.astro';
+import products from '../data/products.json';
+import brands from '../data/brands.json';
+import categories from '../data/categories.json';
+import site from '../data/site.json';
+
+const bySlug = (s: string) => products.find((p) => p.slug === s)!;
+const featured = [
+  'amply-dsp-12-kenh-resolut-x12-dsp',
+  'abyss-6-5h-2way-component-speaker',
+  'loa-sub-hoi-dong-thung-steg-st10p-pro',
+  'loa-canh-phan-tan-2-way-audiocircle-ml-c6-2',
+].map(bySlug).filter(Boolean);
+const brandName = Object.fromEntries(brands.map((b) => [b.slug, b.name]));
+
+const catCover: Record<string, string> = {
+  'loa-canh': 'loa-canh-phan-tan-2-way-audiocircle-ml-c6-2',
+  'mid-treble': 'loa-mid-treble-steg-sff3',
+  subwoofer: 'loa-sub-hoi-audiocircle-ml-s10',
+  'sub-dien': 'loa-sub-dien-dls-acw10i',
+  amply: 'amply-mono-dls-cci500',
+  dsp: 'amply-dsp-12-kenh-resolut-x12-dsp',
+};
+const shownCats = categories.filter((c) => catCover[c.slug]);
+const totalProducts = products.length;
+---
+<Base overlayHeader>
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-media" aria-hidden="true">
+      <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="/video/hero-poster.webp" width="720" height="1280" data-hero-video>
+        <source src="/video/hero.webm" type="video/webm" />
+        <source src="/video/hero.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="wrap hero-inner">
+      <p class="hero-kicker">Âm thanh xe hơi hi-end, phân phối chính hãng</p>
+      <h1 id="hero-title" class="display hero-title">MASTER<br />TUNE</h1>
+      <p class="hero-lede">Loa, amply, DSP từ Ý, Thụy Điển, Đức. Ghép đúng cấu hình, lắp đúng kỹ thuật.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="/ghep-he-thong">Ghép hệ thống của bạn</a>
+        <a class="btn btn-light" href="/san-pham">Xem sản phẩm</a>
+      </div>
+      <dl class="hero-stats">
+        <div><dt>Thương hiệu chính hãng</dt><dd>{brands.length}</dd></div>
+        <div><dt>Thiết bị trong danh mục</dt><dd>{totalProducts}</dd></div>
+        <div><dt>Bảo hành toàn quốc</dt><dd>2 năm</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- BRANDS -->
+  <section class="brands" aria-label="Thương hiệu phân phối">
+    <ul class="wrap brand-row">
+      {brands.filter((b) => b.logo).map((b) => (
+        <li><a href={`/thuong-hieu/${b.slug}`} title={b.name}><img src={b.logo!} alt={b.name} width="160" height="54" loading="lazy" /></a></li>
+      ))}
+    </ul>
+  </section>
+
+  <CarSound3D />
+
+  <!-- CATEGORIES (studio) -->
+  <section class="studio section" aria-labelledby="cat-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="cat-title" class="display">Thiết bị</h2>
+      </div>
+      <ul class="cat-grid">
+        {shownCats.map((c) => {
+          const cover = bySlug(catCover[c.slug]);
+          return (
+            <li>
+              <a class="cat-card" href={`/san-pham?loai=${c.slug}`}>
+                <img src={cover?.image} alt="" width="320" height="240" loading="lazy" decoding="async" />
+                <div class="cat-meta">
+                  <h3>{c.label}</h3>
+                  <span class="count">{c.count}</span>
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+
+      <div class="featured">
+        <h2 class="featured-title">Được chọn nhiều</h2>
+        <ul class="prod-grid">
+          {featured.map((p) => (
+            <li>
+              <a class="prod-card" href={`/san-pham/${p.slug}`}>
+                <div class="prod-img"><img src={p.image} alt={p.name} width="400" height="400" loading="lazy" decoding="async" /></div>
+                <p class="prod-brand">{brandName[p.brand]}</p>
+                <h3>{p.name}</h3>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a class="btn btn-ink" href="/san-pham">Xem toàn bộ {totalProducts} sản phẩm</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="section tools" aria-labelledby="tools-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="tools-title" class="display">Bắt đầu cấu hình</h2>
+      </div>
+      <ol class="tool-list">
+        <li>
+          <a href="/tim-he-thong">
+            <h3>Trả lời 4 câu hỏi</h3>
+            <p class="muted">Nhận gợi ý cấu hình trong một phút.</p>
+          </a>
+        </li>
+        <li>
+          <a href="/ghep-he-thong">
+            <h3>Tự ghép hệ thống</h3>
+            <p class="muted">Chọn từng thiết bị, gửi để nhận báo giá.</p>
+          </a>
+        </li>
+        <li>
+          <a href="/cau-hinh-theo-xe">
+            <h3>Theo dòng xe</h3>
+            <p class="muted">Cấu hình gợi ý và xe cùng dòng đã lắp.</p>
+          </a>
+        </li>
+        <li>
+          <a href="/goi-am-thanh">
+            <h3>Chọn gói dựng sẵn</h3>
+            <p class="muted">Cấu hình đã được kỹ thuật viên phối sẵn.</p>
+          </a>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- SHOWCASE -->
+  <section class="section showcase" aria-labelledby="show-title">
+    <div class="wrap show-grid">
+      <figure class="show-main">
+        <img src="/images/s/news-emma-2025.webp" alt="Đội ngũ MASTERTUNE và các đại lý nâng cúp tại giải thi đấu âm thanh xe hơi EMMA Việt Nam 2025" width="1000" height="666" loading="lazy" decoding="async" />
+      </figure>
+      <div class="show-text">
+        <h2 id="show-title" class="display">Kiểm chứng trên sân khấu thi đấu</h2>
+        <p class="muted">EMMA Việt Nam 2025.</p>
+        <div class="hero-cta">
+          <a class="btn btn-light" href="/showcase">Xem showcase</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEALERS -->
+  <section class="studio section dealers" aria-labelledby="dealer-title">
+    <div class="wrap dealer-grid">
+      <div>
+        <h2 id="dealer-title" class="display">Đại lý chính hãng</h2>
+      </div>
+      <div class="dealer-actions">
+        <a class="dealer-card" href="/dai-ly"><h3>Tìm đại lý gần bạn</h3></a>
+        <a class="dealer-card" href="/dai-ly#kiem-tra"><h3>Kiểm tra đại lý</h3></a>
+        <a class="dealer-card" href="/bao-hanh"><h3>Tra cứu bảo hành</h3></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT CTA -->
+  <section class="section final" aria-labelledby="final-title">
+    <div class="wrap final-inner">
+      <h2 id="final-title" class="display">Nói chuyện với kỹ thuật viên</h2>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href={site.zalo} target="_blank" rel="noopener">Nhắn Zalo</a>
+        <a class="btn btn-ghost" href={`tel:${site.hotlineTel}`}>Gọi {site.hotline}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* HERO */
+  .hero { position: relative; min-height: max(640px, 100svh); display: grid; align-items: end; overflow: hidden; isolation: isolate; }
+  .hero-media { position: absolute; inset: 0 0 0 auto; width: min(62%, 1000px); z-index: -1; }
+  .hero-media video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; display: block; }
+  .hero-media::after {
+    content: ''; position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, var(--cabin) 0%, rgba(7,9,12,0.7) 16%, rgba(7,9,12,0) 46%, rgba(7,9,12,0.2) 100%),
+      linear-gradient(0deg, var(--cabin) 0%, rgba(7,9,12,0) 45%),
+      linear-gradient(180deg, rgba(7,9,12,0.7) 0%, rgba(7,9,12,0) 25%);
+  }
+  .hero-inner { padding-top: calc(var(--header-h) + 4rem); padding-bottom: var(--space-12); display: grid; gap: var(--space-6); }
+  .hero-kicker { color: var(--signal-hover); font-weight: 500; font-size: var(--t-sm); }
+  .hero-title { font-size: var(--t-hero); font-weight: 700; letter-spacing: 0.02em; line-height: 0.9; color: var(--white); }
+  .hero-lede { max-width: 46ch; font-size: var(--t-lg); line-height: 1.55; color: var(--chrome); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .hero-stats {
+    margin: var(--space-12) 0 0; display: grid; grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line); padding-top: var(--space-6);
+  }
+  .hero-stats div { display: flex; flex-direction: column-reverse; gap: var(--space-1); padding-right: var(--space-4); }
+  .hero-stats div + div { border-left: 1px solid var(--line); padding-left: var(--space-6); }
+  .hero-stats dt { font-size: var(--t-xs); color: var(--chrome); }
+  .hero-stats dd { margin: 0; font-size: var(--t-2xl); font-stretch: 125%; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* page-load sequence: the single orchestrated entrance */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-media video { animation: settle 1600ms var(--ease-out) both; }
+    .hero-inner > * { animation: rise 900ms var(--ease-out) both; }
+    .hero-inner > :nth-child(2) { animation-delay: 80ms; }
+    .hero-inner > :nth-child(3) { animation-delay: 180ms; }
+    .hero-inner > :nth-child(4) { animation-delay: 260ms; }
+    .hero-inner > :nth-child(5) { animation-delay: 360ms; }
+    @keyframes settle { from { transform: scale(1.08); opacity: 0; } to { transform: none; opacity: 1; } }
+    @keyframes rise { from { transform: translateY(18px); opacity: 0; } to { transform: none; opacity: 1; } }
+  }
+
+  /* BRANDS */
+  .brands { border-top: 1px solid var(--line); }
+  .brand-row { list-style: none; margin: 0 auto; padding: var(--space-8) 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-8); }
+  .brand-row a { display: block; padding: var(--space-2); }
+  .brand-row img { height: 40px; width: auto; max-width: 140px; object-fit: contain; filter: brightness(0) invert(0.78); transition: filter 200ms; }
+  .brand-row a:hover img { filter: brightness(0) invert(1); }
+
+  /* STUDIO: categories + featured */
+  .split { grid-template-columns: 1fr 1fr; align-items: end; }
+  .split h2 { max-width: 14ch; }
+  .split p { font-size: var(--t-base); max-width: 44ch; justify-self: end; }
+  .cat-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+  .cat-card {
+    display: grid; grid-template-columns: 132px 1fr; gap: var(--space-4); align-items: center;
+    background: var(--studio-card); border: 1px solid var(--studio-line); border-radius: var(--radius-m);
+    padding: var(--space-4); text-decoration: none; height: 100%;
+    transition: border-color 180ms;
+  }
+  .cat-card:hover { border-color: var(--ink); }
+  .cat-card img { width: 132px; height: 112px; object-fit: contain; }
+  .cat-meta { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
+  .cat-meta h3 { font-size: var(--t-lg); font-stretch: 112%; font-weight: 600; }
+    .count { font-size: var(--t-sm); color: var(--graphite); font-variant-numeric: tabular-nums; }
+
+  .featured { margin-top: var(--space-24); display: grid; gap: var(--space-8); justify-items: start; }
+  .featured-title { font-size: var(--t-xl); font-stretch: 112%; font-weight: 600; }
+  .prod-grid { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6); }
+  .prod-card { display: grid; gap: var(--space-2); text-decoration: none; }
+  .prod-img { background: var(--studio-card); border-radius: var(--radius-m); aspect-ratio: 1; display: grid; place-items: center; padding: var(--space-6); border: 1px solid var(--studio-line); transition: border-color 180ms; }
+  .prod-card:hover .prod-img { border-color: var(--ink); }
+  .prod-img img { width: 100%; height: 100%; object-fit: contain; }
+  .prod-brand { font-size: var(--t-xs); color: var(--graphite); font-weight: 600; margin-top: var(--space-2); }
+  .prod-card h3 { font-size: var(--t-base); font-weight: 600; line-height: 1.3; }
+  .prod-specs { margin: var(--space-1) 0 0; display: grid; gap: 2px; font-size: var(--t-xs); }
+  .prod-specs div { display: flex; justify-content: space-between; gap: var(--space-3); border-top: 1px solid var(--studio-line); padding-top: 4px; }
+  .prod-specs dt { color: var(--graphite); }
+  .prod-specs dd { margin: 0; text-align: right; font-weight: 500; }
+
+  /* TOOLS — a real sequence: quiz -> build -> packages */
+  .tool-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); counter-reset: tool; }
+  .tool-list li { counter-increment: tool; }
+  .tool-list li + li { border-left: 1px solid var(--line); }
+  .tool-list a { display: grid; gap: var(--space-4); padding: var(--space-8) var(--space-8) var(--space-8) 0; text-decoration: none; height: 100%; align-content: start; }
+  .tool-list li + li a { padding-left: var(--space-8); }
+  .tool-list h3 { font-size: var(--t-xl); font-stretch: 112%; font-weight: 600; }
+  .tool-list h3::before { content: counter(tool) '. '; color: var(--signal-hover); }
+  .tool-list p { line-height: 1.55; }
+  .tool-list a:hover h3 { color: var(--signal-hover); }
+  .tool-list h3 { transition: color 160ms; }
+
+  /* SHOWCASE */
+  .showcase { border-top: 1px solid var(--line); }
+  .show-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(2rem, 4vw, 4rem); align-items: center; }
+  .show-main { margin: 0; border-radius: var(--radius-m); overflow: hidden; }
+  .show-main img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+  .show-text { display: grid; gap: var(--space-6); }
+  .show-text h2 { font-size: var(--t-2xl); }
+
+  /* DEALERS */
+  .dealer-grid { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(2rem, 4vw, 4rem); align-items: start; }
+  .dealer-grid h2 { font-size: var(--t-2xl); }
+  .dealer-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+  .dealer-card {
+    display: flex; align-items: flex-end; min-height: 120px;
+    padding: var(--space-6); border-radius: var(--radius-m); background: var(--studio-card);
+    border: 1px solid var(--studio-line); text-decoration: none; transition: border-color 180ms;
+  }
+  .dealer-card:hover { border-color: var(--ink); }
+  .dealer-card h3 { font-size: var(--t-lg); font-weight: 600; }
+
+  /* FINAL */
+  .final-inner { display: grid; gap: var(--space-6); justify-items: center; text-align: center; }
+  .final-inner h2 { font-size: var(--t-3xl); max-width: 18ch; }
+
+  @media (max-width: 1080px) {
+    .cat-grid { grid-template-columns: repeat(2, 1fr); }
+    .prod-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .hero-media { width: 100%; opacity: 0.45; }
+    .hero-stats div + div { padding-left: var(--space-4); }
+    .hero-stats dd { font-size: var(--t-xl); }
+    .split, .show-grid, .dealer-grid { grid-template-columns: 1fr; }
+    .split p { justify-self: start; }
+    .tool-list { grid-template-columns: 1fr; }
+    .tool-list li + li { border-left: 0; border-top: 1px solid var(--line); }
+    .tool-list a, .tool-list li + li a { padding: var(--space-6) 0; }
+  }
+  @media (max-width: 560px) {
+    .cat-grid { grid-template-columns: 1fr; }
+    .dealer-actions { grid-template-columns: 1fr; }
+    .dealer-card { min-height: 0; }
+    .cat-card { grid-template-columns: 96px 1fr; }
+    .cat-card img { width: 96px; height: 88px; }
+    .prod-grid { gap: var(--space-4); }
+  }
+</style>
+
+<script>
+  const v = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  if (v) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => { if (reduce.matches) { v.pause(); v.currentTime = 0; } };
+    sync();
+    reduce.addEventListener('change', () => (reduce.matches ? sync() : v.play().catch(() => {})));
+    new IntersectionObserver(([e]) => {
+      if (reduce.matches) return;
+      e.isIntersecting ? v.play().catch(() => {}) : v.pause();
+    }).observe(v);
+  }
+</script>

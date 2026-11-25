@@ -1,0 +1,159 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import ComparePicker from '../../components/ComparePicker.astro';
+import { products, brandOf, categoryOf, related, keySpecs, type Product } from '../../lib/catalog';
+import site from '../../data/site.json';
+
+export function getStaticPaths() {
+  return products.map((p) => ({ params: { slug: p.slug }, props: { product: p } }));
+}
+const { product: p } = Astro.props as { product: Product };
+const brand = brandOf(p);
+const cat = categoryOf(p);
+const more = related(p, 4);
+const summary = keySpecs(p, 3).map((s) => `${s.k}: ${s.v}`).join(', ');
+const description = `${p.name} — ${brand.name}${brand.origin ? ` (${brand.origin})` : ''}, phân phối chính hãng bởi MASTERTUNE.${summary ? ` ${summary}.` : ''} Bảo hành ${p.warranty || 'chính hãng'}.`;
+---
+<Base title={p.name} description={description} image={p.image}>
+  <div class="studio detail">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Đường dẫn">
+        <a href="/san-pham">Sản phẩm</a>
+        <span aria-hidden="true">/</span>
+        <a href={`/thuong-hieu/${brand.slug}`}>{brand.name}</a>
+        {cat && (<><span aria-hidden="true">/</span><a href={`/san-pham?loai=${cat.slug}&hang=${brand.slug}`}>{cat.label}</a></>)}
+      </nav>
+
+      <div class="main">
+        <figure class="photo">
+          <img src={p.image} alt={p.name} width="900" height="900" fetchpriority="high" />
+        </figure>
+
+        <div class="info">
+          <p class="brand"><a href={`/thuong-hieu/${brand.slug}`}>{brand.name}</a>{brand.origin && <span class="origin">{brand.origin}</span>}</p>
+          <h1>{p.name}</h1>
+          <p class="cat">{cat?.label}</p>
+
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-add={p.slug}>Thêm vào cấu hình</button>
+            <a class="btn btn-ink" href={site.zalo} target="_blank" rel="noopener">Hỏi giá qua Zalo</a>
+            <button type="button" class="btn btn-outline" data-compare={p.slug} data-category={p.category} data-category-label={cat?.label} aria-pressed="false" aria-haspopup="dialog">So sánh</button>
+          </div>
+          <p class="note" role="status" data-note></p>
+
+          <section class="specs" aria-labelledby="spec-title">
+            <h2 id="spec-title">Thông số kỹ thuật</h2>
+            {p.specs.length > 0 ? (
+              <dl>{p.specs.map((s) => <div><dt>{s.k}</dt><dd>{s.v}</dd></div>)}</dl>
+            ) : (
+              <p class="muted">Thông số chi tiết đang được cập nhật. Kỹ thuật viên sẽ gửi tài liệu khi bạn hỏi qua Zalo hoặc gọi <a href={`tel:${site.hotlineTel}`}>{site.hotline}</a>.</p>
+            )}
+          </section>
+
+          <dl class="facts">
+            {p.install && <div><dt>Vị trí lắp</dt><dd>{p.install}</dd></div>}
+            <div><dt>Bảo hành</dt><dd>{p.warranty ? `${p.warranty}, toàn quốc` : 'Chính hãng'}</dd></div>
+            <div><dt>Mua tại</dt><dd><a href="/dai-ly">Đại lý chính hãng gần bạn</a></dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {more.length > 0 && (
+    <section class="studio more" aria-labelledby="more-title">
+      <div class="wrap">
+        <h2 id="more-title">Cùng hạng mục</h2>
+        <div class="grid">{more.map((x) => <ProductCard product={x} />)}</div>
+      </div>
+    </section>
+  )}
+  <ComparePicker />
+</Base>
+
+<style>
+  .detail { padding: var(--space-12) 0 var(--space-16); }
+  .crumbs { display: flex; flex-wrap: wrap; gap: var(--space-2); font-size: var(--t-sm); color: var(--graphite); margin-bottom: var(--space-8); }
+  .crumbs a { color: var(--graphite); text-decoration: none; }
+  .crumbs a:hover { color: var(--ink); text-decoration: underline; }
+  .crumbs span { color: var(--studio-line); }
+
+  .main { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .photo {
+    margin: 0; position: sticky; top: calc(var(--header-h) + var(--space-6));
+    background: var(--studio-card); border: 1px solid var(--studio-line); border-radius: var(--radius-m);
+    aspect-ratio: 1; display: grid; place-items: center; padding: clamp(1.5rem, 4vw, 3.5rem);
+  }
+  .photo img { width: 100%; height: 100%; object-fit: contain; }
+
+  .info { display: grid; gap: var(--space-4); align-content: start; }
+  .brand { display: flex; gap: var(--space-3); align-items: baseline; font-weight: 600; }
+  .brand a { color: var(--ink); text-decoration: none; }
+  .brand a:hover { text-decoration: underline; }
+  .origin { font-size: var(--t-sm); color: var(--graphite); font-weight: 400; }
+  h1 { font-size: var(--t-2xl); font-stretch: 112%; font-weight: 600; line-height: 1.12; text-wrap: balance; }
+  .cat { color: var(--graphite); font-size: var(--t-sm); }
+
+  .actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-2); }
+  .btn-outline { background: transparent; border-color: var(--studio-line); color: var(--ink); }
+  .btn-outline:hover { border-color: var(--ink); }
+  .btn-outline[aria-pressed='true'] { border-color: var(--ink); background: var(--studio-card); }
+  .note { min-height: 1.5em; font-size: var(--t-sm); color: var(--graphite); }
+  .note a { color: var(--signal); font-weight: 600; }
+
+  .specs { margin-top: var(--space-4); }
+  .specs h2 { font-size: var(--t-lg); font-weight: 600; margin-bottom: var(--space-3); }
+  .specs dl, .facts { margin: 0; display: grid; }
+  .specs dl div, .facts div {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: var(--space-4);
+    padding: var(--space-3) 0; border-top: 1px solid var(--studio-line); font-size: var(--t-sm);
+  }
+  .specs dt, .facts dt { color: var(--graphite); }
+  .specs dd, .facts dd { margin: 0; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .specs p a { color: var(--signal); }
+  .facts { margin-top: var(--space-4); }
+  .facts a { color: var(--signal); }
+
+  .more { padding-block: 0 var(--space-24); }
+  .more h2 { font-size: var(--t-xl); font-stretch: 112%; font-weight: 600; margin-bottom: var(--space-6); padding-top: var(--space-12); border-top: 1px solid var(--studio-line); }
+  .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-6); }
+
+  @media (max-width: 900px) {
+    .main { grid-template-columns: 1fr; }
+    .photo { position: static; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
+
+<script>
+  import { addToConfig, inConfig, getCompare, setCompare, COMPARE_MAX } from '../../scripts/config-store';
+  import { loadCatalog } from '../../scripts/catalog-client';
+  const add = document.querySelector<HTMLButtonElement>('[data-add]')!;
+  const cmp = document.querySelector<HTMLButtonElement>('[data-compare]')!;
+  const note = document.querySelector<HTMLElement>('[data-note]')!;
+  const slug = add.dataset.add!;
+
+  const sync = () => {
+    add.textContent = inConfig(slug) ? 'Thêm 1 nữa vào cấu hình' : 'Thêm vào cấu hình';
+    const on = getCompare().includes(slug);
+    cmp.setAttribute('aria-pressed', String(on));
+    cmp.textContent = on ? 'Đang so sánh' : 'So sánh';
+  };
+  sync();
+  window.addEventListener('mt:config', sync);
+  window.addEventListener('mt:compare', sync);
+
+  add.addEventListener('click', () => {
+    addToConfig(slug);
+    note.innerHTML = 'Đã thêm vào cấu hình. <a href="/ghep-he-thong">Mở trình ghép hệ thống</a>';
+  });
+  cmp.addEventListener('click', async () => {
+    // keep only same-category items (comparing an amp with a speaker says nothing), put this one first,
+    // then open the picker with the rest of its category
+    const catalog = await loadCatalog();
+    const same = getCompare().filter((s) => s !== slug && catalog.get(s)?.c === cmp.dataset.category);
+    setCompare([slug, ...same].slice(0, COMPARE_MAX));
+    window.dispatchEvent(new CustomEvent('mt:compare-pick', { detail: { category: cmp.dataset.category, label: cmp.dataset.categoryLabel } }));
+  });
+</script>

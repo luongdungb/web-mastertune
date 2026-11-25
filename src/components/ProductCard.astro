@@ -1,0 +1,36 @@
+---
+import { brandOf, categoryOf, keySpecs, type Product } from '../lib/catalog';
+interface Props { product: Product; eager?: boolean }
+const { product: p, eager = false } = Astro.props;
+const brand = brandOf(p);
+const cat = categoryOf(p);
+const specs = keySpecs(p, 2);
+---
+<article class="card" data-brand={p.brand} data-cat={p.category} data-name={`${p.name} ${brand.name} ${p.series}`.toLowerCase()}>
+  <a href={`/san-pham/${p.slug}`} class="link">
+    <div class="img"><img src={p.image} alt={p.name} width="400" height="400" loading={eager ? 'eager' : 'lazy'} decoding="async" /></div>
+    <p class="meta">{brand.name}<span aria-hidden="true">/</span>{cat?.label}</p>
+    <h3>{p.name}</h3>
+    {specs.length > 0 && (
+      <dl class="specs">{specs.map((s) => <div><dt>{s.k}</dt><dd>{s.v}</dd></div>)}</dl>
+    )}
+  </a>
+</article>
+
+<style>
+  .card { display: block; min-width: 0; }
+  .link { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-2); text-decoration: none; color: var(--ink); height: 100%; align-content: start; }
+  .img {
+    aspect-ratio: 1; background: var(--studio-card); border: 1px solid var(--studio-line); border-radius: var(--radius-m);
+    display: grid; place-items: center; padding: var(--space-6); transition: border-color 180ms;
+  }
+  .img img { width: 100%; height: 100%; object-fit: contain; }
+  .link:hover .img { border-color: var(--ink); }
+  .meta { font-size: var(--t-xs); color: var(--graphite); font-weight: 600; margin-top: var(--space-2); display: flex; gap: 6px; }
+  .meta span { color: var(--studio-line); }
+  h3 { font-size: var(--t-base); font-weight: 600; line-height: 1.3; }
+  .specs { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; font-size: var(--t-xs); }
+  .specs div { display: flex; justify-content: space-between; gap: var(--space-3); border-top: 1px solid var(--studio-line); padding-top: 4px; }
+  .specs dt { color: var(--graphite); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1 1 auto; }
+  .specs dd { margin: 0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%; flex: none; }
+</style>

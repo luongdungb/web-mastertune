@@ -1,0 +1,54 @@
+[
+  {
+    "slug": "nang-cap-loa-zin",
+    "name": "Nâng cấp loa zin",
+    "level": 1,
+    "tier": "Cơ bản",
+    "for": "Giữ đầu zin, thay loa cho tiếng rõ và sạch hơn. Lắp nhanh trong ngày, không đụng cốp.",
+    "items": [
+      { "slug": "loa-canh-phan-tan-2-way-steg-mvw6c", "qty": 1, "role": "Loa cánh trước" },
+      { "slug": "loa-canh-dong-truc-steg-ms-650", "qty": 1, "role": "Loa cánh sau" }
+    ]
+  },
+  {
+    "slug": "san-khau-truoc-mat",
+    "name": "Sân khấu trước mặt",
+    "level": 2,
+    "tier": "Trung cấp",
+    "for": "Thêm treble cột A và DSP để giọng ca đứng giữa taplo. Sub điện gầm ghế cho tiếng trầm đầy, không mất cốp.",
+    "items": [
+      { "slug": "loa-canh-phan-tan-2-way-steg-ml650c", "qty": 1, "role": "Loa cánh trước" },
+      { "slug": "loa-mid-treble-steg-sff3", "qty": 1, "role": "Treble cột A" },
+      { "slug": "amply-dsp-8-kenh-steg-dsp-s6", "qty": 1, "role": "Amply / DSP" },
+      { "slug": "loa-sub-dien-steg-sa-8w", "qty": 1, "role": "Sub điện" }
+    ]
+  },
+  {
+    "slug": "hi-end-3-way",
+    "name": "Hi-end 3-way",
+    "level": 3,
+    "tier": "Cao cấp",
+    "for": "Bộ 3-way chia dải riêng cho treble, mid và bass, amply rời và DSP 8 kênh. Dành cho người nghe kỹ từng chi tiết.",
+    "items": [
+      { "slug": "loa-canh-phan-tan-3-way-dls-upi36", "qty": 1, "role": "Loa 3-way trước" },
+      { "slug": "amply-4-kenh-dls-cci44", "qty": 1, "role": "Amply 4 kênh" },
+      { "slug": "bo-xu-ly-tin-hieu-8-kenh-resolut-t-dsp-mk2", "qty": 1, "role": "Bộ xử lý DSP" },
+      { "slug": "amply-mono-dls-cci500", "qty": 1, "role": "Amply sub" },
+      { "slug": "loa-sub-hoi-dls-mcw10", "qty": 1, "role": "Subwoofer" }
+    ]
+  },
+  {
+    "slug": "cau-hinh-thi-dau",
+    "name": "Cấu hình thi đấu",
+    "level": 4,
+    "tier": "Đỉnh cao",
+    "for": "Bộ Master Stroke 3-way, Amply/DSP 12 kênh và nguồn ổn định. Cấu hình hướng tới sân khấu EMMA.",
+    "items": [
+      { "slug": "loa-3-way-master-stroke-ss-1-ss-3-ss-6", "qty": 1, "role": "Loa 3-way trước" },
+      { "slug": "amply-dsp-12-kenh-resolut-x12-dsp", "qty": 1, "role": "Amply / DSP 12 kênh" },
+      { "slug": "amply-2-kenh-steg-k2-04-competition", "qty": 1, "role": "Amply sub" },
+      { "slug": "loa-sub-hoi-audiocircle-ml-s10", "qty": 1, "role": "Subwoofer" },
+      { "slug": "bo-on-dinh-dien-ap-vss-fluxcap-harrison", "qty": 1, "role": "Ổn định nguồn" }
+    ]
+  }
+]

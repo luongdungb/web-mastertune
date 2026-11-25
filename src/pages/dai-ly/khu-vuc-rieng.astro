@@ -1,0 +1,110 @@
+---
+// Dealer area: shared access code -> signed cookie. Runs on the server (not prerendered).
+import Base from '../../layouts/Base.astro';
+import docs from '../../data/dealer-docs.json';
+import site from '../../data/site.json';
+import { codeMatches, endSession, hasSession, isConfigured, startSession, tooManyAttempts } from '../../lib/server/dealer-auth';
+
+export const prerender = false;
+
+type Doc = { title: string; file: string; note?: string; updated?: string };
+const secure = Astro.url.protocol === 'https:';
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  if (form.get('action') === 'logout') {
+    endSession(Astro.cookies);
+    return Astro.redirect('/dai-ly/khu-vuc-rieng', 303);
+  }
+  const ip = Astro.clientAddress ?? 'unknown';
+  if (tooManyAttempts(`login:${ip}`)) {
+    error = 'Nhập sai quá nhiều lần. Thử lại sau 10 phút hoặc gọi phòng kinh doanh.';
+  } else if (codeMatches(String(form.get('code') ?? ''))) {
+    startSession(Astro.cookies, secure);
+    return Astro.redirect('/dai-ly/khu-vuc-rieng', 303);
+  } else {
+    error = 'Mã truy cập không đúng. Kiểm tra lại hoặc liên hệ MASTERTUNE để nhận mã.';
+  }
+}
+
+const loggedIn = hasSession(Astro.cookies);
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex');
+const list = docs as Doc[];
+---
+<Base title="Khu dành cho đại lý" description="Khu dành riêng cho đại lý chính hãng MASTERTUNE: tài liệu bán hàng, hướng dẫn lắp đặt.">
+  <div class="dealer-area">
+    <div class="wrap narrow">
+      {!loggedIn ? (
+        <section class="login" aria-labelledby="login-title">
+          <h1 id="login-title" class="display">Khu dành cho đại lý</h1>
+          <p class="muted">Tài liệu bán hàng và hướng dẫn kỹ thuật cho đại lý chính hãng. Nhập mã truy cập được MASTERTUNE cấp.</p>
+          {!isConfigured() && <p class="warn">Khu đại lý chưa được bật trên máy chủ (chưa đặt mã truy cập).</p>}
+          <form method="post" class="login-form">
+            <label for="code">Mã truy cập</label>
+            <input id="code" name="code" type="password" required autocomplete="current-password" autocapitalize="characters" aria-describedby={error ? 'login-error' : undefined} aria-invalid={error ? 'true' : undefined} />
+            {error && <p class="error" id="login-error" role="alert">{error}</p>}
+            <button type="submit" class="btn btn-primary">Vào khu đại lý</button>
+          </form>
+          <p class="help">Chưa có mã? Gọi <a href={`tel:${site.hotlineTel}`}>{site.hotline}</a> hoặc nhắn <a href={site.zalo} target="_blank" rel="noopener">Zalo</a>. Muốn trở thành đại lý? <a href="https://mastertune.vn/chuong-trinh-tuyen-dai-ly.html" target="_blank" rel="noopener">Xem chương trình tuyển đại lý</a>.</p>
+        </section>
+      ) : (
+        <section class="inside" aria-labelledby="inside-title">
+          <div class="top">
+            <h1 id="inside-title" class="display">Xin chào đại lý</h1>
+            <form method="post"><input type="hidden" name="action" value="logout" /><button type="submit" class="btn btn-ghost">Đăng xuất</button></form>
+          </div>
+
+          <h2>Tài liệu</h2>
+          {list.length ? (
+            <ul class="docs">
+              {list.map((d) => (
+                <li>
+                  <a href={`/dai-ly/tai-lieu/${encodeURIComponent(d.file)}`}>{d.title}</a>
+                  {(d.note || d.updated) && <p>{[d.note, d.updated && `Cập nhật ${d.updated}`].filter(Boolean).join('. ')}</p>}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="muted">Chưa có tài liệu nào. MASTERTUNE sẽ cập nhật bảng giá đại lý, catalogue và hướng dẫn lắp đặt tại đây.</p>
+          )}
+
+          <h2>Công cụ</h2>
+          <ul class="tools">
+            <li><a href="/ghep-he-thong">Ghép hệ thống cho khách và xuất PDF</a></li>
+            <li><a href="/goi-am-thanh">Gói âm thanh dựng sẵn</a></li>
+            <li><a href="/so-sanh">So sánh thông số</a></li>
+            <li><a href="/bao-hanh">Tra cứu bảo hành theo serial</a></li>
+          </ul>
+
+          <h2>Phòng kinh doanh</h2>
+          <p class="muted">Đặt hàng, hỏi tồn kho và hỗ trợ kỹ thuật: <a href={`tel:${site.hotlineTel}`}>{site.hotline}</a>, <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+        </section>
+      )}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .dealer-area { padding: var(--space-16) 0 var(--space-24); min-height: 70vh; }
+  .narrow { max-width: 720px; }
+  h1 { font-size: var(--t-2xl); }
+  .muted { margin-top: var(--space-4); line-height: 1.6; }
+  .muted a, .help a { color: var(--signal-hover); }
+  .warn { margin-top: var(--space-4); padding: var(--space-3) var(--space-4); border: 1px solid #b45309; border-radius: var(--radius-s); font-size: var(--t-sm); }
+  .login-form { display: grid; gap: var(--space-3); margin-top: var(--space-8); max-width: 420px; }
+  .login-form label { font-size: var(--t-sm); color: var(--chrome); }
+  .login-form input { min-height: 48px; padding: 0 var(--space-4); border-radius: var(--radius-s); background: var(--panel); border: 1px solid var(--line); color: var(--white); font-size: var(--t-lg); letter-spacing: 0.08em; }
+  .login-form input[aria-invalid='true'] { border-color: #dc2626; }
+  .login-form input:focus-visible { outline: 2px solid var(--signal-hover); outline-offset: 1px; }
+  .error { color: #fca5a5; font-size: var(--t-sm); }
+  .login-form .btn { justify-self: start; }
+  .help { margin-top: var(--space-8); font-size: var(--t-sm); color: var(--chrome); line-height: 1.6; }
+
+  .top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+  .inside h2 { font-size: var(--t-lg); font-weight: 600; margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--line); }
+  .docs, .tools { list-style: none; padding: 0; margin: var(--space-4) 0 0; display: grid; gap: var(--space-3); }
+  .docs a, .tools a { color: var(--white); font-weight: 600; text-underline-offset: 4px; text-decoration-color: var(--signal); }
+  .docs p { font-size: var(--t-sm); color: var(--chrome); }
+</style>

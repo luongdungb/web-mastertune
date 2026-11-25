@@ -1,0 +1,21 @@
+---
+// Official MASTER TUNE logo (chrome render), cut out to transparent assets by scripts/prepare-logo.mjs.
+// "inline": M mark + two-line wordmark side by side (header). "stacked": the full logo (footer, large uses).
+interface Props { variant?: 'inline' | 'stacked'; height?: number; class?: string }
+const { variant = 'inline', height = 36, class: cls = '' } = Astro.props;
+---
+{variant === 'inline' ? (
+  <span class:list={['logo', cls]} style={`--h:${height}px`}>
+    <img src="/brand/mark-72.webp" alt="" width="107" height="72" class="mark" />
+    <img src="/brand/wordmark-72.webp" alt="MASTER TUNE" width="236" height="72" class="word" />
+  </span>
+) : (
+  <img src="/brand/logo-320.webp" alt="MASTER TUNE" width="320" height="270" class:list={['logo-stacked', cls]} style={`height:${height}px;width:auto`} />
+)}
+
+<style>
+  .logo { display: inline-flex; align-items: center; gap: calc(var(--h) * 0.28); height: var(--h); }
+  .logo img { height: 100%; width: auto; }
+  .logo .word { height: 88%; }
+  .logo-stacked { display: block; }
+</style>

@@ -1,0 +1,716 @@
+[
+  {
+    "name": "OTOPRO GIẢI PHÓNG",
+    "phone": "0916.908.118",
+    "address": "1075 Giải Phóng, Hoàng Mai, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "OTOPRO LONG BIÊN",
+    "phone": "0919.294.895",
+    "address": "166 Hồng Tiến, Long Biên, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "OTOPRO VÕ CHÍ CÔNG",
+    "phone": "0919.294.895",
+    "address": "400 Võ Chí Công, Tây Hồ, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Hoàng Gia Car",
+    "phone": "0971.579.107",
+    "address": "Số 217 Phạm Văn Đồng, Xuân Đỉnh, Bắc Từ Liêm, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "ĐL Car Tuning Workshop",
+    "phone": "0566.139.799",
+    "address": "Số 68 Phạm Tu, xã Tân Triều, huyện Thanh Trì, thành phố Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "EC Auto",
+    "phone": "0968.396.333",
+    "address": "Số 37 TT4, Khu đô thị Văn Phú, Hà Đông, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Phương Đông DCT Auto",
+    "phone": ":",
+    "address": "Lô 2-BT1 KĐT Vinaconex3 Trung Văn, P.Trung Văn, Q.Nam Từ Liêm, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Ecarpro",
+    "phone": "0328.360.079",
+    "address": "J03-L09 An Phú SHOPVILLA, P.Dương Nội, Q.Hà Đông, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Quang Ngọc Auto",
+    "phone": "0961.208.900",
+    "address": "OceanPark - Đường An Đào, Thị trấn Trâu Quỳ, Huyện Gia Lâm, Thành phố Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Lộc Phát Auto",
+    "phone": "0906.577.557",
+    "address": "Số 188 đường Vũ Đức Thận , Việt Hưng, Long Biên, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Gara Hà Thành",
+    "phone": "0944.860.505",
+    "address": "Số 500 Võ Chí Công, Bắc Từ Liêm, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "KingWrap",
+    "phone": "0985.022.495",
+    "address": "683 Đường Lạc Long Quân, P.Phú Thượng, Q.Tây Hồ, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Dubai Care",
+    "phone": "0343.485.850",
+    "address": "68 Đỗ Đức Dục, P. Mễ Trì, Q. Nam Từ Liêm, Tp. Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội thất ô tô Thịnh Cường Auto",
+    "phone": "0901.669.983",
+    "address": "cao tốc đại lộ Thăng Long kéo dài, Xã Thạch Hoà, Huyện Thạch Thất, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Trường Sơn Auto",
+    "phone": "0989.789.828",
+    "address": "105 Nguyễn Mậu Tài, Trâu Quỳ, Gia Lâm, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "NT Huy Hoàng",
+    "phone": "0947.500.109",
+    "address": "1 DV4, P.Mộ Lao, Q.Hà Đông, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội thất Ô tô Mạnh Trung",
+    "phone": "0834.128.999",
+    "address": "156 Lạc Trung, P.Vĩnh Tuy,Q.Hai Bà Trưng, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Lê Duẩn Auto",
+    "phone": "0977.763.669",
+    "address": "396 Chùa Thông, Sơn Lộc, Sơn Tây, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Hạnh Auto",
+    "phone": "0969.555.183",
+    "address": "QL6, Dốc Dài Xuân Mai, Chương Mỹ, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Hưng Long Auto",
+    "phone": "0964.338.544",
+    "address": "Số 38, Ngõ 56, Lê Quang Đạo, Hà Nội",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "2T Auto Car - CS Hà Nội",
+    "phone": "0981.076.486",
+    "address": "Số 19 – 21 ngõ 129 Kim Quan Thượng, Phường Việt Hưng, Thành Phố Hà Nội. (Long Biên, Hà Nội cũ)",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Dương Tân Auto",
+    "phone": "0392.586.666",
+    "address": "285 Đường Núi Đôi, Sóc Sơn, Thành Phố Hà Nội. (Long Biên, Hà Nội cũ)",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội thất ô tô Dũng Mai",
+    "phone": "0984.733.988",
+    "address": "Lạc Trị, Phúc Thọ, Thành Phố Hà Nội. (Long Biên, Hà Nội cũ)",
+    "province": "Hà Nội",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Văn Long Auto",
+    "phone": "0777.366.966",
+    "address": "Số 45, Lý Thánh Tông, Tân Hồng, Từ Sơn, Bắc Ninh",
+    "province": "Bắc Ninh",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Quang Tuyển Auto",
+    "phone": "0338.685.695",
+    "address": "Số 21 Phúc Đức, Khu 10, Đại Phúc, Thành phố Bắc Ninh",
+    "province": "Bắc Ninh",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội Thất Ô Tô Bảo Nam",
+    "phone": "0986.557.193",
+    "address": "83 Nguyễn Văn Cừ, Phường Ninh Xá, Thành phố Bắc Ninh",
+    "province": "Bắc Ninh",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Auto 365 Bắc Giang",
+    "phone": "0978.416.111",
+    "address": "131-133 Minh Khai, Xương Giang, TP. Bắc Giang",
+    "province": "Bắc Giang",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Gara Nội thất ô tô Anh Tuấn",
+    "phone": "0908.143.638",
+    "address": "Lê Thánh Tông, Phường Máy chai,Quận Ngô Quyền, Thành phố Hải Phòng",
+    "province": "Hải Phòng",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Tuấn Hà Auto",
+    "phone": "0836.948.998",
+    "address": "Số 10 ngõ 19 phố Điện Biên Phủ, Phường Máy Tơ, Quận Ngô Quyền, Thành phố Hải Phòng",
+    "province": "Hải Phòng",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Độ Xe TMT Hải Phòng",
+    "phone": "0904.963.988",
+    "address": "Lô 7 Đường Lê Hồng Phong, Đông Khê, Ngô Quyền, Hải Phòng",
+    "province": "Hải Phòng",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "TS Auto",
+    "phone": "0904.963.988",
+    "address": "Số 1086 Lê Thanh Nghị, TDP số 1, Thạch Khối, TP Hải Phòng",
+    "province": "Hải Phòng",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "HPA Auto",
+    "phone": "0973.993.434",
+    "address": "170B Trường Chinh, Phường Tân Bình,Thành phố Hải Dương, Tỉnh Hải Dương",
+    "province": "Hải Dương",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội thất Ô tô Cao Tôn",
+    "phone": "0782.883.333",
+    "address": "39 An Kim Hải, Dư Hàng Kênh, Lê Chân, Hải Phòng",
+    "province": "Hải Phòng",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "AMIKA Auto",
+    "phone": "0932.363.000",
+    "address": "145 Trần Thánh Tông, Phường Thống Nhất,Thành phố Nam Định, Tỉnh Nam Định",
+    "province": "Nam Định",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội thất ô tô Hoàng Tùng",
+    "phone": "0949.385.285",
+    "address": "Số 6 đường Giải Phóng kéo dài, Phường Cửa Bắc,Huyện Nam Trực, Tỉnh Nam Định",
+    "province": "Nam Định",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Độ Xe Nam Hùng",
+    "phone": "0982.853.780",
+    "address": "168Đ.42 Lê Duẩn,TP Phủ Lý, Hà Nam",
+    "province": "Hà Nam",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Sơn Phạm Auto",
+    "phone": "0584.655.555",
+    "address": "Thửa đất số 796, Cụm Công Nghiệp Phong Phú, P. Trần Hưng Đạo, Hưng Yên",
+    "province": "Hưng Yên",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Sơn Phạm Auto 365 Thái Bình",
+    "phone": "0966.213.929",
+    "address": "Ngã 4 Trần Phú & Trần Thụ Độ, Phụ Doãn, Thái Bình",
+    "province": "Thái Bình",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Sơn Phạm Auto Kiến Xương",
+    "phone": "0564.715.555",
+    "address": "Số nhà 01 - Đường 05 - Khu đô thị Tân Tiến - Thị trấn Kiến Xương - Thái Bình",
+    "province": "Thái Bình",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Sơn Phạm Auto Dốc Đen",
+    "phone": "0908.888.303",
+    "address": "235 Dốc Đen, Phường Trần Lãm, TP. Thái Bình",
+    "province": "Thái Bình",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội Thất Ô Tô Thịnh Cường",
+    "phone": "0339.993.733",
+    "address": "Ngã Tư Tủ Thần, Tân Tiến, Văn Giang, Hưng Yên",
+    "province": "Hưng Yên",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Sáng Vịnh auto",
+    "phone": "0932.093.189",
+    "address": "Dịch Trì, Ngọc Long, Yên Mỹ Hưng Yên",
+    "province": "Hưng Yên",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "DC CAR AUTO",
+    "phone": "0703.353.335",
+    "address": "Số 304-306 Đường Hùng Vương, Phường Tích Sơn,Thành phố Vĩnh Yên, Tỉnh Vĩnh Phúc",
+    "province": "Vĩnh Phúc",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Quân Car Auto",
+    "phone": "0859.292.999",
+    "address": "Ngõ 28 Hùng Quốc Vương, Ph.Gia Cẩm, Việt Trì, Phú Thọ",
+    "province": "Phú Thọ",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Auto 365 Phú Thọ",
+    "phone": "0832.365.365",
+    "address": "2622 đại lộ Hùng Vương, Phường Vân Phú,Thành phố Việt Trì, Tỉnh Phú Thọ",
+    "province": "Phú Thọ",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Tuấn Luxury",
+    "phone": "0928.582.288",
+    "address": "33 Đ. Phù Đổng, Việt Trì, Tỉnh Phú Thọ",
+    "province": "Phú Thọ",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội thất ô tô Keramic",
+    "phone": "0913.535.536",
+    "address": "Đường Nguyễn Du kéo dài, Phường Nông Trang, TP Việt Trì, Tỉnh Phú Thọ",
+    "province": "Phú Thọ",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Bình Minh Auto",
+    "phone": "0923555.222",
+    "address": "2821 Đại Lộ Hùng Vương, Việt Trì, Tỉnh Phú Thọ",
+    "province": "Phú Thọ",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Mạnh Ngọc Auto",
+    "phone": "0888.042.222",
+    "address": "Nguyễn Tất Thành, Vĩnh Phúc, Phú Thọ",
+    "province": "Phú Thọ",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Hùng Auto 88",
+    "phone": "0983.512.338",
+    "address": "88 Đường Hai Bà Trưng, Phúc Yên, Vĩnh Phúc, Phú Thọ",
+    "province": "Phú Thọ",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "NỘI THẤT Ô TÔ TUẤN GIANG",
+    "phone": "0975.366.366",
+    "address": "Số 1, tổ 2, khu 6b phường Hạ Long, Quảng Ninh",
+    "province": "Quảng Ninh",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Ô Tô Tuấn",
+    "phone": "0903.815.639",
+    "address": "Số 712, Tổ 13 Khu 4B Hùng Thắng, Hạ Long, Quảng Ninh",
+    "province": "Quảng Ninh",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội Thất ô tô Hoàng Thủy",
+    "phone": "0973.788.886",
+    "address": "109 Chung Cư Hồng Hà, Đường Điện Biên, Cẩm Phả, Quảng Ninh",
+    "province": "Quảng Ninh",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Cường Thịnh Auto 365 Cẩm Phả",
+    "phone": "0965.438.777",
+    "address": "239 Lê Thanh Nghị, Cẩm Phả, Quảng Ninh",
+    "province": "Quảng Ninh",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội Thất ô tô Xuân Quyền - Auto 356 Đông Triều",
+    "phone": "0928.318.388",
+    "address": "Khu Mễ Xá 2, Đông Triều, Quảng Ninh",
+    "province": "Quảng Ninh",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Gara Oto Dũng Auto",
+    "phone": "0961.567.325",
+    "address": "Tổ 3 khu 7 đường Trần Thái Tông, Phường Cao Xanh, TP Hà Long, Quảng Ninh",
+    "province": "Quảng Ninh",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Hoàng Dũng Auto",
+    "phone": "0979.439.163",
+    "address": "Lương Thế Vinh, Vĩnh Lộc 4, Phường Hoàng Văn Thụ, Thành phố Lạng Sơn, Tỉnh Lạng Sơn",
+    "province": "Lạng Sơn",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "THANH ĐÔNG AUTO",
+    "phone": "0912.848.585",
+    "address": "Tổ 18, Phường Nguyễn Trãi, Thành phố Hà Giang, Hà Giang",
+    "province": "Hà Giang",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Dân Tuấn WORKSHOP",
+    "phone": "0396.880.881",
+    "address": "1586 Trần Phú, Phường Nam Cường,Thành phố Lào Cai, Tỉnh Lào Cai",
+    "province": "Lào Cai",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Auto365 Thái Nguyên",
+    "phone": "0354.777.000",
+    "address": "579 Phan Đình Phùng, Phường Đồng Quang, Thành phố Thái Nguyên, Tỉnh Thái Nguyên",
+    "province": "Thái Nguyên",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội thất ô tô H2",
+    "phone": "0862.606.123",
+    "address": "166A Việt Bắc, Phường Quang Trung,Thành phố Thái Nguyên, Tỉnh Thái Nguyên",
+    "province": "Thái Nguyên",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội thất ô tô ToTo Cam",
+    "phone": "0395.997.991",
+    "address": "19 Đường Hoàng Ngân, Phan Đình Phùng,Thành phố Thái Nguyên, Tỉnh Thái Nguyên",
+    "province": "Thái Nguyên",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Nội thất ô tô Nhâm Hương",
+    "phone": "0392.253.023",
+    "address": "67 tổ dân phố Quyết Tiến,Thị trấn Sơn Dương,Huyện Sơn Dương,Tỉnh Tuyên Quang",
+    "province": "Tuyên Quang",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "Duy Anh Auto 365 Tuyên Quang",
+    "phone": "0987.179.592",
+    "address": "Đường 21, Phan Thiết, TP.Tuyên Quang, Tỉnh Tuyên Quang",
+    "province": "Tuyên Quang",
+    "region": "Miền Bắc"
+  },
+  {
+    "name": "TND Global",
+    "phone": "0975.123.345",
+    "address": "Số 154 đường Nguyễn Đình Thuần, P. Đông Tân, TP. Thanh Hóa, Tỉnh Thanh Hóa",
+    "province": "Thanh Hóa",
+    "region": "Miền Trung"
+  },
+  {
+    "name": "Chính Thắng Auto",
+    "phone": "0989.073.923",
+    "address": "176 Mai Hắc Đế, Phường Hà Huy Tập,Thành phố Vinh, Tỉnh Nghệ An",
+    "province": "Nghệ An",
+    "region": "Miền Trung"
+  },
+  {
+    "name": "Nội thất oto Dũng Auto",
+    "phone": "0963.742.366",
+    "address": "51 Nguyễn Thái Học, Phường Lê Lợi, Thành phố Vinh, Tỉnh Nghệ An",
+    "province": "Nghệ An",
+    "region": "Miền Trung"
+  },
+  {
+    "name": "HP AUTO CAR",
+    "phone": "0985.923.479",
+    "address": "79 Bờ Kè Suối Hội Phú,Phường Phù Đổng,Thành phố Pleiku,Tỉnh Gia Lai",
+    "province": "Gia Lai",
+    "region": "Miền Trung"
+  },
+  {
+    "name": "Nội thất Ô tô Kỳ Anh Auto",
+    "phone": "0392.238.238",
+    "address": "Đường Việt Lào, P.Sông Trí, Tỉnh Hà Tĩnh",
+    "province": "Hà Tĩnh",
+    "region": "Miền Trung"
+  },
+  {
+    "name": "OtoPro - Hồ Chí Minh",
+    "phone": "0914.114.994",
+    "address": "18/1 - Đường số 35 - P. An Khánh - TP.Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Hicar - CS Quận 9",
+    "phone": "0356.918.629",
+    "address": "565 Nguyễn Xiển, Phường Long Thạnh Mỹ, Thành phố Thủ Đức, Thành phố Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Hicar - CS Thủ Đức",
+    "phone": "0981.346.927",
+    "address": "16-18 đường số 2 khu dân cư Areco, Linh Xuân, Thành phố Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Hicar - CS Dĩ An 1",
+    "phone": "0981.346.927",
+    "address": "51 đường B, Khu phố Nhị Đông 2, Dĩ An, Thành phố Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Hicar - CS Dĩ An 2",
+    "phone": "0936534539",
+    "address": "212 Đường GS1, Phường Dĩ An, Thành phố Dĩ An, TP. Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Đăng Khôi Auto",
+    "phone": "0986.697.988",
+    "address": "100/2, Đường Liên Huyện, Khu Phố 1B, Phường An Phú, Thành phố Thuận An, Tỉnh Bình Dương",
+    "province": "Bình Dương",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "2T Auto Car - CS Tân Phú",
+    "phone": "0976.526.560",
+    "address": "87D kênhTân hóa, Tân phú, Thành phố Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "2T Auto Car - CS Thủ Đức",
+    "phone": "0961.724.725",
+    "address": "13 Hàn Thuyên, Bình Thọ, Thủ Đức, TP. Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "2T Auto Car - CS Bình Dương 1",
+    "phone": "0961.724.725",
+    "address": "176 Phạm Ngọc Thạch, Phường Hiệp Thành, Thành phố Thủ Dầu Một, Tỉnh Bình Dương",
+    "province": "Bình Dương",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "2T Auto Car - CS Bình Dương 2",
+    "phone": "0961.724.725",
+    "address": "15-117 Phạm Ngọc Thạch, P. Phú Lợi, TP.HCM. (Bình Dương cũ)",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "2T Auto Car - CS Bình Dương 3",
+    "phone": "0961.724.725",
+    "address": "Đường Cao Thắng, P.Bình Dương, TP.HCM (TP.Mới, Bình Dương cũ)",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "1998 Auto",
+    "phone": "0938.366.533",
+    "address": "6G2 đường 52, khu dân cư Tân Quy Đông, Quận 7, Thành phố Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Dương Phụng Auto",
+    "phone": "0907.435.444",
+    "address": "1025 - Phạm Văn Đồng - KP5 Linh Xuân - Thành phố Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Xuân Lộc Auto",
+    "phone": "0336.222.289",
+    "address": "120/3/41 đường Đặng Thùy Trâm, Phường 13, quận Bình Thạnh, Thành phố Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Tiến Phát Auto",
+    "phone": "0975.779.440",
+    "address": "82 Tân Sơn, Phường 15, Quận Tân Bình, Thành phố Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Hiệp Auto",
+    "phone": "0944.145.355",
+    "address": "331-313 Lê Trọng Tấn, Phường Sơn Kỳ, Quận Tân Phú, Thành phố Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Công TY TNHH TMDV ALPHA CAR",
+    "phone": "0966.996.636",
+    "address": "57 Phạm Văn Chiêu, An Tây Hội, Thành phố Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Dương Anh Auto",
+    "phone": "0965.977.365",
+    "address": "293 Phước Thiện, Kp Phước Thiện, P. Long Bình, TP. Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Auto 365 Vũng Tàu",
+    "phone": "0342.365.365",
+    "address": "QL51, KP Hương Giang, Phường Long Hương, Thành phố Bà Rịa, Bà Rịa - Vũng Tàu",
+    "province": "Bà Rịa - Vũng Tàu",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "AUTO 365 BÌNH DƯƠNG",
+    "phone": "0877.365.365",
+    "address": "Số 60, Trương Định, Khu K8, Phường Hiệp Thành, Thành phố Thủ Dầu Một, Tỉnh Bình Dương",
+    "province": "Bình Dương",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Auto 48",
+    "phone": "0975.554.786",
+    "address": "25 Thích Quảng Đức, Phường Chánh Nghĩa, Thành phố Thủ Dầu Một, Tỉnh Bình Dương",
+    "province": "Bình Dương",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Đức Sĩ Auto",
+    "phone": "0988.113.564",
+    "address": "96/10 Quốc lộ 13, Khu phố Đông Nhì, Phường Lái Thêu, Thành phố Thuận An, Tỉnh Bình Dương",
+    "province": "Bình Dương",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "AB Auto",
+    "phone": "0981.214.567",
+    "address": "Số 202, Đường GS1, Khu phố Nhị Đồng 2, Phường Dĩ An, Thị xã Dĩ An, Thành phố Bình Dương",
+    "province": "Bình Dương",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Hạn Auto",
+    "phone": "0905.760.708",
+    "address": "Số 16, Đồng Cây Viết, Phú Mỹ, Thủ Dầu Một, Bình Dương",
+    "province": "Bình Dương",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Mạnh Quân Auto",
+    "phone": "0934.095.209",
+    "address": "164 Hùng Vương, Phường 2 , Quận 10, Thành phố Hồ Chí Minh",
+    "province": "TP. Hồ Chí Minh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Keramic Đồng Nai",
+    "phone": "0915.242.840",
+    "address": "Kiot 3-4, Xa lộ Hà Nội, Phường Tam Hòa, Thành phố Biên Hòa, Tỉnh Đồng Nai",
+    "province": "Đồng Nai",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Linh Long Thành Auto",
+    "phone": "0985.879.177",
+    "address": "610 Quốc Lộ 51, Xã Long An, Huyện Long Thành, Tỉnh Đồng Nai",
+    "province": "Đồng Nai",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "2t Auto Car – CS Biên Hòa, Đồng Nai",
+    "phone": "0925.405.999",
+    "address": "96/16 đường Đồng Khởi, Tổ 6, Khu phố 14, P.Tam Hiệp, Đồng Nai. (Biên Hoà, Đồng Nai cũ)",
+    "province": "Đồng Nai",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Auto 365 Tây Ninh",
+    "phone": "0975.115.511",
+    "address": "Quốc lộ 22 Ấp Chánh, Phường Gia Bình, Thị xãTrảng Bàng, TỉnhTây Ninh",
+    "province": "Tây Ninh",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "2T Auto Car - CS Tây Ninh",
+    "phone": "0922.114.279",
+    "address": "Số 19 – 21 đường Chính Liên Khu Vực, P.Long An, Tây Ninh (Tân An, Long An Cũ)",
+    "province": "Long An",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "Minh Nhựt Auto",
+    "phone": "0947.435.025",
+    "address": "B17 - đường dẫn - khu TTVH Tây Đô, Phường Hưng Thạnh, Quận Cái Răng, Thành phố Cần Thơ",
+    "province": "Cần Thơ",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "2T Auto - CN Cần Thơ",
+    "phone": "0762.094.252",
+    "address": "178-180 Trần Văn Trà, KDC Hưng Phú, Q.Cái Răng, TP. Cần Thơ",
+    "province": "Cần Thơ",
+    "region": "Miền Nam"
+  },
+  {
+    "name": "2T Auto Car - CS Tiền Giang",
+    "phone": "0933.225.379",
+    "address": "53A KP.Trung Lương,Phường Trung An, Đồng Tháp. (Mỹ Tho, Tiền Giang cũ)",
+    "province": "Tiền Giang",
+    "region": "Miền Nam"
+  }
+]

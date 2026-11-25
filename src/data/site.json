@@ -1,0 +1,51 @@
+{
+  "name": "MASTERTUNE",
+  "tagline": "Nhà phân phối âm thanh xe hơi hi-end chính hãng",
+  "hotline": "0888 888 124",
+  "hotlineTel": "0888888124",
+  "zalo": "https://zalo.me/0888888124",
+  "email": "info@mastertune.vn",
+  "addresses": [
+    {
+      "label": "Văn phòng Hà Nội",
+      "text": "1075 Giải Phóng, P. Thịnh Liệt, Q. Hoàng Mai, Hà Nội"
+    },
+    {
+      "label": "Chi nhánh TP.HCM",
+      "text": "18/1 Đường số 35, P. An Khánh, TP. Thủ Đức"
+    }
+  ],
+  "social": {
+    "facebook": "https://www.facebook.com/mastertunevn"
+  },
+  "nav": [
+    {
+      "label": "Sản phẩm",
+      "href": "/san-pham"
+    },
+    {
+      "label": "Thương hiệu",
+      "href": "/thuong-hieu"
+    },
+    {
+      "label": "Theo dòng xe",
+      "href": "/cau-hinh-theo-xe"
+    },
+    {
+      "label": "Ghép hệ thống",
+      "href": "/ghep-he-thong"
+    },
+    {
+      "label": "Showcase",
+      "href": "/showcase"
+    },
+    {
+      "label": "Học viện",
+      "href": "/hoc-vien"
+    },
+    {
+      "label": "Đại lý",
+      "href": "/dai-ly"
+    }
+  ]
+}

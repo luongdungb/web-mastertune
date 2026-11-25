@@ -1,0 +1,90 @@
+[
+  {
+    "slug": "steg",
+    "name": "STEG",
+    "origin": "Italia",
+    "logo": "/images/brands/steg.webp",
+    "count": 74
+  },
+  {
+    "slug": "dls",
+    "name": "DLS",
+    "origin": "Thụy Điển",
+    "logo": "/images/brands/dls.webp",
+    "count": 58
+  },
+  {
+    "slug": "audiocircle",
+    "name": "Audiocircle",
+    "origin": "Đức",
+    "logo": "/images/brands/audiocircle.webp",
+    "count": 24
+  },
+  {
+    "slug": "abyss",
+    "name": "ABYSS",
+    "origin": "",
+    "logo": null,
+    "count": 13
+  },
+  {
+    "slug": "resolut",
+    "name": "Resolut",
+    "origin": "",
+    "logo": "/images/brands/resolut.webp",
+    "count": 5
+  },
+  {
+    "slug": "ks-audio",
+    "name": "KS Audio",
+    "origin": "",
+    "aliases": [
+      "ksaudio",
+      "kingsub"
+    ],
+    "logo": null,
+    "count": 14
+  },
+  {
+    "slug": "vinsub",
+    "name": "Vinsub",
+    "origin": "",
+    "logo": null,
+    "count": 1
+  },
+  {
+    "slug": "harrison",
+    "name": "Harrison",
+    "origin": "",
+    "logo": "/images/brands/harrison.webp",
+    "count": 1
+  },
+  {
+    "slug": "clio",
+    "name": "CLIO",
+    "origin": "",
+    "logo": "/images/brands/clio.webp",
+    "count": 1
+  },
+  {
+    "slug": "golden-acoustics",
+    "name": "Golden Acoustics",
+    "origin": "",
+    "logo": null,
+    "count": 1
+  },
+  {
+    "slug": "bos",
+    "name": "BOS",
+    "origin": "",
+    "logo": null,
+    "count": 4
+  },
+  {
+    "slug": "nrg",
+    "name": "NRG",
+    "origin": "Hàn Quốc",
+    "logo": "/images/brands/nrg.webp",
+    "count": 1
+  }
+]

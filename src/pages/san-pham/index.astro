@@ -1,0 +1,139 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { products, brands, categories } from '../../lib/catalog';
+---
+<Base title="Sản phẩm" description={`${products.length} thiết bị âm thanh xe hơi chính hãng: loa cánh, loa sub, amply, DSP từ STEG, DLS, Audiocircle, Resolut… Thông số kỹ thuật đầy đủ, báo giá theo cấu hình.`}>
+  <header class="page-head">
+    <div class="wrap">
+      <h1 class="display">Sản phẩm</h1>
+      <p class="muted">{products.length} thiết bị chính hãng từ {brands.length} thương hiệu. Giá được báo theo cấu hình và xe của bạn.</p>
+    </div>
+  </header>
+
+  <section class="studio catalog" aria-label="Danh mục sản phẩm">
+    <div class="wrap">
+      <form class="filters" role="search" data-filters onsubmit="return false">
+        <fieldset class="chips">
+          <legend class="sr-only">Hạng mục</legend>
+          <label><input type="radio" name="loai" value="" checked /><span>Tất cả <small>{products.length}</small></span></label>
+          {categories.map((c) => (
+            <label><input type="radio" name="loai" value={c.slug} /><span>{c.label} <small>{c.count}</small></span></label>
+          ))}
+        </fieldset>
+        <div class="row">
+          <label class="field">
+            <span class="sr-only">Thương hiệu</span>
+            <select name="hang">
+              <option value="">Mọi thương hiệu</option>
+              {brands.map((b) => <option value={b.slug}>{b.name} ({b.count})</option>)}
+            </select>
+          </label>
+          <label class="field grow">
+            <span class="sr-only">Tìm theo tên</span>
+            <input type="search" name="q" placeholder="Tìm theo tên, mã sản phẩm…" autocomplete="off" />
+          </label>
+          <p class="count" aria-live="polite" data-count>{products.length} sản phẩm</p>
+        </div>
+      </form>
+
+      <div class="grid" data-grid>
+        {products.map((p, i) => <ProductCard product={p} eager={i < 8} />)}
+      </div>
+      <div class="empty" data-empty hidden>
+        <p>Không có sản phẩm khớp bộ lọc.</p>
+        <button type="button" class="btn btn-ink" data-reset>Xoá bộ lọc</button>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-head { padding: calc(var(--space-16) + 1rem) 0 var(--space-12); }
+  .page-head h1 { font-size: var(--t-3xl); }
+  .page-head p { margin-top: var(--space-4); max-width: 60ch; }
+
+  .catalog { padding-block: var(--space-8) var(--space-24); min-height: 60vh; }
+  .filters {
+    position: sticky; top: var(--header-h); z-index: 5;
+    background: var(--studio); padding-block: var(--space-4); margin-bottom: var(--space-8);
+    border-bottom: 1px solid var(--studio-line); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4);
+  }
+  .filters > * { min-width: 0; }
+  .chips { border: 0; margin: 0; padding: 0; display: flex; gap: var(--space-2); overflow-x: auto; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chips label { flex: none; cursor: pointer; position: relative; }
+  .chips input { position: absolute; opacity: 0; pointer-events: none; }
+  .chips span {
+    display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 var(--space-4);
+    border-radius: var(--radius-pill); border: 1px solid var(--studio-line); background: var(--studio-card);
+    font-size: var(--t-sm); white-space: nowrap; transition: background-color 160ms, color 160ms, border-color 160ms;
+  }
+  .chips small { color: var(--graphite); font-size: var(--t-xs); font-variant-numeric: tabular-nums; }
+  .chips label:hover span { border-color: var(--ink); }
+  .chips input:checked + span { background: var(--ink); color: var(--white); border-color: var(--ink); }
+  .chips input:checked + span small { color: var(--chrome); }
+  .chips input:focus-visible + span { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+  .row { display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; }
+  .field select, .field input {
+    min-height: 44px; padding: 0 var(--space-4); border-radius: var(--radius-s);
+    border: 1px solid var(--studio-line); background: var(--studio-card); color: var(--ink); font-size: var(--t-sm);
+  }
+  .field select:focus-visible, .field input:focus-visible { outline: 2px solid var(--signal); outline-offset: 1px; }
+  .grow { flex: 1 1 260px; }
+  .grow input { width: 100%; }
+  .count { margin-left: auto; font-size: var(--t-sm); color: var(--graphite); font-variant-numeric: tabular-nums; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-8) var(--space-6); }
+  .grid :global(.card[hidden]) { display: none; }
+  .empty { display: grid; justify-items: center; gap: var(--space-4); padding: var(--space-16) 0; color: var(--graphite); }
+
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6) var(--space-3); }
+    .count { margin-left: 0; width: 100%; }
+    .field select { width: 100%; }
+    .row > .field:first-child { flex: 1 1 100%; }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-filters]')!;
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-grid] .card')];
+  const countEl = document.querySelector('[data-count]')!;
+  const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+  const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+  const names = cards.map((c) => norm(c.dataset.name ?? ''));
+
+  const apply = (push = true) => {
+    const fd = new FormData(form);
+    const loai = String(fd.get('loai') ?? '');
+    const hang = String(fd.get('hang') ?? '');
+    const q = norm(String(fd.get('q') ?? '').trim());
+    let n = 0;
+    cards.forEach((c, i) => {
+      const ok = (!loai || c.dataset.cat === loai) && (!hang || c.dataset.brand === hang) && (!q || q.split(/\s+/).every((w) => names[i].includes(w)));
+      c.hidden = !ok;
+      if (ok) n++;
+    });
+    countEl.textContent = `${n} sản phẩm`;
+    empty.hidden = n > 0;
+    if (push) {
+      const url = new URL(location.href);
+      for (const [k, v] of [['loai', loai], ['hang', hang], ['q', String(fd.get('q') ?? '').trim()]]) v ? url.searchParams.set(k, v) : url.searchParams.delete(k);
+      history.replaceState(null, '', url);
+    }
+  };
+
+  // restore from URL (?loai=…&hang=…&q=…)
+  const params = new URLSearchParams(location.search);
+  const loai = params.get('loai');
+  if (loai) form.querySelector<HTMLInputElement>(`input[name="loai"][value="${CSS.escape(loai)}"]`)?.click();
+  (form.elements.namedItem('hang') as HTMLSelectElement).value = params.get('hang') ?? '';
+  (form.elements.namedItem('q') as HTMLInputElement).value = params.get('q') ?? '';
+  apply(false);
+
+  form.addEventListener('change', () => apply());
+  form.addEventListener('input', () => apply());
+  document.querySelector('[data-reset]')?.addEventListener('click', () => { form.reset(); apply(); });
+</script>

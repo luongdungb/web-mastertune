@@ -1,0 +1,37 @@
+[
+  {
+    "slug": "dsp",
+    "label": "Amply / DSP",
+    "count": 18
+  },
+  {
+    "slug": "sub-dien",
+    "label": "Sub điện",
+    "count": 17
+  },
+  {
+    "slug": "subwoofer",
+    "label": "Loa subwoofer",
+    "count": 24
+  },
+  {
+    "slug": "amply",
+    "label": "Amply",
+    "count": 45
+  },
+  {
+    "slug": "mid-treble",
+    "label": "Loa mid / treble",
+    "count": 18
+  },
+  {
+    "slug": "loa-canh",
+    "label": "Loa cánh",
+    "count": 71
+  },
+  {
+    "slug": "phu-kien",
+    "label": "Phụ kiện",
+    "count": 4
+  }
+]

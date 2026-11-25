@@ -1,0 +1,54 @@
+# MASTERTUNE — website
+
+Website phân phối âm thanh xe hơi hi-end. Astro 7 + Node.js (adapter `@astrojs/node`, chế độ standalone).
+
+## Chạy trên máy
+
+```bash
+npm install
+npm run dev        # http://localhost:4321
+npm run build      # build vào dist/
+npm start          # chạy bản build bằng Node (dist/server/entry.mjs)
+```
+
+## Dữ liệu
+
+| File | Nội dung |
+|---|---|
+| `src/data/products.json` | 197 sản phẩm: tên, thương hiệu, hạng mục, ảnh, thông số |
+| `src/data/brands.json` | Thương hiệu + logo |
+| `src/data/categories.json` | Hạng mục sản phẩm |
+| `src/data/site.json` | Hotline, Zalo, địa chỉ, menu |
+
+Dữ liệu sản phẩm được lấy từ mastertune.vn bằng các script trong `scripts/`:
+
+```bash
+node scripts/scrape-products.mjs   # tải trang sản phẩm -> data-raw/products.json
+node scripts/download-images.mjs   # tải ảnh gốc
+node scripts/optimize-images.mjs   # chuyển ảnh sang WebP -> public/images/
+node scripts/build-data.mjs        # tách thông số -> src/data/*.json
+```
+
+`data-raw/` (dữ liệu thô, ảnh gốc) không đưa lên Git.
+
+## Thiết kế
+
+- Màu: đen cabin `#07090c`, bạc chrome `#c9ced6` (từ logo), xanh tín hiệu `#2f7bff` cho nút bấm, trắng studio `#eef0f2` cho khu sản phẩm.
+- Chữ: Saira (variable, có tiếng Việt). Tiêu đề dùng bản giãn rộng (`font-stretch: 125%`, class `.display`).
+- Điểm nhấn: xe 3D xoay được (three.js) với các điểm lắp thiết bị — `src/components/CarSound3D.astro` + `src/scripts/car3d.ts`. three.js chỉ tải khi khách cuộn tới phần này.
+- Mô hình xe: “Generic Sedan Car” — Márcio Meireles (Sketchfab), **CC BY 4.0** (bắt buộc ghi nguồn, đã có dòng ghi nguồn dưới phần 3D). File gốc tải về bị thiếu texture nên dùng vật liệu trơn: `node scripts/prepare-sedan.mjs` rồi `node scripts/compress-sedan.mjs` → `public/models/sedan.glb` (~410KB, Draco). Mui được cắt bằng mặt phẳng cắt (`CUT_HEIGHT` trong `src/scripts/car3d.ts`). Vị trí các điểm (toạ độ 3D) sửa trong mảng `spots` của component.
+- Logo: file chính thức `Logo MasterTune.png` được tách nền bằng `node scripts/prepare-logo.mjs` → `public/brand/` (logo đầy đủ, chữ, chữ M, favicon).
+
+## Phần chạy trên máy chủ
+
+| Đường dẫn | Việc |
+|---|---|
+| `/dai-ly/khu-vuc-rieng` | Khu đại lý, đăng nhập bằng mã truy cập chung |
+| `/dai-ly/tai-lieu/<file>` | Tải tài liệu trong `private/dealer-docs/` (chỉ khi đã đăng nhập) |
+| `/api/bao-hanh` | Tra cứu serial trong `private/warranty.csv` |
+
+Biến môi trường (xem `.env.example`): `DEALER_ACCESS_CODE`, `SESSION_SECRET`, `WARRANTY_FILE` (tuỳ chọn).
+Khi chạy bằng `npm start`, khai báo các biến này trong phần Environment variables của Hostinger.
+Hướng dẫn dữ liệu bảo hành và tài liệu đại lý: `private/README.md`.
+
+Danh sách đại lý lấy từ mastertune.vn: `node scripts/scrape-dealers.mjs` → `src/data/dealers.json`.

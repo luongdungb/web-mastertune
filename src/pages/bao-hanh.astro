@@ -1,0 +1,117 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+---
+<Base title="Tra cứu bảo hành" description="Tra cứu bảo hành thiết bị âm thanh xe hơi chính hãng MASTERTUNE theo số serial.">
+  <div class="warranty" data-warranty data-hotline={site.hotline} data-hotline-tel={site.hotlineTel}>
+    <div class="wrap narrow">
+      <h1 class="display">Tra cứu bảo hành</h1>
+      <p class="muted">Nhập số serial in trên tem bảo hành hoặc trên thân thiết bị.</p>
+
+      <form class="form" data-form novalidate>
+        <label for="serial">Số serial</label>
+        <div class="row">
+          <input id="serial" name="serial" required minlength="4" maxlength="40" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="serial-hint" />
+          <button type="submit" class="btn btn-primary" data-submit>Tra cứu</button>
+        </div>
+        <p class="hint" id="serial-hint">Không phân biệt chữ hoa, chữ thường. Có thể bỏ dấu gạch ngang.</p>
+      </form>
+
+      <div class="result" data-result role="status" aria-live="polite"></div>
+
+      <section class="policy" aria-labelledby="policy-title">
+        <h2 id="policy-title">Chính sách bảo hành</h2>
+        <ul>
+          <li>Thiết bị mua tại đại lý chính hãng được bảo hành theo thời hạn của từng thương hiệu, phần lớn là 2 năm trên toàn quốc.</li>
+          <li>Khi cần bảo hành, mang thiết bị và tem serial tới đại lý đã lắp hoặc bất kỳ <a href="/dai-ly">đại lý chính hãng</a> nào.</li>
+          <li>Không tìm thấy serial hoặc cần hỗ trợ, gọi <a href={`tel:${site.hotlineTel}`}>{site.hotline}</a>.</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .warranty { padding: var(--space-16) 0 var(--space-24); min-height: 70vh; }
+  .narrow { max-width: 720px; }
+  h1 { font-size: var(--t-3xl); }
+  .muted { margin-top: var(--space-4); }
+  .form { display: grid; gap: var(--space-2); margin-top: var(--space-8); }
+  .form label { font-size: var(--t-sm); color: var(--chrome); }
+  .row { display: flex; gap: var(--space-2); }
+  .row input { flex: 1; min-width: 0; min-height: 52px; padding: 0 var(--space-4); border-radius: var(--radius-s); background: var(--panel); border: 1px solid var(--line); color: var(--white); font-size: var(--t-lg); letter-spacing: 0.06em; text-transform: uppercase; }
+  .row input[aria-invalid='true'] { border-color: #dc2626; }
+  .row input:focus-visible { outline: 2px solid var(--signal-hover); outline-offset: 1px; }
+  .hint { font-size: var(--t-xs); color: #8b93a0; }
+  .result { margin-top: var(--space-6); }
+  .result:empty { display: none; }
+  .policy { margin-top: var(--space-16); padding-top: var(--space-8); border-top: 1px solid var(--line); }
+  .policy h2 { font-size: var(--t-lg); font-weight: 600; }
+  .policy ul { margin: var(--space-4) 0 0; padding-left: 1.2em; display: grid; gap: var(--space-2); color: var(--chrome); line-height: 1.6; }
+  .policy a { color: var(--signal-hover); }
+  @media (max-width: 560px) { .row { flex-direction: column; } }
+</style>
+
+<style is:global>
+  .warranty .card-result { padding: var(--space-6); border-radius: var(--radius-m); border: 1px solid var(--line); background: var(--panel); display: grid; gap: var(--space-3); }
+  .warranty .card-result.ok { border-color: #2e8b57; }
+  .warranty .card-result.expired, .warranty .card-result.none { border-color: #b45309; }
+  .warranty .card-result h2 { font-size: var(--t-xl); font-stretch: 112%; font-weight: 600; }
+  .warranty .card-result dl { margin: 0; display: grid; }
+  .warranty .card-result dl div { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: var(--space-4); padding: var(--space-2) 0; border-top: 1px solid var(--line); font-size: var(--t-sm); }
+  .warranty .card-result dt { color: var(--chrome); }
+  .warranty .card-result dd { margin: 0; font-weight: 500; }
+  .warranty .card-result p { color: var(--chrome); font-size: var(--t-sm); line-height: 1.6; }
+  .warranty .card-result a { color: var(--signal-hover); }
+</style>
+
+<script>
+  import { escapeHtml as esc } from '../scripts/catalog-client';
+  const root = document.querySelector<HTMLElement>('[data-warranty]')!;
+  const form = root.querySelector<HTMLFormElement>('[data-form]')!;
+  const input = form.querySelector<HTMLInputElement>('input')!;
+  const btn = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+  const out = root.querySelector<HTMLElement>('[data-result]')!;
+  const call = `<a href="tel:${root.dataset.hotlineTel}">${root.dataset.hotline}</a>`;
+
+  const q = new URLSearchParams(location.search).get('serial');
+  if (q) input.value = q;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const serial = input.value.trim();
+    if (serial.length < 4) {
+      input.setAttribute('aria-invalid', 'true');
+      out.innerHTML = '<div class="card-result none"><p>Số serial cần ít nhất 4 ký tự.</p></div>';
+      input.focus();
+      return;
+    }
+    input.removeAttribute('aria-invalid');
+    btn.disabled = true;
+    btn.textContent = 'Đang tra cứu…';
+    try {
+      const res = await fetch('/api/bao-hanh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ serial }) });
+      const d = await res.json();
+      if (d.error) {
+        out.innerHTML = `<div class="card-result none"><p>${esc(d.error)} Hoặc gọi ${call}.</p></div>`;
+      } else if (!d.found) {
+        out.innerHTML = `<div class="card-result none"><h2>Không tìm thấy serial ${esc(serial.toUpperCase())}</h2><p>Kiểm tra lại từng ký tự trên tem. Nếu thiết bị mua tại đại lý chính hãng mà vẫn không tìm thấy, gọi ${call} để được kích hoạt.</p></div>`;
+      } else {
+        const state = d.active === false ? 'expired' : 'ok';
+        const title = d.active === false ? 'Đã hết hạn bảo hành' : 'Còn trong thời hạn bảo hành';
+        out.innerHTML = `<div class="card-result ${state}"><h2>${title}</h2><dl>
+          <div><dt>Serial</dt><dd>${esc(d.serial)}</dd></div>
+          <div><dt>Sản phẩm</dt><dd>${esc(d.product || '—')}</dd></div>
+          <div><dt>Đại lý lắp đặt</dt><dd>${esc(d.dealer || '—')}</dd></div>
+          <div><dt>Kích hoạt</dt><dd>${esc(d.activated || '—')}</dd></div>
+          <div><dt>Hết hạn</dt><dd>${esc(d.expires || '—')}</dd></div>
+        </dl></div>`;
+      }
+    } catch {
+      out.innerHTML = `<div class="card-result none"><p>Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại, hoặc gọi ${call}.</p></div>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Tra cứu';
+    }
+  });
+</script>

@@ -1,0 +1,127 @@
+---
+import Base from '../layouts/Base.astro';
+import ComparePicker from '../components/ComparePicker.astro';
+import { categories } from '../lib/catalog';
+---
+<Base title="So sánh sản phẩm" description="So sánh thông số kỹ thuật tối đa 3 thiết bị âm thanh xe hơi chính hãng, cạnh nhau.">
+  <header class="page-head">
+    <div class="wrap">
+      <h1 class="display">So sánh</h1>
+      <p class="muted">Tối đa 3 sản phẩm, thông số đặt cạnh nhau. Thêm sản phẩm bằng nút "So sánh" ở trang chi tiết.</p>
+    </div>
+  </header>
+
+  <section class="studio compare" aria-label="Bảng so sánh">
+    <div class="wrap">
+      <div class="empty" data-empty hidden>
+        <p>Chưa có sản phẩm nào để so sánh. Chọn loại thiết bị:</p>
+        <div class="cats">
+          {categories.map((c) => <button type="button" class="cat" data-pick-cat={c.slug} data-label={c.label}>{c.label}</button>)}
+        </div>
+      </div>
+      <div class="table-wrap" data-wrap hidden>
+        <table data-table></table>
+      </div>
+      <div class="more" data-more hidden><button type="button" class="btn btn-ink" data-add-more>Thêm sản phẩm để so sánh</button></div>
+      <p class="hint" data-hint></p>
+    </div>
+  </section>
+  <ComparePicker />
+</Base>
+
+<style>
+  .page-head { padding: var(--space-16) 0 var(--space-12); }
+  .page-head h1 { font-size: var(--t-3xl); }
+  .page-head p { margin-top: var(--space-4); max-width: 62ch; }
+  .compare { padding-block: var(--space-12) var(--space-24); min-height: 50vh; }
+  .empty { display: grid; justify-items: start; gap: var(--space-4); color: var(--graphite); }
+  .table-wrap { overflow-x: auto; }
+  .cats { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .cat { min-height: 44px; padding: 0 var(--space-4); border-radius: var(--radius-pill); border: 1px solid var(--studio-line); background: var(--studio-card); color: var(--ink); cursor: pointer; font-size: var(--t-sm); }
+  .cat:hover { border-color: var(--ink); }
+  .more { margin-top: var(--space-6); }
+  .hint { margin-top: var(--space-4); font-size: var(--t-sm); color: var(--graphite); }
+
+  .compare :global(table) { width: 100%; min-width: 640px; border-collapse: collapse; table-layout: fixed; font-size: var(--t-sm); }
+  .compare :global(th), .compare :global(td) { text-align: left; vertical-align: top; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--studio-line); }
+  .compare :global(thead th) { border-bottom: 0; padding-bottom: var(--space-6); }
+  .compare :global(tbody th) { color: var(--graphite); font-weight: 500; width: 22%; }
+  .compare :global(td) { font-weight: 500; font-variant-numeric: tabular-nums; }
+  .compare :global(td.diff) { background: var(--studio-card); }
+  .compare :global(.col) { display: grid; gap: var(--space-2); }
+  .compare :global(.col .img) { aspect-ratio: 1; background: var(--studio-card); border: 1px solid var(--studio-line); border-radius: var(--radius-m); display: grid; place-items: center; padding: var(--space-4); }
+  .compare :global(.col img) { width: 100%; height: 100%; object-fit: contain; }
+  .compare :global(.col .br) { font-size: var(--t-xs); color: var(--graphite); font-weight: 600; }
+  .compare :global(.col a.nm) { color: var(--ink); font-weight: 600; text-decoration: none; line-height: 1.3; }
+  .compare :global(.col a.nm:hover) { text-decoration: underline; }
+  .compare :global(.col .acts) { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+  .compare :global(.col button) { min-height: 36px; padding: 0 var(--space-3); border-radius: var(--radius-pill); border: 1px solid var(--studio-line); background: transparent; cursor: pointer; font-size: var(--t-xs); font-weight: 600; color: var(--ink); }
+  .compare :global(.col button:hover) { border-color: var(--ink); }
+  .compare :global(.col button.primary) { background: var(--signal); border-color: var(--signal); color: #fff; }
+</style>
+
+<script>
+  import { getCompare, setCompare, addToConfig } from '../scripts/config-store';
+  import { loadCatalog, escapeHtml as esc } from '../scripts/catalog-client';
+
+  const table = document.querySelector<HTMLTableElement>('[data-table]')!;
+  const wrap = document.querySelector<HTMLElement>('[data-wrap]')!;
+  const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+  const hint = document.querySelector<HTMLElement>('[data-hint]')!;
+  const more = document.querySelector<HTMLElement>('[data-more]')!;
+  let firstCat = { c: '', cl: '' };
+  const pick = (category: string, label: string) => window.dispatchEvent(new CustomEvent('mt:compare-pick', { detail: { category, label } }));
+  document.querySelector('[data-empty]')!.addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>('[data-pick-cat]'); if (b) pick(b.dataset.pickCat!, b.dataset.label!); });
+  more.querySelector('[data-add-more]')!.addEventListener('click', () => pick(firstCat.c, firstCat.cl));
+
+  const norm = (k: string) => k.toLowerCase().replace(/\s+/g, ' ').trim();
+
+  async function render() {
+    const catalog = await loadCatalog();
+    const items = getCompare().map((s) => catalog.get(s)).filter((p): p is NonNullable<typeof p> => !!p);
+    empty.hidden = items.length > 0;
+    wrap.hidden = items.length === 0;
+    more.hidden = items.length === 0;
+    if (!items.length) { hint.textContent = ''; return; }
+    firstCat = { c: items[0].c, cl: items[0].cl };
+    more.querySelector('[data-add-more]')!.textContent = items.length < 3 ? `Thêm ${items[0].cl.toLowerCase()} để so sánh` : 'Đổi sản phẩm so sánh';
+
+    // union of spec keys, in first-seen order
+    const keys: string[] = []; const label = new Map<string, string>();
+    for (const p of items) for (const [k] of p.sp) { const n = norm(k); if (!label.has(n)) { label.set(n, k); keys.push(n); } }
+    const val = (p: typeof items[number], n: string) => p.sp.find(([k]) => norm(k) === n)?.[1] ?? '—';
+
+    const head = items.map((p) => `<th scope="col"><div class="col">
+      <div class="img"><img src="${p.i}" alt="" width="240" height="240"></div>
+      <p class="br">${esc(p.b)}</p>
+      <a class="nm" href="/san-pham/${p.s}">${esc(p.n)}</a>
+      <div class="acts"><button type="button" class="primary" data-cfg="${p.s}">Thêm vào cấu hình</button><button type="button" data-rm="${p.s}">Bỏ</button></div>
+    </div></th>`).join('');
+    const row = (title: string, cells: string[]) => {
+      const differ = new Set(cells).size > 1 && items.length > 1;
+      return `<tr><th scope="row">${esc(title)}</th>${cells.map((c) => `<td class="${differ ? 'diff' : ''}">${esc(c)}</td>`).join('')}</tr>`;
+    };
+    const rows = [
+      row('Hạng mục', items.map((p) => p.cl)),
+      ...keys.map((n) => row(label.get(n)!, items.map((p) => val(p, n)))),
+      row('Vị trí lắp', items.map((p) => p.ins || '—')),
+      row('Bảo hành', items.map((p) => p.w || 'Chính hãng')),
+    ].join('');
+    table.innerHTML = `<thead><tr><th scope="col"><span class="sr-only">Thông số</span></th>${head}</tr></thead><tbody>${rows}</tbody>`;
+
+    const cats = new Set(items.map((p) => p.c));
+    hint.textContent = cats.size > 1
+      ? 'Các sản phẩm khác hạng mục nên nhiều thông số không đặt cạnh nhau được. So sánh cùng hạng mục sẽ rõ hơn.'
+      : items.length < 3 ? `Có thể thêm ${3 - items.length} sản phẩm nữa. Ô nền trắng là thông số khác nhau.` : 'Ô nền trắng là thông số khác nhau.';
+  }
+
+  table.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const rm = t.closest<HTMLElement>('[data-rm]')?.dataset.rm;
+    const cfg = t.closest<HTMLElement>('[data-cfg]');
+    if (rm) setCompare(getCompare().filter((s) => s !== rm));
+    if (cfg) { addToConfig(cfg.dataset.cfg!); cfg.textContent = 'Đã thêm'; }
+  });
+  window.addEventListener('mt:compare', render);
+  render().catch(() => { hint.textContent = 'Không tải được dữ liệu. Hãy tải lại trang.'; });
+</script>

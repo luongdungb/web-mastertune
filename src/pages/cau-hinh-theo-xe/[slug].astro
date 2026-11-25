@@ -1,0 +1,162 @@
+---
+import Base from '../../layouts/Base.astro';
+import { cars, notesFor, packagesFor, installsFor, BODY_LABEL, carName, type Car } from '../../lib/cars';
+import { products, brandOf } from '../../lib/catalog';
+import site from '../../data/site.json';
+
+export function getStaticPaths() {
+  return cars.map((c) => ({ params: { slug: c.slug }, props: { car: c } }));
+}
+const { car } = Astro.props as { car: Car };
+const name = carName(car);
+const notes = notesFor(car);
+const pkgs = packagesFor(car);
+const gallery = installsFor(car);
+const bySlug = new Map(products.map((p) => [p.slug, p]));
+const sameBrand = cars.filter((c) => c.brand === car.brand && c.slug !== car.slug);
+---
+<Base title={`Âm thanh cho ${name}`} description={`Gợi ý cấu hình âm thanh cho ${name}: lưu ý lắp đặt, các gói từ nâng cấp loa zin tới cao cấp, ảnh xe đã lắp thực tế. Thiết bị chính hãng MASTERTUNE.`}>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="crumbs"><a href="/cau-hinh-theo-xe">Cấu hình theo dòng xe</a></p>
+      <h1 class="display">Âm thanh cho {name}</h1>
+      <p class="muted">{BODY_LABEL[car.body]}{car.ev ? ', xe điện' : ''}. Kỹ thuật viên sẽ kiểm tra kích thước loa và vị trí lắp trên xe thực tế trước khi báo giá.</p>
+    </div>
+  </header>
+
+  <section class="section notes" aria-labelledby="notes-title">
+    <div class="wrap two">
+      <h2 id="notes-title">Lưu ý khi nâng cấp</h2>
+      <ul>{notes.map((n) => <li>{n}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="studio section pkgs" aria-labelledby="pkg-title">
+    <div class="wrap">
+      <h2 id="pkg-title">Cấu hình gợi ý cho {car.model}</h2>
+      <ol class="pkg-grid">
+        {pkgs.map((pk) => (
+          <li class="pkg">
+            <p class="tier">{pk.tier}</p>
+            <h3>{pk.name}</h3>
+            <p class="for">{pk.for}</p>
+            <ul class="items">
+              {pk.items.map((it) => {
+                const p = bySlug.get(it.slug);
+                return p && (
+                  <li>
+                    <img src={p.image} alt="" width="48" height="48" loading="lazy" />
+                    <div><p class="role">{it.role}</p><a href={`/san-pham/${p.slug}`}>{p.name}</a><p class="brand">{brandOf(p).name}</p></div>
+                  </li>
+                );
+              })}
+            </ul>
+            <button type="button" class="btn btn-ink" data-use={JSON.stringify(pk.items.map(({ slug, qty }) => ({ slug, qty })))}>Dùng cấu hình này</button>
+          </li>
+        ))}
+      </ol>
+      <p class="ask">Muốn một cấu hình riêng cho {car.model}? <a href={site.zalo} target="_blank" rel="noopener">Hỏi kỹ thuật viên qua Zalo</a> hoặc <a href="/tim-he-thong">trả lời 4 câu hỏi</a>.</p>
+    </div>
+  </section>
+
+  <section class="section gallery" id="xe-da-lap" aria-labelledby="gal-title">
+    <div class="wrap">
+      <h2 id="gal-title">{car.model} đã lắp</h2>
+      {gallery.length ? (
+        <ul class="gal-grid">
+          {gallery.map((g) => (
+            <li class="install">
+              <div class="shots">{g.images.slice(0, 3).map((src, i) => <img src={src} alt={`${name}: ${g.title}, ảnh ${i + 1}`} loading="lazy" width="800" height="600" />)}</div>
+              <h3>{g.title}</h3>
+              {g.dealer && <p class="by">Lắp tại {g.dealer}{g.date ? `, ${g.date}` : ''}</p>}
+              {g.note && <p class="by">{g.note}</p>}
+              <ul class="used">
+                {g.products.map((s) => { const p = bySlug.get(s); return p && <li><a href={`/san-pham/${p.slug}`}>{p.name}</a></li>; })}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div class="empty">
+          <p>Chưa có ảnh lắp đặt thực tế cho {name}. Ảnh từ đại lý sẽ được cập nhật tại đây.</p>
+          <a class="btn btn-ghost" href="/dai-ly">Tìm đại lý lắp cho {car.model}</a>
+        </div>
+      )}
+      {sameBrand.length > 0 && (
+        <nav class="others" aria-label={`Dòng xe ${car.brand} khác`}>
+          <p>Dòng {car.brand} khác</p>
+          <ul>{sameBrand.map((c) => <li><a href={`/cau-hinh-theo-xe/${c.slug}`}>{c.model}</a></li>)}</ul>
+        </nav>
+      )}
+    </div>
+  </section>
+  <span hidden data-car-name={name}></span>
+</Base>
+
+<style>
+  .page-head { padding: var(--space-16) 0 var(--space-12); }
+  .crumbs a { color: var(--chrome); font-size: var(--t-sm); text-decoration: none; }
+  .crumbs a:hover { color: var(--white); text-decoration: underline; }
+  .page-head h1 { font-size: var(--t-3xl); margin-top: var(--space-2); }
+  .page-head p.muted { margin-top: var(--space-4); max-width: 62ch; }
+
+  .notes { border-top: 1px solid var(--line); }
+  .two { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(2rem, 5vw, 5rem); }
+  .notes h2, .pkgs h2, .gallery h2 { font-size: var(--t-2xl); font-stretch: 112%; font-weight: 600; }
+  .notes ul { margin: 0; padding-left: 1.2em; display: grid; gap: var(--space-4); color: var(--chrome); line-height: 1.6; }
+
+  .pkgs h2 { margin-bottom: var(--space-8); }
+  .pkg-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+  .pkg { background: var(--studio-card); border: 1px solid var(--studio-line); border-radius: var(--radius-m); padding: var(--space-6); display: grid; gap: var(--space-3); align-content: start; }
+  .tier { font-size: var(--t-sm); color: var(--signal); font-weight: 600; }
+  .pkg h3 { font-size: var(--t-xl); font-stretch: 112%; font-weight: 600; }
+  .for { font-size: var(--t-sm); color: var(--graphite); line-height: 1.55; }
+  .items { list-style: none; margin: 0; padding: 0; display: grid; }
+  .items li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: var(--space-3); align-items: center; padding: var(--space-2) 0; border-top: 1px solid var(--studio-line); }
+  .items img { width: 48px; height: 48px; object-fit: contain; }
+  .role, .brand { font-size: var(--t-xs); color: var(--graphite); }
+  .items a { color: var(--ink); font-weight: 600; font-size: var(--t-sm); text-decoration: none; line-height: 1.3; }
+  .items a:hover { text-decoration: underline; }
+  .pkg .btn { justify-self: start; margin-top: var(--space-2); }
+  .ask { margin-top: var(--space-8); color: var(--graphite); }
+  .ask a { color: var(--signal); font-weight: 600; }
+
+  .gallery h2 { margin-bottom: var(--space-6); }
+  .gal-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-8); }
+  .shots { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: var(--space-2); aspect-ratio: 16 / 10; }
+  .shots img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-s); }
+  .shots img:first-child { grid-row: span 2; }
+  .install h3 { font-size: var(--t-lg); font-weight: 600; margin-top: var(--space-4); }
+  .by { font-size: var(--t-sm); color: var(--chrome); }
+  .used { margin: var(--space-2) 0 0; padding-left: 1.2em; font-size: var(--t-sm); }
+  .used a { color: var(--white); }
+  .empty { display: flex; gap: var(--space-4); align-items: center; flex-wrap: wrap; color: var(--chrome); }
+  .others { margin-top: var(--space-16); padding-top: var(--space-6); border-top: 1px solid var(--line); }
+  .others p { font-size: var(--t-sm); color: var(--chrome); }
+  .others ul { list-style: none; padding: 0; margin: var(--space-3) 0 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .others a { display: inline-flex; min-height: 40px; align-items: center; padding: 0 var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-pill); color: var(--chrome); text-decoration: none; font-size: var(--t-sm); }
+  .others a:hover { color: var(--white); border-color: var(--chrome); }
+
+  @media (max-width: 960px) { .pkg-grid { grid-template-columns: 1fr; } .two { grid-template-columns: 1fr; } .gal-grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  import { getConfig, setConfig } from '../../scripts/config-store';
+  const carName = document.querySelector<HTMLElement>('[data-car-name]')!.dataset.carName!;
+  document.querySelectorAll<HTMLButtonElement>('[data-use]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cfg = getConfig();
+      for (const it of JSON.parse(btn.dataset.use!) as { slug: string; qty: number }[]) {
+        const f = cfg.find((c) => c.slug === it.slug);
+        if (f) f.qty += it.qty; else cfg.push({ ...it });
+      }
+      setConfig(cfg);
+      // prefill the car model in the quote form
+      try {
+        const c = JSON.parse(localStorage.getItem('mt:customer') ?? '{}');
+        if (!c.car) localStorage.setItem('mt:customer', JSON.stringify({ ...c, car: carName }));
+      } catch {}
+      location.href = '/ghep-he-thong';
+    });
+  });
+</script>

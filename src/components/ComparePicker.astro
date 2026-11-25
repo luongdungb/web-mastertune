@@ -1,0 +1,113 @@
+---
+// Dialog that lists products of one category so the visitor can pick up to 3 to compare.
+// Open it from any page with: window.dispatchEvent(new CustomEvent('mt:compare-pick', { detail: { category } }))
+---
+<dialog class="cmp-picker" data-cmp-picker aria-labelledby="cmp-title">
+  <div class="cmp-head">
+    <div>
+      <h2 id="cmp-title" data-cmp-title>So sánh</h2>
+      <p class="cmp-sub" data-cmp-sub>Chọn tối đa 3 sản phẩm.</p>
+    </div>
+    <button type="button" class="cmp-close" data-cmp-close aria-label="Đóng">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+    </button>
+  </div>
+  <div class="cmp-search">
+    <label class="sr-only" for="cmp-q">Tìm sản phẩm</label>
+    <input id="cmp-q" type="search" placeholder="Tìm theo tên, thương hiệu…" autocomplete="off" data-cmp-q />
+  </div>
+  <ul class="cmp-list" data-cmp-list></ul>
+  <div class="cmp-foot">
+    <p class="cmp-count" data-cmp-count role="status"></p>
+    <a class="btn btn-primary" href="/so-sanh" data-cmp-go>Xem so sánh</a>
+  </div>
+</dialog>
+
+<style is:global>
+  .cmp-picker {
+    width: min(720px, calc(100vw - 2rem)); max-height: min(86vh, 900px); padding: 0;
+    border: 1px solid var(--studio-line); border-radius: var(--radius-m); background: var(--studio); color: var(--ink); color-scheme: light;
+  }
+  .cmp-picker[open] { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; }
+  .cmp-picker::backdrop { background: rgba(7, 9, 12, 0.7); backdrop-filter: blur(4px); }
+  .cmp-head { display: flex; justify-content: space-between; align-items: start; gap: var(--space-4); padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--studio-line); }
+  .cmp-head h2 { font-size: var(--t-lg); font-weight: 600; }
+  .cmp-sub { font-size: var(--t-sm); color: var(--graphite); }
+  .cmp-close { width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; border-radius: 50%; display: grid; place-items: center; color: var(--ink); flex: none; }
+  .cmp-close:hover { background: var(--studio-card); }
+  .cmp-search { padding: var(--space-4) var(--space-6) var(--space-2); }
+  .cmp-search input { width: 100%; min-height: 44px; padding: 0 var(--space-3); border: 1px solid var(--studio-line); border-radius: var(--radius-s); background: var(--studio-card); font-size: var(--t-sm); }
+  .cmp-list { list-style: none; margin: 0; padding: 0 var(--space-6); overflow-y: auto; }
+  .cmp-list li { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: var(--space-3); align-items: center; padding: var(--space-3) 0; border-top: 1px solid var(--studio-line); }
+  .cmp-list img { width: 64px; height: 64px; object-fit: contain; background: #fff; border-radius: var(--radius-s); }
+  .cmp-list .nm { font-weight: 600; font-size: var(--t-sm); line-height: 1.3; }
+  .cmp-list .sub { font-size: var(--t-xs); color: var(--graphite); }
+  .cmp-list button {
+    min-height: 40px; padding: 0 var(--space-4); border-radius: var(--radius-pill); border: 1px solid var(--studio-line);
+    background: transparent; color: var(--ink); cursor: pointer; font-size: var(--t-xs); font-weight: 600; white-space: nowrap;
+  }
+  .cmp-list button:hover:not([disabled]) { border-color: var(--ink); }
+  .cmp-list button[aria-pressed='true'] { background: var(--ink); color: var(--white); border-color: var(--ink); }
+  .cmp-list button[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .cmp-list .none { display: block; color: var(--graphite); padding: var(--space-8) 0; border: 0; }
+  .cmp-foot { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); padding: var(--space-4) var(--space-6); border-top: 1px solid var(--studio-line); }
+  .cmp-count { font-size: var(--t-sm); color: var(--graphite); }
+  .cmp-foot .btn[aria-disabled='true'] { opacity: 0.4; pointer-events: none; }
+</style>
+
+<script>
+  import { getCompare, toggleCompare, COMPARE_MAX } from '../scripts/config-store';
+  import { loadCatalog, escapeHtml as esc, fold } from '../scripts/catalog-client';
+
+  const dlg = document.querySelector<HTMLDialogElement>('[data-cmp-picker]')!;
+  const title = dlg.querySelector<HTMLElement>('[data-cmp-title]')!;
+  const sub = dlg.querySelector<HTMLElement>('[data-cmp-sub]')!;
+  const list = dlg.querySelector<HTMLElement>('[data-cmp-list]')!;
+  const q = dlg.querySelector<HTMLInputElement>('[data-cmp-q]')!;
+  const count = dlg.querySelector<HTMLElement>('[data-cmp-count]')!;
+  const go = dlg.querySelector<HTMLAnchorElement>('[data-cmp-go]')!;
+  let category = '';
+  let opener: Element | null = null;
+
+  async function render() {
+    const catalog = await loadCatalog();
+    const chosen = getCompare();
+    const term = fold(q.value.trim());
+    const items = [...catalog.values()]
+      .filter((p) => p.c === category && (!term || term.split(/\s+/).every((w) => fold(`${p.n} ${p.b}`).includes(w))))
+      .sort((a, b) => Number(chosen.includes(b.s)) - Number(chosen.includes(a.s)));
+    const full = chosen.length >= COMPARE_MAX;
+    list.innerHTML = items.length ? items.map((p) => {
+      const on = chosen.includes(p.s);
+      const spec = p.k.map(([k, v]) => `${esc(k)}: ${esc(v)}`).join(', ');
+      return `<li><img src="${p.i}" alt="" width="64" height="64" loading="lazy">
+        <div><p class="nm">${esc(p.n)}</p><p class="sub">${esc(p.b)}${spec ? `. ${spec}` : ''}</p></div>
+        <button type="button" data-cmp="${p.s}" aria-pressed="${on}" ${!on && full ? 'disabled' : ''}>${on ? 'Đang so sánh' : 'So sánh'}</button></li>`;
+    }).join('') : '<li class="none">Không có sản phẩm khớp.</li>';
+    count.textContent = `Đã chọn ${chosen.length}/${COMPARE_MAX}${full ? '. Bỏ bớt để chọn sản phẩm khác.' : ''}`;
+    go.setAttribute('aria-disabled', String(chosen.length < 2));
+    go.textContent = chosen.length < 2 ? 'Chọn thêm để so sánh' : `Xem so sánh ${chosen.length} sản phẩm`;
+  }
+
+  list.addEventListener('click', (e) => {
+    const s = (e.target as HTMLElement).closest<HTMLElement>('[data-cmp]')?.dataset.cmp;
+    if (s) toggleCompare(s);
+  });
+  window.addEventListener('mt:compare', () => { if (dlg.open) render(); });
+  q.addEventListener('input', render);
+  dlg.querySelector('[data-cmp-close]')!.addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('close', () => (opener as HTMLElement | null)?.focus?.());
+
+  window.addEventListener('mt:compare-pick', async (e) => {
+    const detail = (e as CustomEvent<{ category: string; label?: string }>).detail;
+    category = detail.category;
+    opener = document.activeElement;
+    title.textContent = `So sánh ${detail.label ? detail.label.toLowerCase() : 'sản phẩm'}`;
+    sub.textContent = `Chọn tối đa ${COMPARE_MAX} sản phẩm cùng loại để đặt thông số cạnh nhau.`;
+    q.value = '';
+    await render();
+    dlg.showModal();
+    q.focus();
+  });
+</script>

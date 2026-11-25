@@ -1,0 +1,169 @@
+---
+// Signature section: a real-time 3D car (drag to rotate) with a point at every place a component lives.
+// The 3D engine (three.js) is only downloaded when the section scrolls near the viewport.
+import categories from '../data/categories.json';
+
+type Spot = { id: string; category: string; pos: [number, number, number]; title: string; where: string; text: string };
+// Positions in model space: +Z = front, +X = driver side, +Y = up (metres).
+const spots: Spot[] = [
+  { id: 'treble', category: 'mid-treble', pos: [0.66, 1.06, 1.02], title: 'Treble & mid', where: 'Cột A', text: 'Dải cao đặt gần tầm tai, giọng ca nổi lên giữa kính lái.' },
+  { id: 'door', category: 'loa-canh', pos: [0.8, 1.02, 0.55], title: 'Loa cánh', where: 'Cánh cửa', text: 'Bộ loa 2-way, 3-way thay loa zin cho tiếng trung trầm chắc.' },
+  { id: 'dsp', category: 'dsp', pos: [0.41, 0.52, 0.45], title: 'Amply / DSP', where: 'Gầm ghế lái', text: 'Căn thời gian và cân bằng từng loa để sân khấu đứng trước mặt.' },
+  { id: 'amp', category: 'amply', pos: [-0.4, 0.53, 0.45], title: 'Amply', where: 'Gầm ghế phụ', text: 'Công suất sạch, mở lớn vẫn không méo tiếng.' },
+  { id: 'subdien', category: 'sub-dien', pos: [0, 0.58, -0.6], title: 'Sub điện', where: 'Gầm ghế sau', text: 'Liền amply, gọn gàng, không mất cốp.' },
+  { id: 'sub', category: 'subwoofer', pos: [0, 1.13, -2.05], title: 'Subwoofer', where: 'Cốp xe', text: 'Tiếng trầm sâu, có lực cho nghe nhạc và thi đấu.' },
+];
+const catCount = Object.fromEntries(categories.map((c) => [c.slug, c.count]));
+---
+<section class="sound3d" aria-labelledby="sound3d-title">
+  <div class="wrap">
+    <header class="head">
+      <h2 id="sound3d-title" class="display">Âm thanh, từng vị trí</h2>
+      <p class="muted hint">Kéo để xoay xe. Chạm vào từng điểm.</p>
+    </header>
+  </div>
+
+  <div class="stage" data-stage data-spots={JSON.stringify(spots.map(({ id, pos }) => ({ id, pos })))}>
+    <div class="canvas-host" data-host aria-hidden="true"></div>
+    <p class="loading" data-loading>Đang tải mô hình 3D…</p>
+    <svg class="leader" data-leader aria-hidden="true"><line x1="0" y1="0" x2="0" y2="0" /></svg>
+
+    {spots.map((s, i) => (
+      <button type="button" class="spot" aria-pressed={i === 0 ? 'true' : 'false'} aria-controls={`s3d-${s.id}`} data-spot={s.id} hidden>
+        <span class="sr-only">{s.title}, {s.where}</span>
+      </button>
+    ))}
+
+    {spots.map((s, i) => (
+      <article class="callout" id={`s3d-${s.id}`} data-info={s.id} hidden={i !== 0}>
+        <p class="where">{s.where}</p>
+        <h3>{s.title}</h3>
+        <p class="text">{s.text}</p>
+        <a href={`/san-pham?loai=${s.category}`}>Xem {catCount[s.category]} sản phẩm</a>
+      </article>
+    ))}
+  </div>
+
+  <div class="wrap">
+    <ul class="spot-list" aria-label="Các vị trí lắp đặt">
+      {spots.map((s, i) => (
+        <li><button type="button" data-spot={s.id} aria-pressed={i === 0 ? 'true' : 'false'}>{s.title}</button></li>
+      ))}
+    </ul>
+    <p class="credit">Mô hình 3D: <a href="https://sketchfab.com/3d-models/generic-sedan-car-58c33766470d46e7b2aed542650494e5" target="_blank" rel="noopener">“Generic Sedan Car”</a> của Márcio Meireles, giấy phép <a href="https://creativecommons.org/licenses/by/4.0/" rel="license noopener" target="_blank">CC BY 4.0</a>. Đã chỉnh sửa vật liệu và cắt mui để thấy khoang xe.</p>
+  </div>
+</section>
+
+<style>
+  .sound3d { padding-block: clamp(5rem, 10vw, 9rem) var(--space-12); overflow: hidden; }
+  .head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-6); flex-wrap: wrap; }
+  .head h2 { font-size: var(--t-3xl); }
+  .hint { font-size: var(--t-sm); }
+
+  .stage {
+    position: relative; height: clamp(420px, 62vw, 760px); margin-top: var(--space-4);
+    background: radial-gradient(ellipse 48% 42% at 50% 56%, rgba(201, 206, 214, 0.10), rgba(7, 9, 12, 0) 70%);
+  }
+  .canvas-host { position: absolute; inset: 0; cursor: grab; }
+  .canvas-host:active { cursor: grabbing; }
+  .canvas-host :global(canvas) { display: block; width: 100% !important; height: 100% !important; touch-action: pan-y; }
+  .loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--chrome); font-size: var(--t-sm); }
+  .stage.ready .loading { display: none; }
+
+  .spot {
+    position: absolute; left: 0; top: 0; z-index: 2;
+    width: 44px; height: 44px; margin: -22px 0 0 -22px; padding: 0;
+    border: 0; background: transparent; cursor: pointer; display: grid; place-items: center;
+    will-change: transform; transition: opacity 200ms;
+  }
+  .spot::before {
+    content: ''; width: 14px; height: 14px; border-radius: 50%;
+    background: #9cc0ff; box-shadow: 0 0 0 5px rgba(47, 123, 255, 0.25), 0 0 18px 3px rgba(47, 123, 255, 0.45);
+    transition: transform 220ms var(--ease-out), background-color 220ms;
+  }
+  .spot:hover::before { transform: scale(1.2); }
+  .spot[aria-pressed='true']::before { background: #fff; box-shadow: 0 0 0 6px rgba(47, 123, 255, 0.5), 0 0 30px 8px rgba(47, 123, 255, 0.7); }
+  .spot.occluded { opacity: 0.35; }
+
+  .callout {
+    position: absolute; left: 0; top: 0; z-index: 3; width: 270px;
+    padding: var(--space-4); display: grid; gap: var(--space-1);
+    background: rgba(10, 14, 22, 0.9); border: 1px solid rgba(47, 123, 255, 0.45); border-radius: var(--radius-m);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 0 40px rgba(47, 123, 255, 0.12);
+    will-change: transform; pointer-events: auto;
+  }
+  .leader { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: visible; }
+  .leader line { stroke: rgba(47, 123, 255, 0.75); stroke-width: 1; }
+  .stage:not(.ready) .leader { display: none; }
+  .callout .where { font-size: var(--t-xs); color: var(--signal-hover); font-weight: 600; }
+  .callout h3 { font-size: var(--t-xl); font-stretch: 112%; font-weight: 600; }
+  .callout .text { font-size: var(--t-sm); color: var(--chrome); line-height: 1.5; }
+  .callout a { margin-top: var(--space-2); font-size: var(--t-sm); font-weight: 600; color: var(--signal-hover); text-underline-offset: 4px; }
+  .stage:not(.ready) .callout { display: none; }
+
+  .spot-list { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: flex; justify-content: center; flex-wrap: wrap; border-top: 1px solid var(--line); }
+  .spot-list button {
+    min-height: 48px; padding: 0 var(--space-4); background: transparent; border: 0; cursor: pointer;
+    color: var(--chrome); font-size: var(--t-sm); transition: color 160ms, box-shadow 160ms;
+  }
+  .spot-list button:hover { color: var(--white); }
+  .spot-list button[aria-pressed='true'] { color: var(--white); box-shadow: inset 0 2px 0 var(--signal); }
+  .credit { margin-top: var(--space-6); text-align: center; font-size: var(--t-xs); color: #6b7380; }
+  .credit a { color: inherit; }
+
+  /* no WebGL: plain list + card, no floating parts */
+  .stage.failed { height: auto; }
+  .stage.failed .canvas-host, .stage.failed .spot, .stage.failed .leader { display: none !important; }
+  .stage.failed .loading { display: block; position: static; height: auto; text-align: center; padding-block: var(--space-8) var(--space-4); }
+  .stage.failed .callout { position: static; width: auto; max-width: 560px; margin: 0 auto; transform: none !important; }
+
+  /* narrower screens: no side gutters, so the callout sits under the car */
+  @media (max-width: 1099px) {
+    .stage { height: auto; }
+    .canvas-host { position: relative; height: clamp(320px, 62vw, 560px); }
+    .loading { height: clamp(320px, 62vw, 560px); }
+    .leader { display: none; }
+    .callout { position: static; width: auto; max-width: 560px; margin: var(--space-4) auto 0; transform: none !important; }
+    .stage.ready .callout:not([hidden]) { display: grid; }
+    .stage { padding-inline: var(--gutter); }
+    .canvas-host { margin-inline: calc(-1 * var(--gutter)); }
+  }
+</style>
+
+<script>
+  const section = document.querySelector<HTMLElement>('.sound3d');
+  const stage = section?.querySelector<HTMLElement>('[data-stage]');
+  const host = stage?.querySelector<HTMLElement>('[data-host]');
+
+  let active = 'treble';
+  const select = (id: string) => {
+    active = id;
+    section?.querySelectorAll<HTMLButtonElement>('[data-spot]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.spot === id)));
+    section?.querySelectorAll<HTMLElement>('[data-info]').forEach((el) => { el.hidden = el.dataset.info !== id; });
+    window.dispatchEvent(new CustomEvent('mt:spot', { detail: id }));
+  };
+  section?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-spot]');
+    if (btn?.dataset.spot) select(btn.dataset.spot);
+  });
+
+  if (stage && host) {
+    const start = async () => {
+      try {
+        const { mountCar } = await import('../scripts/car3d');
+        await mountCar(stage, host, () => active);
+        stage.classList.add('ready');
+      } catch (err) {
+        console.error(err);
+        const msg = stage.querySelector('[data-loading]');
+        if (msg) msg.textContent = 'Trình duyệt không hiển thị được mô hình 3D. Chọn vị trí ở danh sách bên dưới.';
+        stage.classList.add('ready', 'failed');
+      }
+    };
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); start(); }
+    }, { rootMargin: '400px' });
+    io.observe(stage);
+  }
+</script>

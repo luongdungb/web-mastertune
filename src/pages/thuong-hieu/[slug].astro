@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { brands, products, categories, type Brand } from '../../lib/catalog';
+
+export function getStaticPaths() {
+  return brands.map((b) => ({ params: { slug: b.slug }, props: { brand: b } }));
+}
+const { brand } = Astro.props as { brand: Brand };
+const items = products.filter((p) => p.brand === brand.slug);
+const groups = categories
+  .map((c) => ({ ...c, items: items.filter((p) => p.category === c.slug) }))
+  .filter((g) => g.items.length > 0);
+---
+<Base title={`${brand.name} chính hãng`} description={`${brand.name}${brand.origin ? ` (${brand.origin})` : ''}: ${items.length} sản phẩm âm thanh xe hơi phân phối chính hãng bởi MASTERTUNE. Thông số kỹ thuật, báo giá theo cấu hình.`}>
+  <header class="page-head">
+    <div class="wrap head">
+      <div>
+        <p class="crumbs"><a href="/thuong-hieu">Thương hiệu</a></p>
+        <h1 class="display">{brand.name}</h1>
+        <p class="muted">{items.length} sản phẩm{brand.origin ? `, xuất xứ ${brand.origin}` : ''}. Phân phối chính hãng, bảo hành toàn quốc.</p>
+      </div>
+      {brand.logo && <img class="logo" src={brand.logo} alt="" width="240" height="80" />}
+    </div>
+    {groups.length > 1 && (
+      <nav class="wrap jump" aria-label="Hạng mục">
+        {groups.map((g) => <a href={`#${g.slug}`}>{g.label} <small>{g.items.length}</small></a>)}
+      </nav>
+    )}
+  </header>
+
+  <div class="studio body">
+    {groups.map((g) => (
+      <section class="wrap group" id={g.slug} aria-labelledby={`h-${g.slug}`}>
+        <h2 id={`h-${g.slug}`}>{g.label}</h2>
+        <div class="grid">{g.items.map((p) => <ProductCard product={p} />)}</div>
+      </section>
+    ))}
+  </div>
+</Base>
+
+<style>
+  .page-head { padding: var(--space-16) 0 var(--space-8); }
+  .head { display: flex; justify-content: space-between; align-items: end; gap: var(--space-8); flex-wrap: wrap; }
+  .crumbs a { color: var(--chrome); font-size: var(--t-sm); text-decoration: none; }
+  .crumbs a:hover { color: var(--white); text-decoration: underline; }
+  h1 { font-size: var(--t-3xl); margin-top: var(--space-2); }
+  .head p.muted { margin-top: var(--space-4); }
+  .logo { height: 64px; width: auto; filter: brightness(0) invert(0.85); }
+  .jump { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-8); }
+  .jump a {
+    min-height: 40px; display: inline-flex; align-items: center; gap: 6px; padding: 0 var(--space-4);
+    border: 1px solid var(--line); border-radius: var(--radius-pill); text-decoration: none; color: var(--chrome); font-size: var(--t-sm);
+  }
+  .jump a:hover { color: var(--white); border-color: var(--chrome); }
+  .jump small { color: #6b7380; }
+  .body { padding-block: var(--space-12) var(--space-24); }
+  .group + .group { margin-top: var(--space-16); }
+  .group h2 { font-size: var(--t-xl); font-stretch: 112%; font-weight: 600; margin-bottom: var(--space-6); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-8) var(--space-6); }
+  @media (max-width: 560px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6) var(--space-3); } }
+</style>

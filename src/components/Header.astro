@@ -1,0 +1,104 @@
+---
+import Logo from './Logo.astro';
+import site from '../data/site.json';
+interface Props { overlay?: boolean }
+const { overlay = false } = Astro.props;
+const path = Astro.url.pathname;
+const left = site.nav.slice(0, 4);
+const right = site.nav.slice(4);
+const isActive = (href: string) => path === href || path.startsWith(href + '/');
+---
+<header class:list={['site-header', { overlay }]} data-header>
+  <div class="bar wrap">
+    <nav class="nav nav-left" aria-label="Điều hướng chính">
+      {left.map((l) => <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}{l.href === '/ghep-he-thong' && <span class="badge" data-config-count hidden></span>}</a>)}
+    </nav>
+    <a href="/" class="home" aria-label="MASTERTUNE — Trang chủ"><Logo height={34} /></a>
+    <nav class="nav nav-right" aria-label="Điều hướng phụ">
+      {right.map((l) => <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}{l.href === '/ghep-he-thong' && <span class="badge" data-config-count hidden></span>}</a>)}
+      <a class="call" href={`tel:${site.hotlineTel}`}>{site.hotline}</a>
+    </nav>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-btn>
+      <span class="sr-only">Mở menu</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu" hidden data-menu>
+    <nav class="wrap" aria-label="Menu di động">
+      {site.nav.map((l) => <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}{l.href === '/ghep-he-thong' && <span class="badge" data-config-count hidden></span>}</a>)}
+      <a class="btn btn-primary" href={`tel:${site.hotlineTel}`}>Gọi {site.hotline}</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(7, 9, 12, 0.86);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+    transition: background-color 240ms var(--ease-out), border-color 240ms var(--ease-out);
+  }
+  .site-header.overlay { position: fixed; inset: 0 0 auto 0; }
+  .site-header.overlay:not(.scrolled) { background: transparent; border-color: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .bar {
+    height: var(--header-h);
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--space-6);
+  }
+  .nav { display: flex; align-items: center; gap: clamp(1rem, 2vw, 2rem); font-size: var(--t-sm); }
+  .nav-right { justify-content: flex-end; }
+  .nav a { text-decoration: none; color: var(--chrome); padding-block: var(--space-2); transition: color 160ms; }
+  .nav a:hover, .nav a[aria-current='page'] { color: var(--white); }
+  .nav a[aria-current='page'] { box-shadow: inset 0 -2px 0 var(--signal); }
+  .badge {
+    display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; margin-left: 6px;
+    border-radius: 9px; background: var(--signal); color: #fff; font-size: 11px; font-weight: 700; line-height: 1;
+    font-variant-numeric: tabular-nums; vertical-align: 1px;
+  }
+  .nav .call { color: var(--white); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .home { text-decoration: none; justify-self: center; }
+  .menu-btn {
+    display: none; justify-self: end; width: 44px; height: 44px; border-radius: var(--radius-s);
+    background: transparent; border: 1px solid var(--line); color: var(--white); cursor: pointer;
+    align-items: center; justify-content: center;
+  }
+  .mobile-menu { border-top: 1px solid var(--line); background: var(--cabin); }
+  .mobile-menu nav { display: grid; gap: var(--space-2); padding-block: var(--space-6); }
+  .mobile-menu a:not(.btn) { padding: var(--space-3) 0; text-decoration: none; font-size: var(--t-lg); border-bottom: 1px solid var(--line); }
+  .mobile-menu .btn { margin-top: var(--space-4); }
+
+  @media (max-width: 1080px) {
+    .bar { grid-template-columns: auto 1fr; }
+    .nav { display: none; }
+    .home { justify-self: start; }
+    .menu-btn { display: inline-flex; }
+  }
+</style>
+
+<script>
+  import { configCount } from '../scripts/config-store';
+  const showCount = () => {
+    const n = configCount();
+    document.querySelectorAll<HTMLElement>('[data-config-count]').forEach((b) => {
+      b.hidden = n === 0;
+      b.textContent = String(n);
+      b.setAttribute('aria-label', `${n} thiết bị trong cấu hình`);
+    });
+  };
+  showCount();
+  window.addEventListener('mt:config', showCount);
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const btn = document.querySelector<HTMLButtonElement>('[data-menu-btn]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  btn?.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    btn.querySelector('.sr-only')!.textContent = open ? 'Mở menu' : 'Đóng menu';
+    if (menu) menu.hidden = open;
+    header?.classList.toggle('scrolled', !open || window.scrollY > 24);
+  });
+</script>

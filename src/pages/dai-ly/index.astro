@@ -1,0 +1,186 @@
+---
+import Base from '../../layouts/Base.astro';
+import dealers from '../../data/dealers.json';
+import site from '../../data/site.json';
+
+const provinces = [...dealers.reduce((m, d) => m.set(d.province, (m.get(d.province) ?? 0) + 1), new Map<string, number>())]
+  .sort((a, b) => a[0].localeCompare(b[0], 'vi'));
+const regions = ['Miền Bắc', 'Miền Trung', 'Miền Nam'];
+const tel = (p: string) => p.replace(/[^\d+]/g, '');
+const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+const mapUrl = (d: { name: string; address: string }) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${d.name}, ${d.address}`)}`;
+---
+<Base title="Đại lý chính hãng" description={`${dealers.length} đại lý âm thanh xe hơi chính hãng MASTERTUNE tại ${provinces.length} tỉnh thành. Tìm đại lý gần bạn và kiểm tra cửa hàng có phải đại lý chính hãng.`}>
+  <header class="page-head">
+    <div class="wrap">
+      <h1 class="display">Đại lý chính hãng</h1>
+      <p class="muted">{dealers.length} đại lý tại {provinces.length} tỉnh thành, được MASTERTUNE đào tạo lắp đặt và căn chỉnh. Mua tại đây để được bảo hành chính hãng.</p>
+      <p class="links"><a href="#kiem-tra">Kiểm tra một cửa hàng</a><a href="/dai-ly/khu-vuc-rieng">Khu dành cho đại lý</a></p>
+    </div>
+  </header>
+
+  <section class="studio finder" aria-label="Tìm đại lý">
+    <div class="wrap">
+      <form class="filters" data-filters onsubmit="return false">
+        <fieldset class="chips">
+          <legend class="sr-only">Khu vực</legend>
+          <label><input type="radio" name="vung" value="" checked /><span>Toàn quốc</span></label>
+          {regions.map((r) => <label><input type="radio" name="vung" value={r} /><span>{r}</span></label>)}
+        </fieldset>
+        <div class="row">
+          <label class="field">
+            <span class="sr-only">Tỉnh, thành phố</span>
+            <select name="tinh">
+              <option value="">Mọi tỉnh thành</option>
+              {provinces.map(([p, n]) => <option value={p}>{p} ({n})</option>)}
+            </select>
+          </label>
+          <label class="field grow">
+            <span class="sr-only">Tìm theo tên, quận, đường</span>
+            <input type="search" name="q" placeholder="Tìm theo tên, quận, đường…" autocomplete="off" />
+          </label>
+          <p class="count" aria-live="polite" data-count>{dealers.length} đại lý</p>
+        </div>
+      </form>
+
+      <ul class="list" data-list>
+        {dealers.map((d) => (
+          <li class="dealer" data-region={d.region} data-province={d.province} data-text={fold(`${d.name} ${d.address} ${d.phone}`)}>
+            <p class="prov">{d.province}</p>
+            <h2>{d.name}</h2>
+            <p class="addr">{d.address}</p>
+            <div class="acts">
+              <a class="btn btn-ink" href={`tel:${tel(d.phone)}`}>Gọi {d.phone}</a>
+              <a class="btn btn-outline" href={mapUrl(d)} target="_blank" rel="noopener">Chỉ đường</a>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <p class="empty" data-empty hidden>Chưa có đại lý khớp. Gọi <a href={`tel:${site.hotlineTel}`}>{site.hotline}</a> để được giới thiệu đại lý gần nhất.</p>
+    </div>
+  </section>
+
+  <section class="section verify" id="kiem-tra" aria-labelledby="verify-title">
+    <div class="wrap verify-grid">
+      <div>
+        <h2 id="verify-title" class="display">Kiểm tra đại lý</h2>
+        <p class="muted">Được chào bán thiết bị STEG, DLS, Audiocircle…? Nhập tên cửa hàng hoặc số điện thoại để xem đó có phải đại lý chính hãng.</p>
+      </div>
+      <form class="verify-form" data-verify data-hotline={site.hotline} data-hotline-tel={site.hotlineTel}>
+        <label for="verify-q">Tên cửa hàng hoặc số điện thoại</label>
+        <div class="verify-row">
+          <input id="verify-q" name="q" required minlength="3" autocomplete="off" placeholder="Ví dụ: Chính Thắng Auto hoặc 0989073923" />
+          <button type="submit" class="btn btn-primary">Kiểm tra</button>
+        </div>
+        <div class="verify-result" data-verify-result role="status"></div>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-head { padding: var(--space-16) 0 var(--space-12); }
+  .page-head h1 { font-size: var(--t-3xl); }
+  .page-head p { margin-top: var(--space-4); max-width: 62ch; }
+  .links { display: flex; gap: var(--space-6); flex-wrap: wrap; }
+  .links a { color: var(--white); font-weight: 600; text-underline-offset: 5px; text-decoration-color: var(--signal); }
+
+  .finder { padding-block: var(--space-8) var(--space-24); }
+  .filters {
+    position: sticky; top: var(--header-h); z-index: 5; background: var(--studio);
+    padding-block: var(--space-4); margin-bottom: var(--space-8); border-bottom: 1px solid var(--studio-line);
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4);
+  }
+  .filters > * { min-width: 0; }
+  .chips { border: 0; margin: 0; padding: 0; display: flex; gap: var(--space-2); flex-wrap: wrap; }
+  .chips label { position: relative; cursor: pointer; }
+  .chips input { position: absolute; opacity: 0; pointer-events: none; }
+  .chips span { display: inline-flex; align-items: center; min-height: 40px; padding: 0 var(--space-4); border-radius: var(--radius-pill); border: 1px solid var(--studio-line); background: var(--studio-card); font-size: var(--t-sm); }
+  .chips label:hover span { border-color: var(--ink); }
+  .chips input:checked + span { background: var(--ink); color: var(--white); border-color: var(--ink); }
+  .chips input:focus-visible + span { outline: 2px solid var(--signal); outline-offset: 2px; }
+  .row { display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; }
+  .field select, .field input { min-height: 44px; padding: 0 var(--space-4); border-radius: var(--radius-s); border: 1px solid var(--studio-line); background: var(--studio-card); color: var(--ink); font-size: var(--t-sm); }
+  .grow { flex: 1 1 260px; }
+  .grow input { width: 100%; }
+  .count { margin-left: auto; font-size: var(--t-sm); color: var(--graphite); }
+
+  .list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: var(--space-4); }
+  .dealer { background: var(--studio-card); border: 1px solid var(--studio-line); border-radius: var(--radius-m); padding: var(--space-6); display: grid; gap: var(--space-2); align-content: start; }
+  .dealer[hidden] { display: none; }
+  .prov { font-size: var(--t-xs); color: var(--signal); font-weight: 600; }
+  .dealer h2 { font-size: var(--t-lg); font-weight: 600; line-height: 1.25; }
+  .addr { font-size: var(--t-sm); color: var(--graphite); line-height: 1.5; }
+  .acts { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3); }
+  .acts .btn { min-height: 40px; font-size: var(--t-xs); padding: 0 var(--space-4); }
+  .btn-outline { background: transparent; border-color: var(--studio-line); color: var(--ink); }
+  .btn-outline:hover { border-color: var(--ink); }
+  .empty { color: var(--graphite); padding: var(--space-12) 0; }
+  .empty a { color: var(--signal); }
+
+  .verify { scroll-margin-top: var(--header-h); }
+  .verify-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .verify h2 { font-size: var(--t-2xl); }
+  .verify .muted { margin-top: var(--space-4); }
+  .verify-form { display: grid; gap: var(--space-3); }
+  .verify-form label { font-size: var(--t-sm); color: var(--chrome); }
+  .verify-row { display: flex; gap: var(--space-2); }
+  .verify-row input { flex: 1; min-width: 0; min-height: 48px; padding: 0 var(--space-4); border-radius: var(--radius-s); background: var(--panel); border: 1px solid var(--line); color: var(--white); }
+  .verify-row input:focus-visible { outline: 2px solid var(--signal-hover); outline-offset: 1px; }
+  .verify-result:empty { display: none; }
+  .verify-result { padding: var(--space-4); border-radius: var(--radius-s); border: 1px solid var(--line); background: var(--panel); font-size: var(--t-sm); line-height: 1.55; }
+  .verify-result.ok { border-color: #2e8b57; }
+  .verify-result.no { border-color: #b45309; }
+  .verify-result :global(strong) { display: block; font-size: var(--t-base); margin-bottom: 4px; }
+  .verify-result :global(a) { color: var(--signal-hover); }
+
+  @media (max-width: 860px) { .verify-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .count { margin-left: 0; width: 100%; } .field, .field select { width: 100%; } .verify-row { flex-direction: column; } }
+</style>
+
+<script>
+  const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+  const digits = (s: string) => s.replace(/\D/g, '');
+  const form = document.querySelector<HTMLFormElement>('[data-filters]')!;
+  const items = [...document.querySelectorAll<HTMLElement>('[data-list] .dealer')];
+  const count = document.querySelector('[data-count]')!;
+  const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+
+  const apply = () => {
+    const fd = new FormData(form);
+    const vung = String(fd.get('vung') ?? '');
+    const tinh = String(fd.get('tinh') ?? '');
+    const q = fold(String(fd.get('q') ?? '').trim());
+    let n = 0;
+    for (const el of items) {
+      const ok = (!vung || el.dataset.region === vung) && (!tinh || el.dataset.province === tinh) && (!q || q.split(/\s+/).every((w) => el.dataset.text!.includes(w)));
+      el.hidden = !ok;
+      if (ok) n++;
+    }
+    count.textContent = `${n} đại lý`;
+    empty.hidden = n > 0;
+  };
+  form.addEventListener('input', apply);
+  form.addEventListener('change', apply);
+  const tinh = new URLSearchParams(location.search).get('tinh');
+  if (tinh) { (form.elements.namedItem('tinh') as HTMLSelectElement).value = tinh; apply(); }
+
+  // --- verify a shop by name or phone
+  const verify = document.querySelector<HTMLFormElement>('[data-verify]')!;
+  const out = verify.querySelector<HTMLElement>('[data-verify-result]')!;
+  verify.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const raw = String(new FormData(verify).get('q') ?? '').trim();
+    const q = fold(raw);
+    const d = digits(raw);
+    const hits = items.filter((el) => {
+      const name = fold(el.querySelector('h2')!.textContent!);
+      const phone = digits(el.querySelector('a[href^="tel:"]')!.getAttribute('href')!);
+      return (d.length >= 8 && phone.endsWith(d.slice(-8))) || (q.length >= 3 && name.includes(q));
+    });
+    out.className = 'verify-result ' + (hits.length ? 'ok' : 'no');
+    out.innerHTML = hits.length
+      ? `<strong>Có trong danh sách đại lý chính hãng</strong>${hits.slice(0, 3).map((el) => `${el.querySelector('h2')!.textContent}, ${el.querySelector('.addr')!.textContent}`).join('<br>')}`
+      : `<strong>Không tìm thấy trong danh sách</strong>Cửa hàng có thể chưa được cập nhật hoặc không phải đại lý chính hãng. Gọi <a href="tel:${verify.dataset.hotlineTel}">${verify.dataset.hotline}</a> để MASTERTUNE xác nhận trước khi mua.`;
+  });
+</script>
