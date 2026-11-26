@@ -1,0 +1,163 @@
+{
+  "loa-mid-treble-steg-sff1": {
+    "specs": [
+      {
+        "k": "Trở kháng",
+        "v": "4 Ω"
+      },
+      {
+        "k": "Dải tần",
+        "v": "165 Hz - 15 kHz"
+      },
+      {
+        "k": "Công suất",
+        "v": "25 W"
+      },
+      {
+        "k": "Độ nhạy",
+        "v": "83 dB"
+      },
+      {
+        "k": "Kích thước",
+        "v": "Ø70 mm"
+      },
+      {
+        "k": "Đường kính lắp",
+        "v": "Ø34,6 mm"
+      },
+      {
+        "k": "Độ sâu lắp",
+        "v": "21 mm"
+      },
+      {
+        "k": "Màng loa",
+        "v": "Nhôm CNC"
+      },
+      {
+        "k": "Mặt lưới",
+        "v": "Nhôm CNC, họa tiết Mandala"
+      }
+    ],
+    "install": "Cột A, taplo hoặc ốp thiết kế riêng theo xe",
+    "gallery": [
+      {
+        "src": "/images/g/loa-mid-treble-steg-sff1-1.webp",
+        "thumb": "/images/g/loa-mid-treble-steg-sff1-1-t.webp",
+        "w": 1600,
+        "h": 1067,
+        "alt": "Cặp loa STEG SFF1 với mặt lưới nhôm CNC"
+      },
+      {
+        "src": "/images/g/loa-mid-treble-steg-sff1-2.webp",
+        "thumb": "/images/g/loa-mid-treble-steg-sff1-2-t.webp",
+        "w": 893,
+        "h": 1600,
+        "alt": "STEG SFF1 dưới ánh đèn, nhìn nghiêng"
+      },
+      {
+        "src": "/images/g/loa-mid-treble-steg-sff1-3.webp",
+        "thumb": "/images/g/loa-mid-treble-steg-sff1-3-t.webp",
+        "w": 893,
+        "h": 1600,
+        "alt": "Cận cảnh mặt lưới họa tiết Mandala của STEG SFF1"
+      },
+      {
+        "src": "/images/g/loa-mid-treble-steg-sff1-4.webp",
+        "thumb": "/images/g/loa-mid-treble-steg-sff1-4-t.webp",
+        "w": 490,
+        "h": 866,
+        "alt": "STEG SFF1 lắp trên cột A"
+      },
+      {
+        "src": "/images/g/loa-mid-treble-steg-sff1-5.webp",
+        "thumb": "/images/g/loa-mid-treble-steg-sff1-5-t.webp",
+        "w": 485,
+        "h": 870,
+        "alt": "STEG SFF1 lắp trên taplo"
+      }
+    ],
+    "video": {
+      "src": "/video/p/loa-mid-treble-steg-sff1.mp4",
+      "poster": "/video/p/loa-mid-treble-steg-sff1-poster.webp",
+      "thumb": "/video/p/loa-mid-treble-steg-sff1-thumb.webp"
+    }
+  },
+  "loa-sub-dien-vinsub-vs-8-pro": {
+    "specs": [
+      {
+        "k": "Công suất",
+        "v": "120 W"
+      },
+      {
+        "k": "Đường kính loa bass",
+        "v": "8 inch"
+      },
+      {
+        "k": "Dải tần",
+        "v": "30 - 150 Hz"
+      },
+      {
+        "k": "Độ nhạy",
+        "v": "90 dB"
+      },
+      {
+        "k": "Kết nối",
+        "v": "Tín hiệu loa từ đầu phát, núm chỉnh bass rời"
+      },
+      {
+        "k": "Trong hộp",
+        "v": "Loa sub, dây tín hiệu, núm chỉnh bass, phụ kiện cố định"
+      }
+    ],
+    "install": "Gầm ghế",
+    "gallery": [
+      {
+        "src": "/images/g/loa-sub-dien-vinsub-vs-8-pro-1.webp",
+        "thumb": "/images/g/loa-sub-dien-vinsub-vs-8-pro-1-t.webp",
+        "w": 1000,
+        "h": 562,
+        "alt": "Vinsub VS8 Pro cạnh hộp sản phẩm"
+      },
+      {
+        "src": "/images/g/loa-sub-dien-vinsub-vs-8-pro-2.webp",
+        "thumb": "/images/g/loa-sub-dien-vinsub-vs-8-pro-2-t.webp",
+        "w": 893,
+        "h": 1600,
+        "alt": "Vinsub VS8 Pro, mặt lưới loa bass"
+      },
+      {
+        "src": "/images/g/loa-sub-dien-vinsub-vs-8-pro-3.webp",
+        "thumb": "/images/g/loa-sub-dien-vinsub-vs-8-pro-3-t.webp",
+        "w": 893,
+        "h": 1600,
+        "alt": "Vinsub VS8 Pro đặt trên mặt nền tối"
+      },
+      {
+        "src": "/images/g/loa-sub-dien-vinsub-vs-8-pro-4.webp",
+        "thumb": "/images/g/loa-sub-dien-vinsub-vs-8-pro-4-t.webp",
+        "w": 1000,
+        "h": 562,
+        "alt": "Cận cảnh logo Vinsub trên thân loa"
+      },
+      {
+        "src": "/images/g/loa-sub-dien-vinsub-vs-8-pro-5.webp",
+        "thumb": "/images/g/loa-sub-dien-vinsub-vs-8-pro-5-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "Bảng chỉnh và cổng kết nối của Vinsub VS8 Pro"
+      },
+      {
+        "src": "/images/g/loa-sub-dien-vinsub-vs-8-pro-6.webp",
+        "thumb": "/images/g/loa-sub-dien-vinsub-vs-8-pro-6-t.webp",
+        "w": 893,
+        "h": 1600,
+        "alt": "Vinsub VS8 Pro lắp dưới gầm ghế xe"
+      }
+    ],
+    "video": {
+      "src": "/video/p/loa-sub-dien-vinsub-vs-8-pro.mp4",
+      "poster": "/video/p/loa-sub-dien-vinsub-vs-8-pro-poster.webp",
+      "thumb": "/video/p/loa-sub-dien-vinsub-vs-8-pro-thumb.webp"
+    }
+  }
+}

@@ -2,6 +2,7 @@
 import productsJson from '../data/products.json';
 import brandsJson from '../data/brands.json';
 import categoriesJson from '../data/categories.json';
+import extrasJson from '../data/product-extras.json';
 
 export type Spec = { k: string; v: string };
 export type Product = {
@@ -11,7 +12,18 @@ export type Product = {
 export type Brand = { slug: string; name: string; origin: string; logo: string | null; count: number };
 export type Category = { slug: string; label: string; count: number };
 
-export const products = productsJson as Product[];
+export type GalleryImage = { src: string; thumb: string; w: number; h: number; alt: string };
+export type ProductVideo = { src: string; poster: string; thumb: string };
+type Extra = { specs?: Spec[]; install?: string; gallery?: GalleryImage[]; video?: ProductVideo };
+// Hand-maintained data (scripts/import-media.mjs, manual specs) layered over the scraped catalog,
+// so re-running the scraper never wipes it.
+const extras = extrasJson as Record<string, Extra>;
+
+export const products = (productsJson as Product[]).map((p) => {
+  const e = extras[p.slug];
+  return e ? { ...p, specs: e.specs ?? p.specs, install: e.install ?? p.install } : p;
+});
+export const mediaOf = (p: Product) => ({ gallery: extras[p.slug]?.gallery ?? [], video: extras[p.slug]?.video });
 export const brands = brandsJson as Brand[];
 export const categories = (categoriesJson as Category[]).filter((c) => c.count > 0);
 

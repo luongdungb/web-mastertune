@@ -31,6 +31,19 @@ node scripts/build-data.mjs        # tách thông số -> src/data/*.json
 
 `data-raw/` (dữ liệu thô, ảnh gốc) không đưa lên Git.
 
+### Ảnh thêm, video và thông số tự nhập
+
+`src/data/product-extras.json` ghi đè lên dữ liệu lấy từ mastertune.vn (chạy lại script lấy dữ liệu không làm mất):
+thông số (`specs`), vị trí lắp (`install`), ảnh thêm (`gallery`) và video (`video`).
+Trang sản phẩm hiện dải ảnh nhỏ dưới ảnh chính, video ở cuối dải.
+
+```bash
+# theo thứ tự muốn hiển thị; file .mp4 thành video (nén H.264 1080p, có ảnh bìa)
+node scripts/import-media.mjs <slug> anh1.jpg anh2.png video.mp4
+```
+
+Sau đó sửa `alt` (mô tả ảnh) trong `product-extras.json`. Cần `ffmpeg` cho video.
+
 ## Thiết kế
 
 - Màu: đen cabin `#07090c`, bạc chrome `#c9ced6` (từ logo), xanh tín hiệu `#2f7bff` cho nút bấm, trắng studio `#eef0f2` cho khu sản phẩm.

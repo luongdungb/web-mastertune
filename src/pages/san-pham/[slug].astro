@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import ComparePicker from '../../components/ComparePicker.astro';
-import { products, brandOf, categoryOf, related, keySpecs, type Product } from '../../lib/catalog';
+import { products, brandOf, categoryOf, related, keySpecs, mediaOf, type Product } from '../../lib/catalog';
 import site from '../../data/site.json';
 
 export function getStaticPaths() {
@@ -13,6 +13,13 @@ const brand = brandOf(p);
 const cat = categoryOf(p);
 const more = related(p, 4);
 const summary = keySpecs(p, 3).map((s) => `${s.k}: ${s.v}`).join(', ');
+const { gallery, video } = mediaOf(p);
+// main cut-out shot first, then photos, video last
+const slides = [
+  { kind: 'cut', src: p.image, thumb: p.image, alt: p.name, w: 900, h: 900 },
+  ...gallery.map((g) => ({ kind: 'photo', ...g })),
+  ...(video ? [{ kind: 'video', src: video.src, thumb: video.thumb, alt: `Video ${p.name}`, w: 1920, h: 1080 }] : []),
+];
 const description = `${p.name} — ${brand.name}${brand.origin ? ` (${brand.origin})` : ''}, phân phối chính hãng bởi MASTERTUNE.${summary ? ` ${summary}.` : ''} Bảo hành ${p.warranty || 'chính hãng'}.`;
 ---
 <Base title={p.name} description={description} image={p.image}>
@@ -26,9 +33,27 @@ const description = `${p.name} — ${brand.name}${brand.origin ? ` (${brand.orig
       </nav>
 
       <div class="main">
-        <figure class="photo">
-          <img src={p.image} alt={p.name} width="900" height="900" fetchpriority="high" />
-        </figure>
+        <div class="media" data-media>
+          <figure class="photo" data-stage>
+            <img src={p.image} alt={p.name} width="900" height="900" fetchpriority="high" data-stage-img />
+            {video && <video data-stage-video controls playsinline preload="none" poster={video.poster} hidden><source src={video.src} type="video/mp4" /></video>}
+          </figure>
+          {slides.length > 1 && (
+            <ul class="thumbs" aria-label={`Ảnh và video ${p.name}`}>
+              {slides.map((s, i) => (
+                <li>
+                  <button type="button" class:list={['thumb', { 'is-video': s.kind === 'video', 'is-cut': s.kind === 'cut' }]}
+                    aria-label={s.kind === 'video' ? `Xem video ${p.name}` : `Xem ảnh ${i + 1}: ${s.alt}`}
+                    aria-current={i === 0 ? 'true' : 'false'}
+                    data-kind={s.kind} data-src={s.src} data-alt={s.alt} data-w={s.w} data-h={s.h}>
+                    <img src={s.thumb} alt="" width="96" height="96" loading="lazy" />
+                    {s.kind === 'video' && <span class="play" aria-hidden="true"></span>}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
         <div class="info">
           <p class="brand"><a href={`/thuong-hieu/${brand.slug}`}>{brand.name}</a>{brand.origin && <span class="origin">{brand.origin}</span>}</p>
@@ -80,12 +105,41 @@ const description = `${p.name} — ${brand.name}${brand.origin ? ` (${brand.orig
   .crumbs span { color: var(--studio-line); }
 
   .main { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .media { position: sticky; top: calc(var(--header-h) + var(--space-6)); display: grid; gap: var(--space-3); min-width: 0; }
   .photo {
-    margin: 0; position: sticky; top: calc(var(--header-h) + var(--space-6));
+    margin: 0; overflow: hidden;
     background: var(--studio-card); border: 1px solid var(--studio-line); border-radius: var(--radius-m);
     aspect-ratio: 1; display: grid; place-items: center; padding: clamp(1.5rem, 4vw, 3.5rem);
+    /* keep the thumbnail strip above the fold on short laptop screens */
+    width: 100%; max-height: max(320px, calc(100svh - var(--header-h) - 12rem));
+    transition: background-color 200ms;
   }
-  .photo img { width: 100%; height: 100%; object-fit: contain; }
+  .photo img, .photo video { width: 100%; height: 100%; object-fit: contain; min-height: 0; }
+  /* lifestyle photos and the video sit on the cabin tone, edge to edge */
+  .photo[data-mode='photo'], .photo[data-mode='video'] { background: var(--ink); border-color: var(--ink); padding: 0; }
+  .photo video { background: var(--ink); }
+
+  .thumbs { list-style: none; margin: 0; padding: 2px; display: flex; gap: var(--space-2); overflow-x: auto; scrollbar-width: thin; }
+  .thumbs li { flex: none; }
+  .thumb {
+    position: relative; display: block; width: 76px; height: 76px; padding: 0; overflow: hidden; cursor: pointer;
+    border: 1px solid var(--studio-line); border-radius: var(--radius-s); background: var(--ink);
+    transition: border-color 160ms, opacity 160ms; opacity: 0.72;
+  }
+  .thumb.is-cut { background: var(--studio-card); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb.is-cut img { object-fit: contain; padding: 6px; }
+  .thumb:hover { opacity: 1; border-color: var(--graphite); }
+  .thumb[aria-current='true'] { opacity: 1; border: 2px solid var(--ink); }
+  .thumb:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+  .play {
+    position: absolute; inset: 0; margin: auto; width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+  .play::after {
+    content: ''; position: absolute; left: 12px; top: 9px;
+    border-style: solid; border-width: 6px 0 6px 10px; border-color: transparent transparent transparent var(--ink);
+  }
 
   .info { display: grid; gap: var(--space-4); align-content: start; }
   .brand { display: flex; gap: var(--space-3); align-items: baseline; font-weight: 600; }
@@ -121,7 +175,8 @@ const description = `${p.name} — ${brand.name}${brand.origin ? ` (${brand.orig
 
   @media (max-width: 900px) {
     .main { grid-template-columns: 1fr; }
-    .photo { position: static; }
+    .media { position: static; }
+    .thumb { width: 64px; height: 64px; }
     .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 </style>
@@ -129,6 +184,45 @@ const description = `${p.name} — ${brand.name}${brand.origin ? ` (${brand.orig
 <script>
   import { addToConfig, inConfig, getCompare, setCompare, COMPARE_MAX } from '../../scripts/config-store';
   import { loadCatalog } from '../../scripts/catalog-client';
+
+  // gallery: thumbnails swap the stage between the cut-out shot, photos and the video
+  const stage = document.querySelector<HTMLElement>('[data-stage]')!;
+  const stageImg = stage.querySelector<HTMLImageElement>('[data-stage-img]')!;
+  const stageVideo = stage.querySelector<HTMLVideoElement>('[data-stage-video]');
+  const thumbs = [...document.querySelectorAll<HTMLButtonElement>('.thumb')];
+  stage.dataset.mode = 'cut';
+  const show = (btn: HTMLButtonElement, focus = false) => {
+    const kind = btn.dataset.kind!;
+    thumbs.forEach((t) => t.setAttribute('aria-current', String(t === btn)));
+    stage.dataset.mode = kind;
+    if (kind === 'video' && stageVideo) {
+      stageImg.hidden = true;
+      stageVideo.hidden = false;
+      stageVideo.play().catch(() => {});
+    } else {
+      stageVideo?.pause();
+      if (stageVideo) stageVideo.hidden = true;
+      stageImg.hidden = false;
+      stageImg.src = btn.dataset.src!;
+      stageImg.alt = btn.dataset.alt!;
+      stageImg.width = Number(btn.dataset.w);
+      stageImg.height = Number(btn.dataset.h);
+    }
+    if (focus) btn.focus();
+    btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  };
+  thumbs.forEach((t, i) => {
+    t.addEventListener('click', () => show(t));
+    t.addEventListener('keydown', (e) => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!d) return;
+      e.preventDefault();
+      show(thumbs[(i + d + thumbs.length) % thumbs.length], true);
+    });
+  });
+  // warm the cache for the full-size photos once the page is idle
+  const warm = () => thumbs.forEach((t) => { if (t.dataset.kind === 'photo') new Image().src = t.dataset.src!; });
+  if ('requestIdleCallback' in window) requestIdleCallback(warm); else setTimeout(warm, 1500);
   const add = document.querySelector<HTMLButtonElement>('[data-add]')!;
   const cmp = document.querySelector<HTMLButtonElement>('[data-compare]')!;
   const note = document.querySelector<HTMLElement>('[data-note]')!;
