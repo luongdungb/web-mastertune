@@ -20,8 +20,8 @@ const links = [
       <!-- phones: a still photo only (the film is never downloaded). Computers: the film's first frame
            sits here until the film, attached by the script below, starts playing on top of it. -->
       <picture>
-        <source media="(min-width: 761px)" srcset="/video/hero-poster.webp" width="720" height="1280" />
-        <img class="still" src="/video/hero-mobile.webp" width="893" height="1600" alt="" fetchpriority="high" decoding="async" />
+        <source media="(min-width: 761px)" srcset="/video/hero-poster.webp?v=2" width="720" height="1280" />
+        <img class="still" src="/video/hero-mobile.webp?v=2" width="893" height="1600" alt="" fetchpriority="high" decoding="async" />
       </picture>
       <!-- H.264 first: iPhones and in-app browsers (Zalo, Messenger) may pick WebM and then not play it -->
       <video autoplay muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto" data-film></video>
@@ -222,7 +222,7 @@ const links = [
     if (!wide.matches) { film.pause(); return; }
     if (!film.dataset.on) {
       film.dataset.on = '1';
-      film.innerHTML = '<source src="/video/hero.mp4" type="video/mp4"><source src="/video/hero.webm" type="video/webm">';
+      film.innerHTML = '<source src="/video/hero.mp4?v=2" type="video/mp4"><source src="/video/hero.webm?v=2" type="video/webm">';
       film.load();
     }
     start();
