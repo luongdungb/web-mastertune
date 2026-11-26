@@ -13,7 +13,7 @@ export type Brand = { slug: string; name: string; origin: string; logo: string |
 export type Category = { slug: string; label: string; count: number };
 
 export type GalleryImage = { src: string; thumb: string; w: number; h: number; alt: string };
-export type ProductVideo = { src: string; poster: string; thumb: string };
+export type ProductVideo = { src: string; poster: string; thumb: string; loop?: string };
 type Extra = { specs?: Spec[]; install?: string; gallery?: GalleryImage[]; video?: ProductVideo };
 // Hand-maintained data (scripts/import-media.mjs, manual specs) layered over the scraped catalog,
 // so re-running the scraper never wipes it.

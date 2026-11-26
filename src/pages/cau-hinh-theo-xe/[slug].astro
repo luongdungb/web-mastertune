@@ -95,21 +95,21 @@ const sameBrand = cars.filter((c) => c.brand === car.brand && c.slug !== car.slu
 
 <style>
   .page-head { padding: var(--space-16) 0 var(--space-12); }
-  .crumbs a { color: var(--chrome); font-size: var(--t-sm); text-decoration: none; }
-  .crumbs a:hover { color: var(--white); text-decoration: underline; }
+  .crumbs a { color: var(--fg-2); font-size: var(--t-sm); text-decoration: none; }
+  .crumbs a:hover { color: var(--fg); text-decoration: underline; }
   .page-head h1 { font-size: var(--t-3xl); margin-top: var(--space-2); }
   .page-head p.muted { margin-top: var(--space-4); max-width: 62ch; }
 
   .notes { border-top: 1px solid var(--line); }
   .two { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(2rem, 5vw, 5rem); }
-  .notes h2, .pkgs h2, .gallery h2 { font-size: var(--t-2xl); font-stretch: 112%; font-weight: 600; }
-  .notes ul { margin: 0; padding-left: 1.2em; display: grid; gap: var(--space-4); color: var(--chrome); line-height: 1.6; }
+  .notes h2, .pkgs h2, .gallery h2 { font-size: var(--t-2xl); font-stretch: 104%; font-weight: 400; }
+  .notes ul { margin: 0; padding-left: 1.2em; display: grid; gap: var(--space-4); color: var(--fg-2); line-height: 1.6; }
 
   .pkgs h2 { margin-bottom: var(--space-8); }
   .pkg-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
   .pkg { background: var(--studio-card); border: 1px solid var(--studio-line); border-radius: var(--radius-m); padding: var(--space-6); display: grid; gap: var(--space-3); align-content: start; }
   .tier { font-size: var(--t-sm); color: var(--signal); font-weight: 600; }
-  .pkg h3 { font-size: var(--t-xl); font-stretch: 112%; font-weight: 600; }
+  .pkg h3 { font-size: var(--t-xl); font-stretch: 104%; font-weight: 400; }
   .for { font-size: var(--t-sm); color: var(--graphite); line-height: 1.55; }
   .items { list-style: none; margin: 0; padding: 0; display: grid; }
   .items li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: var(--space-3); align-items: center; padding: var(--space-2) 0; border-top: 1px solid var(--studio-line); }
@@ -127,15 +127,15 @@ const sameBrand = cars.filter((c) => c.brand === car.brand && c.slug !== car.slu
   .shots img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-s); }
   .shots img:first-child { grid-row: span 2; }
   .install h3 { font-size: var(--t-lg); font-weight: 600; margin-top: var(--space-4); }
-  .by { font-size: var(--t-sm); color: var(--chrome); }
+  .by { font-size: var(--t-sm); color: var(--fg-2); }
   .used { margin: var(--space-2) 0 0; padding-left: 1.2em; font-size: var(--t-sm); }
-  .used a { color: var(--white); }
-  .empty { display: flex; gap: var(--space-4); align-items: center; flex-wrap: wrap; color: var(--chrome); }
+  .used a { color: var(--fg); }
+  .empty { display: flex; gap: var(--space-4); align-items: center; flex-wrap: wrap; color: var(--fg-2); }
   .others { margin-top: var(--space-16); padding-top: var(--space-6); border-top: 1px solid var(--line); }
-  .others p { font-size: var(--t-sm); color: var(--chrome); }
+  .others p { font-size: var(--t-sm); color: var(--fg-2); }
   .others ul { list-style: none; padding: 0; margin: var(--space-3) 0 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
-  .others a { display: inline-flex; min-height: 40px; align-items: center; padding: 0 var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-pill); color: var(--chrome); text-decoration: none; font-size: var(--t-sm); }
-  .others a:hover { color: var(--white); border-color: var(--chrome); }
+  .others a { display: inline-flex; min-height: 40px; align-items: center; padding: 0 var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-pill); color: var(--fg-2); text-decoration: none; font-size: var(--t-sm); }
+  .others a:hover { color: var(--fg); border-color: var(--fg-2); }
 
   @media (max-width: 960px) { .pkg-grid { grid-template-columns: 1fr; } .two { grid-template-columns: 1fr; } .gal-grid { grid-template-columns: 1fr; } }
 </style>

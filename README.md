@@ -46,11 +46,13 @@ Sau đó sửa `alt` (mô tả ảnh) trong `product-extras.json`. Cần `ffmpeg
 
 ## Thiết kế
 
-- Màu: đen cabin `#07090c`, bạc chrome `#c9ced6` (từ logo), xanh tín hiệu `#2f7bff` cho nút bấm, trắng studio `#eef0f2` cho khu sản phẩm.
-- Chữ: Saira (variable, có tiếng Việt). Tiêu đề dùng bản giãn rộng (`font-stretch: 125%`, class `.display`).
+- Phong cách sáng "mist": nền `#eef2f5`, thẻ trắng bo góc lớn, dải màu xanh xám (`--mist` trong `src/styles/global.css`) cho khung đầu trang, phần 3D và lời kêu gọi cuối trang. Nút chính là viên thuốc màu đen, chữ trên nền mist dùng xanh thép đậm `#10202e` để đủ tương phản.
+- Chữ: Saira (variable, có tiếng Việt). Tiêu đề mảnh và hơi giãn (class `.display`: weight 300, stretch 112%); chữ MASTER / TUNE khổng lồ ở đầu trang chủ weight 200.
+- Đầu trang chủ: video SFF1 (`public/video/hero.*`) trong khung vòm, hai chú thích nối đường kẻ tới sản phẩm (dữ liệu `heroProduct` trong `src/pages/index.astro`), ba ô dưới có cạnh vát.
+- Tâm điểm: 4 ô sản phẩm dưới đầu trang (`src/data/spotlight.json`: `slug`, `label`, `tag` = Mới về / Bán chạy / Nổi bật). Sản phẩm có video thì ô chạy đoạn lặp ngắn không tiếng (`*-loop.mp4`, tạo bằng `node scripts/make-loop.mjs <slug> [giây bắt đầu] [độ dài]`), bấm vào mở video đầy đủ; chưa có video thì ảnh sản phẩm chuyển động chậm.
 - Điểm nhấn: xe 3D xoay được (three.js) với các điểm lắp thiết bị — `src/components/CarSound3D.astro` + `src/scripts/car3d.ts`. three.js chỉ tải khi khách cuộn tới phần này.
 - Mô hình xe: “Generic Sedan Car” — Márcio Meireles (Sketchfab), **CC BY 4.0** (bắt buộc ghi nguồn, đã có dòng ghi nguồn dưới phần 3D). File gốc tải về bị thiếu texture nên dùng vật liệu trơn: `node scripts/prepare-sedan.mjs` rồi `node scripts/compress-sedan.mjs` → `public/models/sedan.glb` (~410KB, Draco). Mui được cắt bằng mặt phẳng cắt (`CUT_HEIGHT` trong `src/scripts/car3d.ts`). Vị trí các điểm (toạ độ 3D) sửa trong mảng `spots` của component.
-- Logo: file chính thức `Logo MasterTune.png` được tách nền bằng `node scripts/prepare-logo.mjs` → `public/brand/` (logo đầy đủ, chữ, chữ M, favicon).
+- Logo: file chính thức (chrome, nền trong) lưu ở `assets-src/logo-mastertune.png`, tách bằng `node scripts/prepare-logo.mjs` → `public/brand/` (logo đầy đủ, chữ MASTER TUNE, chữ M, favicon). Đổi logo: thay file rồi chạy lại lệnh.
 
 ## Phần chạy trên máy chủ
 

@@ -6,16 +6,18 @@ const { variant = 'inline', height = 36, class: cls = '' } = Astro.props;
 ---
 {variant === 'inline' ? (
   <span class:list={['logo', cls]} style={`--h:${height}px`}>
-    <img src="/brand/mark-72.webp" alt="" width="107" height="72" class="mark" />
-    <img src="/brand/wordmark-72.webp" alt="MASTER TUNE" width="236" height="72" class="word" />
+    <img src="/brand/mark-72.webp" alt="" width="96" height="72" class="mark" />
+    <img src="/brand/wordmark-72.webp" alt="MASTER TUNE" width="172" height="72" class="word" />
   </span>
 ) : (
-  <img src="/brand/logo-320.webp" alt="MASTER TUNE" width="320" height="270" class:list={['logo-stacked', cls]} style={`height:${height}px;width:auto`} />
+  <img src="/brand/logo-320.webp" alt="MASTER TUNE" width="320" height="308" class:list={['logo-stacked', cls]} style={`height:${height}px;width:auto`} />
 )}
 
 <style>
-  .logo { display: inline-flex; align-items: center; gap: calc(var(--h) * 0.28); height: var(--h); }
+  .logo { display: inline-flex; align-items: center; gap: calc(var(--h) * 0.22); height: var(--h); }
+  /* chrome on light surfaces: a hairline shadow gives the bevel an edge */
+  .logo, .logo-stacked { filter: drop-shadow(0 1px 1px rgba(13, 17, 23, 0.28)) drop-shadow(0 3px 8px rgba(13, 17, 23, 0.12)); }
   .logo img { height: 100%; width: auto; }
-  .logo .word { height: 88%; }
+  .logo .word { height: 92%; }
   .logo-stacked { display: block; }
 </style>

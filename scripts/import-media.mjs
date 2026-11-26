@@ -1,12 +1,13 @@
 // Add a product's extra photos + video to the site.
 //   node scripts/import-media.mjs <slug> <file> [file...]
 // Files keep the given order. Images -> public/images/g/<slug>-N.webp (+ -N-t.webp thumbnail),
-// one .mp4 -> public/video/p/<slug>.mp4 (H.264 1080p, faststart) + poster.
+// one .mp4 -> public/video/p/<slug>.mp4 (H.264 1080p, faststart) + poster + a short silent loop for spotlight tiles.
 // Writes gallery/video into src/data/product-extras.json (specs/install there are left alone).
 import sharp from 'sharp';
 import { execFileSync } from 'node:child_process';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { makeLoop } from './make-loop.mjs';
 
 const [slug, ...files] = process.argv.slice(2);
 if (!slug || !files.length) { console.error('usage: node scripts/import-media.mjs <slug> <file> [file...]'); process.exit(1); }
@@ -33,7 +34,7 @@ for (const f of files) {
     const png = execFileSync('ffmpeg', ['-v', 'error', '-ss', '2', '-i', f, '-frames:v', '1', '-f', 'image2pipe', '-vcodec', 'png', '-'], { maxBuffer: 64e6 });
     await sharp(png).resize({ width: 1280 }).webp({ quality: 78 }).toFile(poster);
     await sharp(png).resize(240, 240, { fit: 'cover' }).webp({ quality: 72 }).toFile(`public/video/p/${slug}-thumb.webp`);
-    video = { src: `/video/p/${slug}.mp4`, poster: `/video/p/${slug}-poster.webp`, thumb: `/video/p/${slug}-thumb.webp` };
+    video = { src: `/video/p/${slug}.mp4`, poster: `/video/p/${slug}-poster.webp`, thumb: `/video/p/${slug}-thumb.webp`, loop: makeLoop(slug).src };
     continue;
   }
   const n = gallery.length + 1;

@@ -129,25 +129,25 @@ const catCount = Object.fromEntries(categories.map((c) => [c.slug, c.count]));
 
   .summary {
     position: sticky; top: calc(var(--header-h) + var(--space-6));
-    background: var(--ink); color: var(--white); color-scheme: dark; border-radius: var(--radius-m); padding: var(--space-6);
+    background: var(--surface); color: var(--fg); border-radius: var(--radius-l); padding: var(--space-6); box-shadow: var(--shadow-lift);
     display: grid; gap: var(--space-4);
   }
-  .summary h2 { font-size: var(--t-xl); font-stretch: 112%; font-weight: 600; }
-  .total { color: var(--chrome); font-size: var(--t-sm); margin-top: calc(-1 * var(--space-3)); }
+  .summary h2 { font-size: var(--t-xl); font-stretch: 104%; font-weight: 400; }
+  .total { color: var(--fg-2); font-size: var(--t-sm); margin-top: calc(-1 * var(--space-3)); }
   .customer { display: grid; gap: var(--space-3); }
-  .customer label { display: grid; gap: 6px; font-size: var(--t-sm); color: var(--chrome); }
+  .customer label { display: grid; gap: 6px; font-size: var(--t-sm); color: var(--fg-2); }
   .customer input, .customer textarea {
     min-height: 44px; padding: var(--space-2) var(--space-3); border-radius: var(--radius-s);
-    background: var(--panel); border: 1px solid var(--line); color: var(--white); font-size: var(--t-sm); resize: vertical;
+    background: var(--surface-2); border: 1px solid var(--line); color: var(--fg); font-size: var(--t-sm); resize: vertical;
   }
   .customer input:focus-visible, .customer textarea:focus-visible { outline: 2px solid var(--signal-hover); outline-offset: 1px; }
   .actions { display: grid; gap: var(--space-2); }
-  .summary .btn-outline { border-color: var(--line); color: var(--white); }
-  .summary .btn-outline:hover { border-color: var(--chrome); }
-  .status { font-size: var(--t-sm); color: var(--chrome); min-height: 1.4em; }
-  .copy-box { width: 100%; min-height: 140px; background: var(--panel); color: var(--white); border: 1px solid var(--line); border-radius: var(--radius-s); padding: var(--space-3); font-size: var(--t-xs); }
-  .clear { justify-self: start; background: none; border: 0; color: var(--chrome); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: var(--t-sm); min-height: 44px; padding: 0; }
-  .clear:hover { color: var(--white); }
+  .summary .btn-outline { border-color: var(--line); color: var(--fg); }
+  .summary .btn-outline:hover { border-color: var(--fg-2); }
+  .status { font-size: var(--t-sm); color: var(--fg-2); min-height: 1.4em; }
+  .copy-box { width: 100%; min-height: 140px; background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: var(--radius-s); padding: var(--space-3); font-size: var(--t-xs); }
+  .clear { justify-self: start; background: none; border: 0; color: var(--fg-2); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: var(--t-sm); min-height: 44px; padding: 0; }
+  .clear:hover { color: var(--fg); }
 
   /* picker dialog */
   .picker {
@@ -155,7 +155,7 @@ const catCount = Object.fromEntries(categories.map((c) => [c.slug, c.count]));
     border: 1px solid var(--studio-line); border-radius: var(--radius-m); background: var(--studio); color: var(--ink); color-scheme: light;
   }
   .picker[open] { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; }
-  .picker::backdrop { background: rgba(7, 9, 12, 0.7); backdrop-filter: blur(4px); }
+  .picker::backdrop { background: rgba(30, 44, 58, 0.5); backdrop-filter: blur(6px); }
   .picker-head { display: flex; justify-content: space-between; align-items: center; padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--studio-line); }
   .picker-head h2 { font-size: var(--t-lg); font-weight: 600; }
   .close { width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; border-radius: 50%; display: grid; place-items: center; color: var(--ink); }
@@ -169,7 +169,7 @@ const catCount = Object.fromEntries(categories.map((c) => [c.slug, c.count]));
   .picker-list .nm { font-weight: 600; font-size: var(--t-sm); line-height: 1.3; }
   .picker-list .sub { font-size: var(--t-xs); color: var(--graphite); }
   .picker-list .pick { min-height: 40px; }
-  .picker-list .pick[aria-pressed='true'] { background: var(--ink); color: var(--white); border-color: var(--ink); }
+  .picker-list .pick[aria-pressed='true'] { background: var(--ink); color: #fff; border-color: var(--ink); }
   .picker-list .none { display: block; color: var(--graphite); padding: var(--space-8) 0; border: 0; }
   .picker-foot { padding: var(--space-4) var(--space-6); border-top: 1px solid var(--studio-line); display: flex; justify-content: flex-end; }
 

@@ -37,9 +37,9 @@ import site from '../data/site.json';
   h1 { font-size: var(--t-3xl); }
   .muted { margin-top: var(--space-4); }
   .form { display: grid; gap: var(--space-2); margin-top: var(--space-8); }
-  .form label { font-size: var(--t-sm); color: var(--chrome); }
+  .form label { font-size: var(--t-sm); color: var(--fg-2); }
   .row { display: flex; gap: var(--space-2); }
-  .row input { flex: 1; min-width: 0; min-height: 52px; padding: 0 var(--space-4); border-radius: var(--radius-s); background: var(--panel); border: 1px solid var(--line); color: var(--white); font-size: var(--t-lg); letter-spacing: 0.06em; text-transform: uppercase; }
+  .row input { flex: 1; min-width: 0; min-height: 52px; padding: 0 var(--space-4); border-radius: var(--radius-s); background: var(--surface); border: 1px solid var(--line); color: var(--fg); font-size: var(--t-lg); letter-spacing: 0.06em; text-transform: uppercase; }
   .row input[aria-invalid='true'] { border-color: #dc2626; }
   .row input:focus-visible { outline: 2px solid var(--signal-hover); outline-offset: 1px; }
   .hint { font-size: var(--t-xs); color: #8b93a0; }
@@ -47,21 +47,21 @@ import site from '../data/site.json';
   .result:empty { display: none; }
   .policy { margin-top: var(--space-16); padding-top: var(--space-8); border-top: 1px solid var(--line); }
   .policy h2 { font-size: var(--t-lg); font-weight: 600; }
-  .policy ul { margin: var(--space-4) 0 0; padding-left: 1.2em; display: grid; gap: var(--space-2); color: var(--chrome); line-height: 1.6; }
+  .policy ul { margin: var(--space-4) 0 0; padding-left: 1.2em; display: grid; gap: var(--space-2); color: var(--fg-2); line-height: 1.6; }
   .policy a { color: var(--signal-hover); }
   @media (max-width: 560px) { .row { flex-direction: column; } }
 </style>
 
 <style is:global>
-  .warranty .card-result { padding: var(--space-6); border-radius: var(--radius-m); border: 1px solid var(--line); background: var(--panel); display: grid; gap: var(--space-3); }
+  .warranty .card-result { padding: var(--space-6); border-radius: var(--radius-m); border: 1px solid var(--line); background: var(--surface); display: grid; gap: var(--space-3); }
   .warranty .card-result.ok { border-color: #2e8b57; }
   .warranty .card-result.expired, .warranty .card-result.none { border-color: #b45309; }
-  .warranty .card-result h2 { font-size: var(--t-xl); font-stretch: 112%; font-weight: 600; }
+  .warranty .card-result h2 { font-size: var(--t-xl); font-stretch: 104%; font-weight: 400; }
   .warranty .card-result dl { margin: 0; display: grid; }
   .warranty .card-result dl div { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: var(--space-4); padding: var(--space-2) 0; border-top: 1px solid var(--line); font-size: var(--t-sm); }
-  .warranty .card-result dt { color: var(--chrome); }
+  .warranty .card-result dt { color: var(--fg-2); }
   .warranty .card-result dd { margin: 0; font-weight: 500; }
-  .warranty .card-result p { color: var(--chrome); font-size: var(--t-sm); line-height: 1.6; }
+  .warranty .card-result p { color: var(--fg-2); font-size: var(--t-sm); line-height: 1.6; }
   .warranty .card-result a { color: var(--signal-hover); }
 </style>
 

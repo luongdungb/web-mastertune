@@ -94,17 +94,17 @@ const list = docs as Doc[];
   .muted a, .help a { color: var(--signal-hover); }
   .warn { margin-top: var(--space-4); padding: var(--space-3) var(--space-4); border: 1px solid #b45309; border-radius: var(--radius-s); font-size: var(--t-sm); }
   .login-form { display: grid; gap: var(--space-3); margin-top: var(--space-8); max-width: 420px; }
-  .login-form label { font-size: var(--t-sm); color: var(--chrome); }
-  .login-form input { min-height: 48px; padding: 0 var(--space-4); border-radius: var(--radius-s); background: var(--panel); border: 1px solid var(--line); color: var(--white); font-size: var(--t-lg); letter-spacing: 0.08em; }
+  .login-form label { font-size: var(--t-sm); color: var(--fg-2); }
+  .login-form input { min-height: 48px; padding: 0 var(--space-4); border-radius: var(--radius-s); background: var(--surface); border: 1px solid var(--line); color: var(--fg); font-size: var(--t-lg); letter-spacing: 0.08em; }
   .login-form input[aria-invalid='true'] { border-color: #dc2626; }
   .login-form input:focus-visible { outline: 2px solid var(--signal-hover); outline-offset: 1px; }
   .error { color: #fca5a5; font-size: var(--t-sm); }
   .login-form .btn { justify-self: start; }
-  .help { margin-top: var(--space-8); font-size: var(--t-sm); color: var(--chrome); line-height: 1.6; }
+  .help { margin-top: var(--space-8); font-size: var(--t-sm); color: var(--fg-2); line-height: 1.6; }
 
   .top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
   .inside h2 { font-size: var(--t-lg); font-weight: 600; margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--line); }
   .docs, .tools { list-style: none; padding: 0; margin: var(--space-4) 0 0; display: grid; gap: var(--space-3); }
-  .docs a, .tools a { color: var(--white); font-weight: 600; text-underline-offset: 4px; text-decoration-color: var(--signal); }
-  .docs p { font-size: var(--t-sm); color: var(--chrome); }
+  .docs a, .tools a { color: var(--fg); font-weight: 600; text-underline-offset: 4px; text-decoration-color: var(--signal); }
+  .docs p { font-size: var(--t-sm); color: var(--fg-2); }
 </style>

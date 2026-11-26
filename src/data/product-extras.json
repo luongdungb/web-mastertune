@@ -79,7 +79,8 @@
     "video": {
       "src": "/video/p/loa-mid-treble-steg-sff1.mp4",
       "poster": "/video/p/loa-mid-treble-steg-sff1-poster.webp",
-      "thumb": "/video/p/loa-mid-treble-steg-sff1-thumb.webp"
+      "thumb": "/video/p/loa-mid-treble-steg-sff1-thumb.webp",
+      "loop": "/video/p/loa-mid-treble-steg-sff1-loop.mp4"
     }
   },
   "loa-sub-dien-vinsub-vs-8-pro": {
@@ -157,7 +158,8 @@
     "video": {
       "src": "/video/p/loa-sub-dien-vinsub-vs-8-pro.mp4",
       "poster": "/video/p/loa-sub-dien-vinsub-vs-8-pro-poster.webp",
-      "thumb": "/video/p/loa-sub-dien-vinsub-vs-8-pro-thumb.webp"
+      "thumb": "/video/p/loa-sub-dien-vinsub-vs-8-pro-thumb.webp",
+      "loop": "/video/p/loa-sub-dien-vinsub-vs-8-pro-loop.mp4"
     }
   }
 }

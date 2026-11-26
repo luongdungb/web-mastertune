@@ -93,11 +93,11 @@ const questions = [
   .opt input { position: absolute; opacity: 0; inset: 0; pointer-events: none; }
   .opt span {
     display: grid; gap: 2px; padding: var(--space-4) var(--space-6); border: 1px solid var(--line); border-radius: var(--radius-m);
-    background: var(--panel); transition: border-color 160ms, background-color 160ms;
+    background: var(--surface); transition: border-color 160ms, background-color 160ms;
   }
   .opt strong { font-weight: 600; font-size: var(--t-lg); }
-  .opt small { color: var(--chrome); font-size: var(--t-sm); }
-  .opt:hover span { border-color: var(--chrome); }
+  .opt small { color: var(--fg-2); font-size: var(--t-sm); }
+  .opt:hover span { border-color: var(--fg-2); }
   .opt input:checked + span { border-color: var(--signal); background: #0f1a2e; }
   .opt input:focus-visible + span { outline: 2px solid var(--signal-hover); outline-offset: 2px; }
   .nav { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--space-8); }
@@ -105,17 +105,17 @@ const questions = [
 
   .result:focus { outline: none; }
   .result .muted { margin-top: var(--space-4); line-height: 1.6; }
-  .why { margin: var(--space-6) 0 0; padding-left: 1.2em; color: var(--chrome); display: grid; gap: var(--space-2); font-size: var(--t-sm); }
+  .why { margin: var(--space-6) 0 0; padding-left: 1.2em; color: var(--fg-2); display: grid; gap: var(--space-2); font-size: var(--t-sm); }
   .items { list-style: none; margin: var(--space-8) 0 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
-  .fine { margin-top: var(--space-6); font-size: var(--t-xs); color: #6b7380; }
+  .fine { margin-top: var(--space-6); font-size: var(--t-xs); color: var(--fg-2); }
 </style>
 
 <style is:global>
   /* rows injected by the result script */
   .quiz-page .items li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: var(--space-4); align-items: center; padding: var(--space-3) 0; border-bottom: 1px solid var(--line); }
   .quiz-page .items img { width: 64px; height: 64px; object-fit: contain; background: #fff; border-radius: var(--radius-s); }
-  .quiz-page .items .role { font-size: var(--t-xs); color: var(--chrome); }
-  .quiz-page .items a { color: var(--white); font-weight: 600; text-decoration: none; font-size: var(--t-sm); }
+  .quiz-page .items .role { font-size: var(--t-xs); color: var(--fg-2); }
+  .quiz-page .items a { color: var(--fg); font-weight: 600; text-decoration: none; font-size: var(--t-sm); }
   .quiz-page .items a:hover { text-decoration: underline; }
   .quiz-page .items .added { color: var(--signal-hover); font-size: var(--t-xs); font-weight: 600; margin-left: 6px; }
 </style>

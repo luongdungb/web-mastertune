@@ -44,21 +44,21 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
-  .site-footer { border-top: 1px solid var(--line); padding-top: var(--space-16); background: var(--cabin); }
+  .site-footer { margin: var(--space-8) var(--frame) var(--frame); padding-top: var(--space-16); background: var(--surface); border-radius: var(--radius-l); }
   .grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.4fr; gap: var(--space-12); }
   .brand-col { display: grid; gap: var(--space-6); align-content: start; justify-items: start; }
   .brand-col p { max-width: 38ch; font-size: var(--t-sm); }
-  .col-title { font-size: var(--t-sm); font-weight: 600; color: var(--white); margin-bottom: var(--space-4); }
+  .col-title { font-size: var(--t-xs); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-2); margin-bottom: var(--space-4); }
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); font-size: var(--t-sm); }
-  li { color: var(--chrome); }
-  a { text-decoration: none; color: var(--chrome); }
-  a:hover { color: var(--white); }
-  .hotline { font-size: var(--t-xl); font-stretch: 125%; font-weight: 600; color: var(--white); font-variant-numeric: tabular-nums; }
-  .label { display: block; color: var(--white); font-weight: 500; }
+  li { color: var(--fg-2); }
+  a { text-decoration: none; color: var(--fg-2); }
+  a:hover { color: var(--fg); }
+  .hotline { font-size: var(--t-xl); font-stretch: 104%; font-weight: 300; color: var(--fg); font-variant-numeric: tabular-nums; }
+  .label { display: block; color: var(--fg); font-weight: 500; }
   .legal {
     display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap;
     margin-top: var(--space-16); padding-block: var(--space-6); border-top: 1px solid var(--line);
-    font-size: var(--t-xs); color: var(--chrome);
+    font-size: var(--t-xs); color: var(--fg-2);
   }
   @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } .brand-col { grid-column: 1 / -1; } }
   @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }

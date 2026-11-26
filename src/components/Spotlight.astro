@@ -1,0 +1,162 @@
+---
+// Four product tiles under the hero (src/data/spotlight.json). A tile with a product video plays a short
+// silent loop while on screen; clicking it opens the full video. Without a video the product photo drifts slowly.
+import spotlight from '../data/spotlight.json';
+import { products, brandOf, mediaOf } from '../lib/catalog';
+
+const tones: Record<string, string> = { 'Mới về': 'new', 'Bán chạy': 'hot', 'Nổi bật': 'pick' };
+const tiles = spotlight
+  .map((s) => {
+    const p = products.find((x) => x.slug === s.slug);
+    if (!p) return null;
+    const { video } = mediaOf(p);
+    return { ...s, p, brand: brandOf(p), video, tone: tones[s.tag] ?? 'pick' };
+  })
+  .filter((t): t is NonNullable<typeof t> => t !== null);
+---
+<section class="spotlight" aria-labelledby="spot-title">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <p class="eyebrow">Sản phẩm nổi bật</p>
+        <h2 id="spot-title" class="display">Tâm điểm</h2>
+      </div>
+      <a class="all" href="/san-pham">Tất cả sản phẩm <span aria-hidden="true">›</span></a>
+    </div>
+    <ul class="tiles">
+      {tiles.map((t) => (
+        <li class="tile">
+          {t.video ? (
+            <button type="button" class="media has-video" data-open-video={t.video.src} data-title={t.p.name} data-href={`/san-pham/${t.p.slug}`} aria-label={`Xem video ${t.p.name}`}>
+              <video muted loop playsinline preload="none" poster={t.video.poster} data-loop={t.video.loop ?? t.video.src} aria-hidden="true"></video>
+              <span class="play" aria-hidden="true"></span>
+              <span class:list={['tag', t.tone]}>{t.tag}</span>
+            </button>
+          ) : (
+            <a class="media has-photo" href={`/san-pham/${t.p.slug}`} tabindex="-1" aria-hidden="true">
+              <img src={t.p.image} alt="" width="900" height="900" loading="lazy" decoding="async" />
+              <span class:list={['tag', t.tone]}>{t.tag}</span>
+            </a>
+          )}
+          <div class="bar">
+            {t.brand.logo ? <img class="brand-logo" src={t.brand.logo} alt={t.brand.name} width="80" height="27" loading="lazy" /> : <span class="brand-name">{t.brand.name}</span>}
+            <a class="name" href={`/san-pham/${t.p.slug}`}><span class="sr-only">{t.p.name}: </span><span aria-hidden="true">{t.label}</span></a>
+            <span class="go" aria-hidden="true">›</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <dialog class="vid-dialog" data-vid-dialog aria-labelledby="vid-dialog-title">
+    <div class="vid-box">
+      <div class="vid-head">
+        <h3 id="vid-dialog-title" data-vid-title></h3>
+        <button type="button" class="close" data-vid-close aria-label="Đóng video">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+        </button>
+      </div>
+      <video controls playsinline preload="none" data-vid-player></video>
+      <a class="btn btn-primary" data-vid-link href="/san-pham">Xem sản phẩm</a>
+    </div>
+  </dialog>
+</section>
+
+<style>
+  .spotlight { padding-block: clamp(3rem, 6vw, 5rem) clamp(4rem, 7vw, 6rem); }
+  .head { display: flex; justify-content: space-between; align-items: end; gap: var(--space-6); margin-bottom: var(--space-8); }
+  .head h2 { font-size: var(--t-3xl); margin-top: var(--space-2); }
+  .all { font-size: var(--t-sm); font-weight: 500; text-decoration: none; padding: var(--space-2) 0; border-bottom: 1px solid currentColor; white-space: nowrap; }
+  .all:hover { color: var(--signal); }
+
+  .tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+  .tile {
+    position: relative; display: grid; background: var(--surface); border-radius: var(--radius-m);
+    overflow: hidden; box-shadow: var(--shadow-soft); border: 1px solid rgba(13, 17, 23, 0.06);
+    transition: box-shadow 220ms var(--ease-out), transform 220ms var(--ease-out);
+  }
+  .tile:hover { box-shadow: var(--shadow-lift); transform: translateY(-2px); }
+  .media {
+    position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; padding: 0; border: 0; margin: 0;
+    cursor: pointer; background: var(--ink); width: 100%;
+  }
+  .media video { width: 100%; height: 100%; object-fit: cover; }
+  .has-photo { background: #fff; }
+  .has-photo img { width: 100%; height: 100%; object-fit: contain; padding: 8% 14%; transform-origin: 50% 55%; }
+  @media (prefers-reduced-motion: no-preference) {
+    .has-photo img { animation: drift 14s ease-in-out infinite alternate; }
+    @keyframes drift { from { transform: scale(1) translateY(0); } to { transform: scale(1.1) translateY(-2%); } }
+  }
+  .tag {
+    position: absolute; top: 12px; left: 12px; padding: 4px 10px; border-radius: var(--radius-pill);
+    font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.4;
+  }
+  .tag.new { background: var(--ink); color: #fff; }
+  .tag.hot { background: var(--signal); color: #fff; }
+  .tag.pick { background: linear-gradient(135deg, #fbfcfd, #c4ced7); color: var(--ink); box-shadow: inset 0 0 0 1px rgba(13, 17, 23, 0.08); }
+  .play {
+    position: absolute; right: 12px; bottom: 12px; width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92); box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3); transition: transform 200ms var(--ease-out);
+  }
+  .play::after { content: ''; position: absolute; left: 13px; top: 10px; border-style: solid; border-width: 7px 0 7px 11px; border-color: transparent transparent transparent var(--ink); }
+  .media:hover .play { transform: scale(1.08); }
+
+  .bar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); }
+  .brand-logo { height: 20px; width: auto; max-width: 80px; object-fit: contain; filter: brightness(0); opacity: 0.8; }
+  .brand-name { font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-2); }
+  .name { font-weight: 600; font-size: var(--t-sm); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* the whole bar is the link to the product */
+  .name::after { content: ''; position: absolute; inset: auto 0 0 0; height: 52px; }
+  .go { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); font-size: 18px; line-height: 1; transition: background-color 180ms, color 180ms; }
+  .bar:hover .go { background: var(--ink); color: #fff; }
+
+  .vid-dialog { width: min(100% - 2rem, 1080px); padding: 0; border: 0; border-radius: var(--radius-l); background: var(--surface); color: var(--fg); box-shadow: 0 30px 80px rgba(13, 17, 23, 0.35); }
+  .vid-dialog::backdrop { background: rgba(30, 44, 58, 0.55); backdrop-filter: blur(6px); }
+  .vid-box { display: grid; gap: var(--space-4); padding: var(--space-4); justify-items: start; }
+  .vid-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); width: 100%; padding-inline: var(--space-2); }
+  .vid-head h3 { font-size: var(--t-lg); font-weight: 600; }
+  .close { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: transparent; display: grid; place-items: center; cursor: pointer; }
+  .close:hover { border-color: var(--fg); }
+  .vid-box video { width: 100%; aspect-ratio: 16 / 9; background: var(--ink); border-radius: var(--radius-m); }
+
+  @media (max-width: 1080px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 520px) {
+    .tiles { grid-template-columns: 1fr; }
+    .head { align-items: start; flex-direction: column; gap: var(--space-3); }
+  }
+</style>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  // loops: attach the source the first time a tile is on screen, play only while visible
+  const loops = [...document.querySelectorAll<HTMLVideoElement>('.spotlight video[data-loop]')];
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      const v = e.target as HTMLVideoElement;
+      if (e.isIntersecting && !reduce.matches) {
+        if (!v.src) { v.src = v.dataset.loop!; }
+        v.play().catch(() => {});
+      } else v.pause();
+    }
+  }, { threshold: 0.35 });
+  loops.forEach((v) => io.observe(v));
+
+  const dialog = document.querySelector<HTMLDialogElement>('[data-vid-dialog]');
+  const player = dialog?.querySelector<HTMLVideoElement>('[data-vid-player]');
+  const title = dialog?.querySelector<HTMLElement>('[data-vid-title]');
+  const link = dialog?.querySelector<HTMLAnchorElement>('[data-vid-link]');
+  document.querySelectorAll<HTMLButtonElement>('[data-open-video]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!dialog || !player) return;
+      player.src = btn.dataset.openVideo!;
+      title!.textContent = btn.dataset.title!;
+      link!.href = btn.dataset.href!;
+      dialog.showModal();
+      player.play().catch(() => {});
+    });
+  });
+  const shut = () => { player?.pause(); dialog?.close(); };
+  dialog?.querySelector('[data-vid-close]')?.addEventListener('click', shut);
+  dialog?.addEventListener('click', (e) => { if (e.target === dialog) shut(); });
+  dialog?.addEventListener('close', () => { player?.pause(); });
+</script>
