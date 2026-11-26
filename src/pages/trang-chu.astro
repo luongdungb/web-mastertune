@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import CarSound3D from '../components/CarSound3D.astro';
 import Spotlight from '../components/Spotlight.astro';
+import BrandMarquee from '../components/BrandMarquee.astro';
 import products from '../data/products.json';
 import brands from '../data/brands.json';
 import categories from '../data/categories.json';
@@ -31,13 +32,7 @@ const totalProducts = products.length;
   <Spotlight headingLevel="h1" />
 
   <!-- BRANDS -->
-  <section class="brands" aria-label="Thương hiệu phân phối">
-    <ul class="wrap brand-row">
-      {brands.filter((b) => b.logo).map((b) => (
-        <li><a href={`/thuong-hieu/${b.slug}`} title={b.name}><img src={b.logo!} alt={b.name} width="160" height="54" loading="lazy" /></a></li>
-      ))}
-    </ul>
-  </section>
+  <BrandMarquee />
 
   <CarSound3D />
 
@@ -166,11 +161,6 @@ const totalProducts = products.length;
   .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 
   /* BRANDS */
-  .brands { border-top: 1px solid var(--line); }
-  .brand-row { list-style: none; margin: 0 auto; padding: var(--space-8) 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-8); }
-  .brand-row a { display: block; padding: var(--space-2); }
-  .brand-row img { height: 40px; width: auto; max-width: 140px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.5; transition: opacity 200ms; }
-  .brand-row a:hover img { opacity: 0.9; }
 
   /* STUDIO: categories + featured */
   .split { grid-template-columns: 1fr 1fr; align-items: end; }

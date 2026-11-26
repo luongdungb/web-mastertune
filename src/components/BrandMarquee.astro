@@ -1,0 +1,80 @@
+---
+// Endless strip of the distributed brands, in colour (dark-background versions made by
+// scripts/prepare-brand-logos.mjs). Brands without a logo file show their name as a wordmark.
+// The list is rendered twice and slid left by exactly one copy, so the loop has no seam.
+import brands from '../data/brands.json';
+
+const items = brands.map((b) => ({
+  slug: b.slug,
+  name: b.name,
+  logo: b.logo ? b.logo.replace('/images/brands/', '/images/brands/dark/') : null,
+}));
+---
+<section class="brand-strip" aria-labelledby="brand-strip-title">
+  <h2 id="brand-strip-title" class="strip-title"><span>Thương hiệu phân phối chính hãng</span></h2>
+  <div class="marquee">
+    <div class="track">
+      {[0, 1].map((copy) => (
+        <ul class="group" aria-hidden={copy === 1 ? 'true' : undefined}>
+          {items.map((b) => (
+            <li>
+              <a href={`/thuong-hieu/${b.slug}`} tabindex={copy === 1 ? -1 : undefined} title={b.name}>
+                {b.logo
+                  ? <img src={b.logo} alt={copy === 0 ? b.name : ''} height="56" loading="lazy" decoding="async" />
+                  : <span class="wordmark">{b.name}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .brand-strip {
+    position: relative; overflow: hidden; padding-block: var(--space-8) var(--space-12);
+    border-block: 1px solid var(--line);
+    background:
+      radial-gradient(40% 120% at 50% 0%, rgba(201, 206, 214, 0.06), rgba(201, 206, 214, 0) 70%),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 8.333% 100%;
+  }
+  /* title between two hairlines, like an instrument label */
+  .strip-title {
+    display: flex; align-items: center; justify-content: center; gap: var(--space-6);
+    font-family: var(--mono); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase; color: var(--fg-2);
+    margin: 0 auto var(--space-8); padding-inline: var(--gutter); text-align: center;
+  }
+  .strip-title::before, .strip-title::after { content: ''; flex: 0 1 120px; height: 1px; }
+  .strip-title::before { background: linear-gradient(90deg, rgba(201, 206, 214, 0), rgba(201, 206, 214, 0.6)); }
+  .strip-title::after { background: linear-gradient(90deg, rgba(201, 206, 214, 0.6), rgba(201, 206, 214, 0)); }
+
+  .marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 9%, #000 91%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0%, #000 9%, #000 91%, transparent 100%);
+  }
+  .track { display: flex; width: max-content; animation: slide 48s linear infinite; }
+  .marquee:hover .track, .marquee:focus-within .track { animation-play-state: paused; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  /* gap lives inside each copy (incl. its trailing edge) so both copies are exactly the same width */
+  .group { list-style: none; margin: 0; padding: 0 0 0 clamp(3rem, 6vw, 6rem); display: flex; align-items: center; gap: clamp(3rem, 6vw, 6rem); }
+  .group a { display: grid; place-items: center; height: 64px; text-decoration: none; border-radius: var(--radius-s); transition: transform 260ms var(--ease-out), filter 260ms; }
+  .group a:hover { transform: translateY(-3px) scale(1.04); filter: brightness(1.12) drop-shadow(0 6px 18px rgba(255, 255, 255, 0.12)); }
+  .group img { height: 56px; width: auto; max-width: 230px; object-fit: contain; }
+  .wordmark { font-size: clamp(1.4rem, 1rem + 1vw, 1.9rem); font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap; color: #ececec; }
+
+  @media (max-width: 640px) {
+    .group img { height: 40px; max-width: 160px; }
+    .group a { height: 48px; }
+    .strip-title { letter-spacing: 0.2em; font-size: 0.6875rem; gap: var(--space-3); }
+    .track { animation-duration: 36s; }
+  }
+  /* no motion: one copy, wrapped and centred */
+  @media (prefers-reduced-motion: reduce) {
+    .track { animation: none; width: auto; justify-content: center; }
+    .group { flex-wrap: wrap; justify-content: center; padding: 0 var(--gutter); row-gap: var(--space-6); }
+    .group[aria-hidden='true'] { display: none; }
+    .marquee { -webkit-mask-image: none; mask-image: none; }
+  }
+</style>
