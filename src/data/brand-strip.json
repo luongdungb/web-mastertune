@@ -1,0 +1,10 @@
+[
+  {"slug":"steg","name":"STEG","href":"/thuong-hieu/steg","ratio":2.431},
+  {"slug":"dls","name":"DLS","href":"/thuong-hieu/dls","scale":1.45,"ratio":1},
+  {"slug":"audiocircle","name":"Audiocircle","href":"/thuong-hieu/audiocircle","ratio":5.203},
+  {"slug":"zelos","name":"Zelos Audio","href":"/thuong-hieu/abyss","scale":1.1,"ratio":1.569},
+  {"slug":"resolut","name":"Resolut","href":"/thuong-hieu/resolut","ratio":5.065},
+  {"slug":"ks-audio","name":"KS Audio","href":"/thuong-hieu/ks-audio","ratio":6.154},
+  {"slug":"bos","name":"BOS","href":"/thuong-hieu/bos","ratio":4.295},
+  {"slug":"tikhoff","name":"Tikhoff","href":null,"scale":1.35,"ratio":1.087}
+]

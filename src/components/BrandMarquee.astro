@@ -1,30 +1,30 @@
 ---
-// Endless strip of the distributed brands, in colour (dark-background versions made by
-// scripts/prepare-brand-logos.mjs). Brands without a logo file show their name as a wordmark.
-// The list is rendered twice and slid left by exactly one copy, so the loop has no seam.
-import brands from '../data/brands.json';
+// Endless strip of the main distributed brands (src/data/brand-strip.json), in colour: the official
+// logos in assets-src/brands/ made dark-ready by scripts/prepare-brand-logos.mjs.
+// The list is rendered four times and slid left by half (two copies), so the loop has no seam
+// even on very wide screens. `scale` evens out square logos next to wide wordmarks.
+import strip from '../data/brand-strip.json';
 
-const items = brands.map((b) => ({
-  slug: b.slug,
-  name: b.name,
-  logo: b.logo ? b.logo.replace('/images/brands/', '/images/brands/dark/') : null,
-}));
+const items = strip.map((b) => ({ ...b, logo: `/images/brands/dark/${b.slug}.webp`, scale: (b as { scale?: number }).scale ?? 1 }));
+// fixed slot sizes from each logo's real proportions: nothing shifts while the strip moves
+const copies = [0, 1, 2, 3];
 ---
 <section class="brand-strip" aria-labelledby="brand-strip-title">
   <h2 id="brand-strip-title" class="strip-title"><span>Thương hiệu phân phối chính hãng</span></h2>
   <div class="marquee">
     <div class="track">
-      {[0, 1].map((copy) => (
-        <ul class="group" aria-hidden={copy === 1 ? 'true' : undefined}>
-          {items.map((b) => (
-            <li>
-              <a href={`/thuong-hieu/${b.slug}`} tabindex={copy === 1 ? -1 : undefined} title={b.name}>
-                {b.logo
-                  ? <img src={b.logo} alt={copy === 0 ? b.name : ''} height="56" loading="lazy" decoding="async" />
-                  : <span class="wordmark">{b.name}</span>}
-              </a>
-            </li>
-          ))}
+      {copies.map((copy) => (
+        <ul class="group" aria-hidden={copy > 0 ? 'true' : undefined}>
+          {items.map((b) => {
+            const img = <img src={b.logo} alt={copy === 0 ? b.name : ''} width={Math.round(52 * b.scale * b.ratio)} height={Math.round(52 * b.scale)} style={`--s:${b.scale};aspect-ratio:${b.ratio}`} decoding="async" />;
+            return (
+              <li>
+                {b.href
+                  ? <a href={b.href} tabindex={copy > 0 ? -1 : undefined} title={b.name}>{img}</a>
+                  : <span class="item" title={b.name}>{img}</span>}
+              </li>
+            );
+          })}
         </ul>
       ))}
     </div>
@@ -54,21 +54,21 @@ const items = brands.map((b) => ({
     -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 9%, #000 91%, transparent 100%);
             mask-image: linear-gradient(90deg, transparent 0%, #000 9%, #000 91%, transparent 100%);
   }
-  .track { display: flex; width: max-content; animation: slide 48s linear infinite; }
+  /* 4 copies on the track; sliding by half moves exactly two of them */
+  .track { display: flex; width: max-content; animation: slide 64s linear infinite; }
   .marquee:hover .track, .marquee:focus-within .track { animation-play-state: paused; }
   @keyframes slide { to { transform: translateX(-50%); } }
   /* gap lives inside each copy (incl. its trailing edge) so both copies are exactly the same width */
   .group { list-style: none; margin: 0; padding: 0 0 0 clamp(3rem, 6vw, 6rem); display: flex; align-items: center; gap: clamp(3rem, 6vw, 6rem); }
-  .group a { display: grid; place-items: center; height: 64px; text-decoration: none; border-radius: var(--radius-s); transition: transform 260ms var(--ease-out), filter 260ms; }
+  .group a, .group .item { display: grid; place-items: center; height: 72px; text-decoration: none; border-radius: var(--radius-s); transition: transform 260ms var(--ease-out), filter 260ms; }
   .group a:hover { transform: translateY(-3px) scale(1.04); filter: brightness(1.12) drop-shadow(0 6px 18px rgba(255, 255, 255, 0.12)); }
-  .group img { height: 56px; width: auto; max-width: 230px; object-fit: contain; }
-  .wordmark { font-size: clamp(1.4rem, 1rem + 1vw, 1.9rem); font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap; color: #ececec; }
+  .group img { height: calc(52px * var(--s, 1)); width: auto; max-width: 240px; object-fit: contain; }
 
   @media (max-width: 640px) {
-    .group img { height: 40px; max-width: 160px; }
-    .group a { height: 48px; }
+    .group img { height: calc(38px * var(--s, 1)); max-width: 160px; }
+    .group a, .group .item { height: 52px; }
     .strip-title { letter-spacing: 0.2em; font-size: 0.6875rem; gap: var(--space-3); }
-    .track { animation-duration: 36s; }
+    .track { animation-duration: 44s; }
   }
   /* no motion: one copy, wrapped and centred */
   @media (prefers-reduced-motion: reduce) {
