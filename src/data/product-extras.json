@@ -161,5 +161,194 @@
       "thumb": "/video/p/loa-sub-dien-vinsub-vs-8-pro-thumb.webp",
       "loop": "/video/p/loa-sub-dien-vinsub-vs-8-pro-loop.mp4"
     }
+  },
+  "loa-sub-dien-dls-acw10i": {
+    "specs": [
+      {
+        "k": "Công suất RMS",
+        "v": "200 W"
+      },
+      {
+        "k": "Công suất tối đa",
+        "v": "450 W"
+      },
+      {
+        "k": "Đường kính loa bass",
+        "v": "10 inch"
+      },
+      {
+        "k": "Dải tần",
+        "v": "30 - 150 Hz"
+      },
+      {
+        "k": "Độ nhạy",
+        "v": "90 dB"
+      },
+      {
+        "k": "Amply",
+        "v": "Class AB tích hợp"
+      },
+      {
+        "k": "Công nghệ",
+        "v": "Kick Bass (bật / tắt)"
+      },
+      {
+        "k": "Kích thước",
+        "v": "345 × 245 × 79 mm"
+      }
+    ],
+    "install": "Gầm ghế",
+    "gallery": [
+      {
+        "src": "/images/g/loa-sub-dien-dls-acw10i-1.webp",
+        "thumb": "/images/g/loa-sub-dien-dls-acw10i-1-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "DLS ACW10I dưới ánh đèn vàng, nền tối"
+      },
+      {
+        "src": "/images/g/loa-sub-dien-dls-acw10i-2.webp",
+        "thumb": "/images/g/loa-sub-dien-dls-acw10i-2-t.webp",
+        "w": 1600,
+        "h": 1078,
+        "alt": "DLS ACW10I nhìn nghiêng trên bục trưng bày"
+      },
+      {
+        "src": "/images/g/loa-sub-dien-dls-acw10i-3.webp",
+        "thumb": "/images/g/loa-sub-dien-dls-acw10i-3-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "DLS ACW10I, mặt lưới loa bass 10 inch"
+      },
+      {
+        "src": "/images/g/loa-sub-dien-dls-acw10i-4.webp",
+        "thumb": "/images/g/loa-sub-dien-dls-acw10i-4-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "Bảng chỉnh và cổng kết nối phía sau DLS ACW10I"
+      },
+      {
+        "src": "/images/g/loa-sub-dien-dls-acw10i-5.webp",
+        "thumb": "/images/g/loa-sub-dien-dls-acw10i-5-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "DLS ACW10I cạnh hộp sản phẩm và phụ kiện đi kèm"
+      },
+      {
+        "src": "/images/g/loa-sub-dien-dls-acw10i-6.webp",
+        "thumb": "/images/g/loa-sub-dien-dls-acw10i-6-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "Thân loa DLS ACW10I chỉ cao 79 mm"
+      },
+      {
+        "src": "/images/g/loa-sub-dien-dls-acw10i-7.webp",
+        "thumb": "/images/g/loa-sub-dien-dls-acw10i-7-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "DLS ACW10I trên nền tối, sóng bass lan ra xung quanh"
+      }
+    ],
+    "video": {
+      "src": "/video/p/loa-sub-dien-dls-acw10i.mp4",
+      "poster": "/video/p/loa-sub-dien-dls-acw10i-poster.webp",
+      "thumb": "/video/p/loa-sub-dien-dls-acw10i-thumb.webp",
+      "loop": "/video/p/loa-sub-dien-dls-acw10i-loop.mp4"
+    }
+  },
+  "loa-canh-phan-tan-2-way-audiocircle-kl-c6-2": {
+    "specs": [
+      {
+        "k": "Kích thước loa bass",
+        "v": "6,5 inch (165 mm)"
+      },
+      {
+        "k": "Trở kháng",
+        "v": "3 Ω"
+      },
+      {
+        "k": "Dải tần",
+        "v": "57 Hz - 20 kHz"
+      },
+      {
+        "k": "Độ nhạy",
+        "v": "88 dB"
+      },
+      {
+        "k": "Công suất",
+        "v": "60 W RMS / 120 W"
+      },
+      {
+        "k": "Cuộn dây",
+        "v": "25,5 mm"
+      },
+      {
+        "k": "Nam châm",
+        "v": "307,6 g"
+      },
+      {
+        "k": "Màng loa",
+        "v": "Giấy"
+      },
+      {
+        "k": "Khung",
+        "v": "Thép"
+      },
+      {
+        "k": "Phân tần",
+        "v": "Thụ động 2 đường tiếng"
+      }
+    ],
+    "install": "Loa bass ở cánh cửa, treble ở cột A hoặc taplo",
+    "gallery": [
+      {
+        "src": "/images/g/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-1.webp",
+        "thumb": "/images/g/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-1-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "Bộ loa Audiocircle KL-C6.2: loa bass, treble và phân tần"
+      },
+      {
+        "src": "/images/g/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-2.webp",
+        "thumb": "/images/g/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-2-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "Loa bass 6,5 inch của Audiocircle KL-C6.2"
+      },
+      {
+        "src": "/images/g/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-3.webp",
+        "thumb": "/images/g/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-3-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "Cận cảnh loa treble Audiocircle KL-C6.2"
+      },
+      {
+        "src": "/images/g/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-4.webp",
+        "thumb": "/images/g/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-4-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "Cặp phân tần thụ động 2 đường tiếng Audiocircle KL-C6.2"
+      },
+      {
+        "src": "/images/g/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-5.webp",
+        "thumb": "/images/g/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-5-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "Nam châm và khung thép loa bass Audiocircle KL-C6.2"
+      },
+      {
+        "src": "/images/g/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-6.webp",
+        "thumb": "/images/g/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-6-t.webp",
+        "w": 1600,
+        "h": 893,
+        "alt": "Loa Audiocircle KL-C6.2 lắp trong xe, sân khấu âm thanh trên taplo"
+      }
+    ],
+    "video": {
+      "src": "/video/p/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2.mp4",
+      "poster": "/video/p/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-poster.webp",
+      "thumb": "/video/p/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-thumb.webp",
+      "loop": "/video/p/loa-canh-phan-tan-2-way-audiocircle-kl-c6-2-loop.mp4"
+    }
   }
 }
