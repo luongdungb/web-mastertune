@@ -184,7 +184,16 @@ const total = String(tiles.length).padStart(2, '0');
       } else v.pause();
     }
   }, { threshold: 0.35 });
-  loops.forEach((v) => io.observe(v));
+  loops.forEach((v) => { v.muted = true; v.playsInline = true; io.observe(v); });
+  // iPhones in Low Power Mode / in-app browsers block autoplay until the first touch: retry then
+  const retry = () => {
+    if (reduce.matches) return;
+    loops.forEach((v) => {
+      const r = v.getBoundingClientRect();
+      if (v.src && v.paused && r.bottom > 0 && r.top < innerHeight) v.play().catch(() => {});
+    });
+  };
+  ['touchend', 'scroll'].forEach((t) => window.addEventListener(t, retry, { passive: true }));
 
   const dialog = document.querySelector<HTMLDialogElement>('[data-vid-dialog]');
   const player = dialog?.querySelector<HTMLVideoElement>('[data-vid-player]');

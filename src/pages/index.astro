@@ -17,11 +17,17 @@ const links = [
   <div class="portal" data-portal>
     <!-- the film: portrait clips sit centred and melt into the black; a landscape clip fills the screen -->
     <div class="media" aria-hidden="true">
-      <video autoplay muted loop playsinline preload="auto" poster="/video/hero-poster.webp" data-film>
-        <source src="/video/hero.webm" type="video/webm" />
+      <!-- H.264 first: iPhones and in-app browsers (Zalo, Messenger) may pick WebM and then not play it -->
+      <video autoplay muted loop playsinline webkit-playsinline disablepictureinpicture preload="auto" poster="/video/hero-poster.webp" data-film>
         <source src="/video/hero.mp4" type="video/mp4" />
+        <source src="/video/hero.webm" type="video/webm" />
       </video>
     </div>
+    <button class="film-btn" type="button" aria-pressed="false" data-film-btn>
+      <span class="sr-only" data-film-label>Tạm dừng video nền</span>
+      <svg class="i-pause" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 2h2v8H3zM7 2h2v8H7z" fill="currentColor" /></svg>
+      <svg class="i-play" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor" /></svg>
+    </button>
     <div class="shade" aria-hidden="true"></div>
 
     <!-- instrument lines -->
@@ -83,6 +89,18 @@ const links = [
     -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 24%, #000 76%, transparent 100%);
             mask-image: linear-gradient(90deg, transparent 0%, #000 24%, #000 76%, transparent 100%);
   }
+  /* small pause / play for the background film */
+  .film-btn {
+    position: absolute; z-index: 2; right: clamp(1.25rem, 3vw, 2.5rem); bottom: clamp(1.75rem, 4vh, 2.5rem);
+    display: grid; place-items: center; width: 36px; height: 36px; padding: 0; cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.18); border-radius: var(--radius-s);
+    background: rgba(11, 12, 14, 0.45); color: var(--fg-2);
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    transition: color 180ms, border-color 180ms;
+  }
+  .film-btn:hover { color: var(--fg); border-color: rgba(255, 255, 255, 0.4); }
+  .film-btn .i-play, .film-btn[aria-pressed='true'] .i-pause { display: none; }
+  .film-btn[aria-pressed='true'] .i-play { display: block; }
   /* landscape clip (set by the script from the file itself): full bleed */
   .portal.wide .media video { width: 100%; height: 100%; aspect-ratio: auto; -webkit-mask-image: none; mask-image: none; }
   .shade {
@@ -178,6 +196,8 @@ const links = [
     .media video { width: 100%; height: 100%; -webkit-mask-image: none; mask-image: none; }
     .readout { bottom: 8.5rem; font-size: 0.6875rem; }
     .readout.right, .hint { display: none; }
+    /* beside the left readout, clear of the Enter button and of in-app browser overlays */
+    .film-btn { right: var(--space-4); bottom: 8.5rem; }
     .lines .c-tl, .lines .c-tr, .lines .c-bl, .lines .c-br { display: none; }
   }
 </style>
@@ -188,7 +208,33 @@ const links = [
   const markWide = () => portal.classList.toggle('wide', film.videoWidth > film.videoHeight);
   film.addEventListener('loadedmetadata', markWide);
   if (film.readyState >= 1) markWide();
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) film.pause();
+
+  // Keep the film running. iPhones refuse autoplay in Low Power Mode and in some in-app browsers,
+  // so: force the muted/inline flags in script too, retry when it can play, when the page comes
+  // back, and on the visitor's first touch. A visitor who pauses it with the button stays paused.
+  const btn = portal.querySelector<HTMLButtonElement>('[data-film-btn]')!;
+  const label = btn.querySelector<HTMLElement>('[data-film-label]')!;
+  let held = false;
+  film.muted = true; film.defaultMuted = true; film.playsInline = true;
+  const start = () => { if (!held && film.paused) film.play().catch(() => {}); };
+  const sync = () => {
+    btn.setAttribute('aria-pressed', String(film.paused));
+    label.textContent = film.paused ? 'Phát video nền' : 'Tạm dừng video nền';
+  };
+  film.addEventListener('play', sync);
+  film.addEventListener('pause', sync);
+  film.addEventListener('canplay', start);
+  start();
+  const onFirstTouch = (e: Event) => {
+    if ((e.target as Element | null)?.closest?.('[data-film-btn]')) return; // the button handles itself
+    start(); if (!film.paused) ['touchstart', 'pointerdown', 'scroll'].forEach((t) => window.removeEventListener(t, onFirstTouch)); };
+  ['touchstart', 'pointerdown', 'scroll'].forEach((t) => window.addEventListener(t, onFirstTouch, { passive: true }));
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) start(); });
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    held = !film.paused;
+    if (held) film.pause(); else film.play().catch(() => {});
+  });
 
   const enter = (e?: Event) => {
     e?.preventDefault();
@@ -206,5 +252,5 @@ const links = [
     enter(e);
   });
   // coming back with the browser's back button: show the portal again
-  window.addEventListener('pageshow', (e) => { if (e.persisted) portal.classList.remove('leaving'); });
+  window.addEventListener('pageshow', (e) => { if (e.persisted) { portal.classList.remove('leaving'); start(); } });
 </script>
