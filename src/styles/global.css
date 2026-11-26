@@ -3,7 +3,7 @@
 
 /* ============ MASTERTUNE design tokens ============
    Dark technical look: near-black stage, charcoal panels, hairline grid with crosshair marks,
-   pale lime for the one main action, chrome logo. Product photos (shot on white) sit in light
+   polished chrome (from the logo) for the one main action, chrome logo. Product photos (shot on white) sit in light
    "light-box" wells so they read like studio pedestals in the dark.
    Type: Exo 2 (automotive, full Vietnamese) + JetBrains Mono for [// labels] and spec readouts. */
 :root {
@@ -14,8 +14,10 @@
   --grid: rgba(255, 255, 255, 0.06); /* decorative grid lines */
   --fg: #ecedef;             /* primary text */
   --fg-2: #9ba0a8;           /* secondary text */
-  --signal: #d6f5b8;         /* accent: pale lime (main action, active states) */
-  --signal-hover: #e6fbd2;
+  --signal: #c9ced6;         /* accent: chrome silver from the logo (active states, small marks) */
+  --signal-hover: #e4e7eb;
+  /* polished chrome for the main action: bright top, sharp mid-line reflection, soft bottom */
+  --chrome: linear-gradient(180deg, #f6f7f9 0%, #d9dde2 46%, #b3bac3 50%, #cdd2d8 78%, #eef0f3 100%);
   --signal-ink: #0b0c0e;     /* text on the accent */
   --deep: #050506;           /* media backgrounds */
   --studio: #0f1012;         /* alternate section background */
@@ -114,7 +116,7 @@ p { margin: 0; }
 
 :focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; border-radius: 4px; }
 
-/* Buttons: compact, squared. Lime for the one main action. */
+/* Buttons: compact, squared. Chrome for the one main action. */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
   min-height: 46px; padding: 0 var(--space-6);
@@ -122,8 +124,11 @@ p { margin: 0; }
   font-weight: 600; font-size: var(--t-sm); text-decoration: none; cursor: pointer; white-space: nowrap;
   transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out), border-color 180ms var(--ease-out);
 }
-.btn-primary { background: var(--signal); color: var(--signal-ink); }
-.btn-primary:hover { background: var(--signal-hover); }
+.btn-primary {
+  background: var(--chrome); color: var(--signal-ink); border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(0, 0, 0, 0.18), 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+.btn-primary:hover { filter: brightness(1.07); }
 .btn-ink, .btn-light { background: var(--fg); color: var(--bg); }
 .btn-ink:hover, .btn-light:hover { background: #ffffff; }
 .btn-ghost, .btn-glass { border-color: var(--line); color: var(--fg); background: rgba(255, 255, 255, 0.02); }
@@ -151,7 +156,7 @@ p { margin: 0; }
   position: relative; isolation: isolate; overflow: hidden;
   margin: var(--frame) var(--frame) 0; border-radius: var(--radius-l);
   background:
-    radial-gradient(50% 120% at 85% 0%, rgba(214, 245, 184, 0.07), rgba(214, 245, 184, 0) 70%),
+    radial-gradient(50% 120% at 85% 0%, rgba(201, 206, 214, 0.07), rgba(201, 206, 214, 0) 70%),
     linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 100% 33.33%,
     linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 12.5% 100%,
     var(--surface);

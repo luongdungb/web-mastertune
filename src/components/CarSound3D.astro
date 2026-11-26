@@ -88,7 +88,7 @@ const catCount = Object.fromEntries(categories.map((c) => [c.slug, c.count]));
     transition: transform 220ms var(--ease-out), background-color 220ms;
   }
   .spot:hover::before { transform: scale(1.2); }
-  .spot[aria-pressed='true']::before { background: var(--signal); box-shadow: 0 0 0 6px rgba(214, 245, 184, 0.28), 0 0 26px 6px rgba(214, 245, 184, 0.45); }
+  .spot[aria-pressed='true']::before { background: var(--signal); box-shadow: 0 0 0 6px rgba(201, 206, 214, 0.28), 0 0 26px 6px rgba(201, 206, 214, 0.45); }
   .spot.occluded { opacity: 0.35; }
 
   .callout {
@@ -100,7 +100,7 @@ const catCount = Object.fromEntries(categories.map((c) => [c.slug, c.count]));
     will-change: transform; pointer-events: auto;
   }
   .leader { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: visible; }
-  .leader line { stroke: rgba(214, 245, 184, 0.75); stroke-width: 1; }
+  .leader line { stroke: rgba(201, 206, 214, 0.75); stroke-width: 1; }
   .stage:not(.ready) .leader { display: none; }
   .callout .where { font-family: var(--mono); font-size: 0.6875rem; color: var(--signal); letter-spacing: 0.08em; text-transform: uppercase; }
   .callout .where::before { content: '[// '; } .callout .where::after { content: ']'; }

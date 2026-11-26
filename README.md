@@ -46,8 +46,8 @@ Sau đó sửa `alt` (mô tả ảnh) trong `product-extras.json`. Cần `ffmpeg
 
 ## Thiết kế
 
-- Cấu trúc: `/` là trang mở đầu toàn màn hình (phim sản phẩm, nút **Enter Portal**, phím Enter cũng vào được). Website bắt đầu ở `/trang-chu`; logo trên menu dẫn về đây. Thay phim: ghi đè `public/video/hero.mp4` và `hero.webm` (+ `hero-poster.webp`). Phim dọc nằm giữa và tan vào nền đen; phim ngang tự tràn toàn màn hình.
-- Màu: nền gần đen `#0b0c0e`, thẻ than chì `#141518`, lưới kẻ mảnh và dấu chữ thập, điểm nhấn xanh chanh nhạt `#d6f5b8` cho nút chính và trạng thái đang chọn. Ảnh sản phẩm (chụp nền trắng) nằm trong khung sáng `--well` để không bị ô trắng trên nền tối.
+- Cấu trúc: `/` là trang mở đầu toàn màn hình (chữ MASTERTUNE mạ chrome + "Âm thanh xe hơi cao cấp", phim sản phẩm, nút **Enter Portal**, phím Enter cũng vào được). Website bắt đầu ở `/trang-chu`; logo trên menu dẫn về đây. Thay phim: ghi đè `public/video/hero.mp4` và `hero.webm` (+ `hero-poster.webp`). Phim dọc nằm giữa và tan vào nền đen; phim ngang tự tràn toàn màn hình.
+- Màu: nền gần đen `#0b0c0e`, thẻ than chì `#141518`, lưới kẻ mảnh và dấu chữ thập, điểm nhấn bạc chrome như logo: nút chính dạng kim loại bóng (`--chrome`), trạng thái đang chọn màu bạc `#c9ced6`. Ảnh sản phẩm (chụp nền trắng) nằm trong khung sáng `--well` để không bị ô trắng trên nền tối.
 - Chữ: Exo 2 (nét kỹ thuật, hợp ngành ô tô, đủ dấu tiếng Việt) cho nội dung và tiêu đề; JetBrains Mono cho nhãn kiểu `[// NHÃN]` và thông số.
 - Tâm điểm: 4 ô sản phẩm xếp 2 × 2 ở đầu `/trang-chu` (`src/data/spotlight.json`: `slug`, `label`, `tag` = Mới về / Bán chạy / Nổi bật). Sản phẩm có video thì ô chạy đoạn lặp ngắn không tiếng (`*-loop.mp4`, tạo bằng `node scripts/make-loop.mjs <slug> [giây bắt đầu] [độ dài]`), bấm vào mở video đầy đủ; chưa có video thì ảnh sản phẩm chuyển động chậm.
 - Điểm nhấn: xe 3D xoay được (three.js) với các điểm lắp thiết bị — `src/components/CarSound3D.astro` + `src/scripts/car3d.ts`. three.js chỉ tải khi khách cuộn tới phần này.
