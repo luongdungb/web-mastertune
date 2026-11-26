@@ -8,7 +8,7 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
 ---
 <header class:list={['site-header', { overlay }]} data-header>
   <div class="bar wrap">
-    <a href="/" class="home" aria-label="MASTERTUNE — Trang chủ"><Logo height={44} /></a>
+    <a href="/trang-chu" class="home" aria-label="MASTERTUNE — Trang chủ"><Logo height={40} /></a>
     <nav class="nav" aria-label="Điều hướng chính">
       {site.nav.map((l) => <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}{l.href === '/ghep-he-thong' && <span class="badge" data-config-count hidden></span>}</a>)}
     </nav>
@@ -29,47 +29,37 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
 <style>
   .site-header {
     position: sticky; top: 0; z-index: 50; color: var(--fg);
-    background: rgba(238, 242, 245, 0.82);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    border-bottom: 1px solid rgba(13, 17, 23, 0.06);
-    transition: background-color 240ms var(--ease-out), border-color 240ms var(--ease-out), color 240ms var(--ease-out);
+    background: rgba(11, 12, 14, 0.78);
+    backdrop-filter: blur(16px) saturate(1.1);
+    -webkit-backdrop-filter: blur(16px) saturate(1.1);
+    border-bottom: 1px solid var(--line);
   }
-  /* home: floats inside the mist hero card, white type until the page scrolls */
   .site-header.overlay { position: fixed; inset: 0 0 auto 0; }
-  .site-header.overlay:not(.scrolled) {
-    background: transparent; border-color: transparent; color: var(--on-mist);
-    backdrop-filter: none; -webkit-backdrop-filter: none;
-    padding-top: var(--frame);
-  }
+  .site-header.overlay:not(.scrolled) { background: transparent; border-color: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .bar {
     height: var(--header-h);
     display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--space-6);
   }
   .home { text-decoration: none; display: inline-flex; }
-  /* chrome logo on the pale mist needs a little depth to read */
-  .overlay:not(.scrolled) .home { filter: drop-shadow(0 2px 6px rgba(22, 38, 54, 0.3)); }
   .nav { display: flex; justify-content: center; align-items: center; gap: clamp(1rem, 1.9vw, 2.1rem); font-size: var(--t-sm); }
-  .nav a { position: relative; text-decoration: none; color: inherit; opacity: 0.78; padding-block: var(--space-2); transition: opacity 160ms; white-space: nowrap; }
-  .nav a:hover, .nav a[aria-current='page'] { opacity: 1; }
-  .nav a[aria-current='page']::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; }
+  .nav a { position: relative; text-decoration: none; color: var(--fg-2); padding-block: var(--space-2); transition: color 160ms; white-space: nowrap; }
+  .nav a:hover, .nav a[aria-current='page'] { color: var(--fg); }
+  .nav a[aria-current='page']::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--signal); }
   .badge {
     display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; margin-left: 6px;
-    border-radius: 9px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 600; line-height: 1;
+    border-radius: 4px; background: var(--signal); color: var(--signal-ink); font-family: var(--mono); font-size: 11px; font-weight: 600; line-height: 1;
     font-variant-numeric: tabular-nums; vertical-align: 1px;
   }
-  .overlay:not(.scrolled) .badge { background: #fff; color: var(--ink); }
   .call {
-    display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-6);
-    border: 1px solid currentColor; border-radius: var(--radius-pill);
-    text-decoration: none; font-size: var(--t-sm); font-weight: 500; font-variant-numeric: tabular-nums;
-    transition: background-color 180ms, color 180ms;
+    display: inline-flex; align-items: center; min-height: 42px; padding: 0 var(--space-4);
+    border: 1px solid var(--line); border-radius: var(--radius-s); background: rgba(255, 255, 255, 0.02);
+    text-decoration: none; font-family: var(--mono); font-size: var(--t-xs); font-weight: 500; letter-spacing: 0.04em; font-variant-numeric: tabular-nums;
+    transition: background-color 180ms, color 180ms, border-color 180ms;
   }
-  .call:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
-  .overlay:not(.scrolled) .call:hover { background: #fff; border-color: #fff; color: var(--ink); }
+  .call:hover { background: var(--signal); border-color: var(--signal); color: var(--signal-ink); }
   .menu-btn {
-    display: none; justify-self: end; width: 44px; height: 44px; border-radius: 50%;
-    background: transparent; border: 1px solid currentColor; color: inherit; cursor: pointer;
+    display: none; justify-self: end; width: 44px; height: 44px; border-radius: var(--radius-s);
+    background: transparent; border: 1px solid var(--line); color: inherit; cursor: pointer;
     align-items: center; justify-content: center;
   }
   .mobile-menu { background: var(--bg); color: var(--fg); border-top: 1px solid var(--line); }

@@ -34,7 +34,7 @@ const description = `${p.name} — ${brand.name}${brand.origin ? ` (${brand.orig
 
       <div class="main">
         <div class="media" data-media>
-          <figure class="photo" data-stage>
+          <figure class="photo" data-stage data-mode="cut">
             <img src={p.image} alt={p.name} width="900" height="900" fetchpriority="high" data-stage-img />
             {video && <video data-stage-video controls playsinline preload="none" poster={video.poster} hidden><source src={video.src} type="video/mp4" /></video>}
           </figure>
@@ -116,21 +116,24 @@ const description = `${p.name} — ${brand.name}${brand.origin ? ` (${brand.orig
   }
   .photo img, .photo video { width: 100%; height: 100%; object-fit: contain; min-height: 0; }
   /* lifestyle photos and the video sit on the cabin tone, edge to edge */
-  .photo[data-mode='photo'], .photo[data-mode='video'] { background: var(--ink); border-color: var(--ink); padding: 0; }
-  .photo video { background: var(--ink); }
+  .photo[data-mode='cut'] { background: var(--well); }
+  .photo[data-mode='cut'] img { mix-blend-mode: multiply; }
+  .photo[data-mode='photo'], .photo[data-mode='video'] { background: var(--deep); border-color: var(--line); padding: 0; }
+  .photo video { background: var(--deep); }
 
   .thumbs { list-style: none; margin: 0; padding: 2px; display: flex; gap: var(--space-2); overflow-x: auto; scrollbar-width: thin; }
   .thumbs li { flex: none; }
   .thumb {
     position: relative; display: block; width: 76px; height: 76px; padding: 0; overflow: hidden; cursor: pointer;
-    border: 1px solid var(--studio-line); border-radius: var(--radius-s); background: var(--ink);
+    border: 1px solid var(--studio-line); border-radius: var(--radius-s); background: var(--deep);
     transition: border-color 160ms, opacity 160ms; opacity: 0.72;
   }
-  .thumb.is-cut { background: var(--studio-card); }
+  .thumb.is-cut { background: var(--well); }
+  .thumb.is-cut img { mix-blend-mode: multiply; }
   .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .thumb.is-cut img { object-fit: contain; padding: 6px; }
   .thumb:hover { opacity: 1; border-color: var(--graphite); }
-  .thumb[aria-current='true'] { opacity: 1; border: 2px solid var(--ink); }
+  .thumb[aria-current='true'] { opacity: 1; border: 2px solid var(--signal); }
   .thumb:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
   .play {
     position: absolute; inset: 0; margin: auto; width: 30px; height: 30px; border-radius: 50%;
@@ -146,13 +149,13 @@ const description = `${p.name} — ${brand.name}${brand.origin ? ` (${brand.orig
   .brand a { color: var(--ink); text-decoration: none; }
   .brand a:hover { text-decoration: underline; }
   .origin { font-size: var(--t-sm); color: var(--graphite); font-weight: 400; }
-  h1 { font-size: var(--t-3xl); font-stretch: 104%; font-weight: 300; line-height: 1.08; letter-spacing: -0.01em; text-wrap: balance; }
+  h1 { font-size: var(--t-3xl); font-weight: 600; line-height: 1.08; letter-spacing: -0.01em; text-wrap: balance; }
   .cat { color: var(--graphite); font-size: var(--t-sm); }
 
   .actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-2); }
   .btn-outline { background: transparent; border-color: var(--studio-line); color: var(--ink); }
   .btn-outline:hover { border-color: var(--ink); }
-  .btn-outline[aria-pressed='true'] { border-color: var(--ink); background: var(--studio-card); }
+  .btn-outline[aria-pressed='true'] { border-color: var(--signal); color: var(--signal); background: transparent; }
   .note { min-height: 1.5em; font-size: var(--t-sm); color: var(--graphite); }
   .note a { color: var(--signal); font-weight: 600; }
 
@@ -170,7 +173,7 @@ const description = `${p.name} — ${brand.name}${brand.origin ? ` (${brand.orig
   .facts a { color: var(--signal); }
 
   .more { padding-block: 0 var(--space-24); }
-  .more h2 { font-size: var(--t-xl); font-stretch: 104%; font-weight: 400; margin-bottom: var(--space-6); padding-top: var(--space-12); border-top: 1px solid var(--studio-line); }
+  .more h2 { font-size: var(--t-xl); font-weight: 600; margin-bottom: var(--space-6); padding-top: var(--space-12); border-top: 1px solid var(--studio-line); }
   .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-6); }
 
   @media (max-width: 900px) {

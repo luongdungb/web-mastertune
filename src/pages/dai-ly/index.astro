@@ -97,7 +97,7 @@ const mapUrl = (d: { name: string; address: string }) => `https://www.google.com
   .chips input { position: absolute; opacity: 0; pointer-events: none; }
   .chips span { display: inline-flex; align-items: center; min-height: 40px; padding: 0 var(--space-4); border-radius: var(--radius-pill); border: 1px solid var(--studio-line); background: var(--studio-card); font-size: var(--t-sm); }
   .chips label:hover span { border-color: var(--ink); }
-  .chips input:checked + span { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .chips input:checked + span { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
   .chips input:focus-visible + span { outline: 2px solid var(--signal); outline-offset: 2px; }
   .row { display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; }
   .field select, .field input { min-height: 44px; padding: 0 var(--space-4); border-radius: var(--radius-s); border: 1px solid var(--studio-line); background: var(--studio-card); color: var(--ink); font-size: var(--t-sm); }

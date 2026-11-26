@@ -64,7 +64,7 @@ const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,
   .chips input { position: absolute; opacity: 0; pointer-events: none; }
   .chips span { display: inline-flex; align-items: center; min-height: 40px; padding: 0 var(--space-4); border-radius: var(--radius-pill); border: 1px solid var(--studio-line); background: var(--studio-card); font-size: var(--t-sm); white-space: nowrap; }
   .chips label:hover span { border-color: var(--ink); }
-  .chips input:checked + span { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .chips input:checked + span { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
   .chips input:focus-visible + span { outline: 2px solid var(--signal); outline-offset: 2px; }
   .search input { width: 100%; min-height: 44px; padding: 0 var(--space-4); border-radius: var(--radius-s); border: 1px solid var(--studio-line); background: var(--studio-card); font-size: var(--t-sm); }
 
@@ -73,7 +73,7 @@ const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,
   .car { display: grid; gap: 2px; padding: var(--space-4) var(--space-6); background: var(--studio-card); border: 1px solid var(--studio-line); border-radius: var(--radius-m); text-decoration: none; color: var(--ink); height: 100%; transition: border-color 160ms; }
   .car:hover { border-color: var(--ink); }
   .brand { font-size: var(--t-xs); color: var(--graphite); font-weight: 600; }
-  .model { font-size: var(--t-xl); font-stretch: 104%; font-weight: 400; }
+  .model { font-size: var(--t-xl); font-weight: 600; }
   .meta { font-size: var(--t-xs); color: var(--graphite); }
   .missing { margin-top: var(--space-12); display: flex; gap: var(--space-4); align-items: center; flex-wrap: wrap; color: var(--graphite); }
 </style>

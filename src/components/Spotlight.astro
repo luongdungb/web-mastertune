@@ -1,46 +1,66 @@
 ---
-// Four product tiles under the hero (src/data/spotlight.json). A tile with a product video plays a short
-// silent loop while on screen; clicking it opens the full video. Without a video the product photo drifts slowly.
+// Four product spotlights (src/data/spotlight.json) in a balanced 2 x 2 grid. A tile with a product
+// video plays a short silent loop while on screen; clicking it opens the full film.
+// Without a video, the product photo sits in a light-box well and drifts slowly.
 import spotlight from '../data/spotlight.json';
-import { products, brandOf, mediaOf } from '../lib/catalog';
+import { products, brandOf, mediaOf, keySpecs, categoryOf } from '../lib/catalog';
+
+interface Props { headingLevel?: 'h1' | 'h2' }
+const { headingLevel = 'h2' } = Astro.props;
+const Heading = headingLevel;
 
 const tones: Record<string, string> = { 'Mới về': 'new', 'Bán chạy': 'hot', 'Nổi bật': 'pick' };
 const tiles = spotlight
-  .map((s) => {
+  .map((s, i) => {
     const p = products.find((x) => x.slug === s.slug);
     if (!p) return null;
     const { video } = mediaOf(p);
-    return { ...s, p, brand: brandOf(p), video, tone: tones[s.tag] ?? 'pick' };
+    return { ...s, i, p, brand: brandOf(p), cat: categoryOf(p), video, specs: keySpecs(p, 2), tone: tones[s.tag] ?? 'pick' };
   })
   .filter((t): t is NonNullable<typeof t> => t !== null);
+const total = String(tiles.length).padStart(2, '0');
 ---
 <section class="spotlight" aria-labelledby="spot-title">
   <div class="wrap">
     <div class="head">
-      <div>
-        <p class="eyebrow">Sản phẩm nổi bật</p>
-        <h2 id="spot-title" class="display">Tâm điểm</h2>
+      <div class="head-l">
+        <p class="eyebrow">Tâm điểm</p>
+        <Heading id="spot-title" class="display">Âm thanh xe hơi hi-end, phân phối chính hãng</Heading>
       </div>
-      <a class="all" href="/san-pham">Tất cả sản phẩm <span aria-hidden="true">›</span></a>
+      <div class="head-r">
+        <p class="muted">Bốn thiết bị đang được chọn nhiều nhất. Bấm vào ô có video để xem phim sản phẩm.</p>
+        <a class="all" href="/san-pham">Tất cả sản phẩm <span aria-hidden="true">›</span></a>
+      </div>
     </div>
+
     <ul class="tiles">
       {tiles.map((t) => (
         <li class="tile">
+          <span class="cross k-tl" aria-hidden="true"></span>
+          <span class="cross k-br" aria-hidden="true"></span>
           {t.video ? (
             <button type="button" class="media has-video" data-open-video={t.video.src} data-title={t.p.name} data-href={`/san-pham/${t.p.slug}`} aria-label={`Xem video ${t.p.name}`}>
               <video muted loop playsinline preload="none" poster={t.video.poster} data-loop={t.video.loop ?? t.video.src} aria-hidden="true"></video>
-              <span class="play" aria-hidden="true"></span>
-              <span class:list={['tag', t.tone]}>{t.tag}</span>
+              <span class="play" aria-hidden="true"><span>Xem phim</span></span>
             </button>
           ) : (
-            <a class="media has-photo" href={`/san-pham/${t.p.slug}`} tabindex="-1" aria-hidden="true">
+            <a class="media has-photo well" href={`/san-pham/${t.p.slug}`} tabindex="-1" aria-hidden="true">
               <img src={t.p.image} alt="" width="900" height="900" loading="lazy" decoding="async" />
-              <span class:list={['tag', t.tone]}>{t.tag}</span>
             </a>
           )}
-          <div class="bar">
-            {t.brand.logo ? <img class="brand-logo" src={t.brand.logo} alt={t.brand.name} width="80" height="27" loading="lazy" /> : <span class="brand-name">{t.brand.name}</span>}
-            <a class="name" href={`/san-pham/${t.p.slug}`}><span class="sr-only">{t.p.name}: </span><span aria-hidden="true">{t.label}</span></a>
+          <span class:list={['tag', t.tone]}>{t.tag}</span>
+          <span class="idx" aria-hidden="true">{String(t.i + 1).padStart(2, '0')} / {total}</span>
+          <div class="info">
+            <div class="who">
+              {t.brand.logo ? <img class="brand-logo" src={t.brand.logo} alt={t.brand.name} width="80" height="27" loading="lazy" /> : <span class="brand-name">{t.brand.name}</span>}
+              <span class="cat">{t.cat?.label}</span>
+            </div>
+            <h3><a href={`/san-pham/${t.p.slug}`}>{t.label}</a></h3>
+            {t.specs.length > 0 && (
+              <dl class="specs">
+                {t.specs.map((s) => <div><dt>{s.k}</dt><dd>{s.v}</dd></div>)}
+              </dl>
+            )}
             <span class="go" aria-hidden="true">›</span>
           </div>
         </li>
@@ -63,66 +83,91 @@ const tiles = spotlight
 </section>
 
 <style>
-  .spotlight { padding-block: clamp(3rem, 6vw, 5rem) clamp(4rem, 7vw, 6rem); }
-  .head { display: flex; justify-content: space-between; align-items: end; gap: var(--space-6); margin-bottom: var(--space-8); }
-  .head h2 { font-size: var(--t-3xl); margin-top: var(--space-2); }
-  .all { font-size: var(--t-sm); font-weight: 500; text-decoration: none; padding: var(--space-2) 0; border-bottom: 1px solid currentColor; white-space: nowrap; }
+  .spotlight { padding-block: clamp(2.5rem, 5vw, 4rem) clamp(4rem, 7vw, 6rem); }
+  .head { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--space-8); align-items: end; margin-bottom: var(--space-8); }
+  .head-l { display: grid; gap: var(--space-4); }
+  .head :global(h1), .head :global(h2) { font-size: var(--t-3xl); max-width: 22ch; }
+  .head-r { display: grid; gap: var(--space-4); justify-items: start; }
+  .head-r p { max-width: 42ch; font-size: var(--t-sm); line-height: 1.6; }
+  .all { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; padding: var(--space-2) 0; border-bottom: 1px solid var(--signal); color: var(--fg); }
   .all:hover { color: var(--signal); }
 
-  .tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+  /* balanced 2 x 2: every tile the same weight */
+  .tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
   .tile {
-    position: relative; display: grid; background: var(--surface); border-radius: var(--radius-m);
-    overflow: hidden; box-shadow: var(--shadow-soft); border: 1px solid rgba(13, 17, 23, 0.06);
-    transition: box-shadow 220ms var(--ease-out), transform 220ms var(--ease-out);
+    position: relative; display: grid; grid-template-rows: auto 1fr; background: var(--surface);
+    border: 1px solid var(--line); border-radius: var(--radius-l); overflow: hidden;
+    transition: border-color 220ms var(--ease-out), transform 220ms var(--ease-out);
   }
-  .tile:hover { box-shadow: var(--shadow-lift); transform: translateY(-2px); }
-  .media {
-    position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; padding: 0; border: 0; margin: 0;
-    cursor: pointer; background: var(--ink); width: 100%;
-  }
-  .media video { width: 100%; height: 100%; object-fit: cover; }
-  .has-photo { background: #fff; }
-  .has-photo img { width: 100%; height: 100%; object-fit: contain; padding: 8% 14%; transform-origin: 50% 55%; }
+  .tile:hover { border-color: #3a3e45; transform: translateY(-2px); }
+  .tile .cross { z-index: 3; opacity: 0.7; }
+  .k-tl { top: 12px; right: 12px; }
+  .k-br { bottom: 12px; right: 12px; }
+
+  .media { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; padding: 0; border: 0; margin: 0; width: 100%; cursor: pointer; background: var(--deep); }
+  .media video { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease-out); }
+  .tile:hover .media video { transform: scale(1.03); }
+  .has-photo { background: var(--well); }
+  .has-photo img { width: 100%; height: 100%; object-fit: contain; padding: 7% 18%; transform-origin: 50% 55%; mix-blend-mode: multiply; }
   @media (prefers-reduced-motion: no-preference) {
     .has-photo img { animation: drift 14s ease-in-out infinite alternate; }
-    @keyframes drift { from { transform: scale(1) translateY(0); } to { transform: scale(1.1) translateY(-2%); } }
+    @keyframes drift { from { transform: scale(1) translateY(0); } to { transform: scale(1.08) translateY(-2%); } }
   }
-  .tag {
-    position: absolute; top: 12px; left: 12px; padding: 4px 10px; border-radius: var(--radius-pill);
-    font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.4;
-  }
-  .tag.new { background: var(--ink); color: #fff; }
-  .tag.hot { background: var(--signal); color: #fff; }
-  .tag.pick { background: linear-gradient(135deg, #fbfcfd, #c4ced7); color: var(--ink); box-shadow: inset 0 0 0 1px rgba(13, 17, 23, 0.08); }
   .play {
-    position: absolute; right: 12px; bottom: 12px; width: 34px; height: 34px; border-radius: 50%;
-    background: rgba(255, 255, 255, 0.92); box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3); transition: transform 200ms var(--ease-out);
+    position: absolute; left: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: var(--space-2);
+    padding: 6px 12px 6px 8px; border-radius: var(--radius-s); background: rgba(11, 12, 14, 0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.14); font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg);
+    transition: background-color 200ms, color 200ms;
   }
-  .play::after { content: ''; position: absolute; left: 13px; top: 10px; border-style: solid; border-width: 7px 0 7px 11px; border-color: transparent transparent transparent var(--ink); }
-  .media:hover .play { transform: scale(1.08); }
+  .play::before { content: ''; width: 0; height: 0; border-style: solid; border-width: 5px 0 5px 8px; border-color: transparent transparent transparent var(--signal); margin-left: 4px; }
+  .media:hover .play { background: var(--signal); color: var(--signal-ink); }
+  .media:hover .play::before { border-left-color: var(--signal-ink); }
 
-  .bar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); }
-  .brand-logo { height: 20px; width: auto; max-width: 80px; object-fit: contain; filter: brightness(0); opacity: 0.8; }
-  .brand-name { font-size: var(--t-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-2); }
-  .name { font-weight: 600; font-size: var(--t-sm); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  /* the whole bar is the link to the product */
-  .name::after { content: ''; position: absolute; inset: auto 0 0 0; height: 52px; }
-  .go { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); font-size: 18px; line-height: 1; transition: background-color 180ms, color 180ms; }
-  .bar:hover .go { background: var(--ink); color: #fff; }
+  .tag {
+    position: absolute; top: 14px; left: 14px; z-index: 2; padding: 4px 10px; border-radius: 4px;
+    font-family: var(--mono); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.4;
+  }
+  .tag.new { background: var(--signal); color: var(--signal-ink); }
+  .tag.hot { background: var(--fg); color: var(--bg); }
+  .tag.pick { background: rgba(11, 12, 14, 0.75); color: var(--fg); border: 1px solid rgba(255, 255, 255, 0.25); }
+  .idx { position: absolute; top: 16px; right: 36px; z-index: 2; font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.75); mix-blend-mode: difference; }
 
-  .vid-dialog { width: min(100% - 2rem, 1080px); padding: 0; border: 0; border-radius: var(--radius-l); background: var(--surface); color: var(--fg); box-shadow: 0 30px 80px rgba(13, 17, 23, 0.35); }
-  .vid-dialog::backdrop { background: rgba(30, 44, 58, 0.55); backdrop-filter: blur(6px); }
+  .info { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto auto; column-gap: var(--space-4); row-gap: var(--space-2); padding: var(--space-4) var(--space-6) var(--space-6); }
+  .who { grid-column: 1; display: flex; align-items: center; gap: var(--space-3); min-width: 0; }
+  .brand-logo { height: 18px; width: auto; max-width: 84px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.85; }
+  .brand-name { font-family: var(--mono); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+  .cat { font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cat::before { content: '/ '; color: var(--line); }
+  h3 { grid-column: 1; font-size: var(--t-xl); font-weight: 700; letter-spacing: -0.01em; }
+  h3 a { text-decoration: none; }
+  /* the whole tile below the media is the product link */
+  h3 a::after { content: ''; position: absolute; inset: 0; }
+  .specs { grid-column: 1; margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-6); font-family: var(--mono); font-size: 0.75rem; }
+  .specs div { display: flex; gap: var(--space-2); }
+  .specs dt { color: var(--fg-2); text-transform: uppercase; letter-spacing: 0.04em; }
+  .specs dd { margin: 0; color: var(--fg); }
+  .go {
+    grid-column: 2; grid-row: 1 / span 3; align-self: center; width: 44px; height: 44px; border-radius: var(--radius-s);
+    display: grid; place-items: center; border: 1px solid var(--line); font-size: 20px; transition: background-color 180ms, color 180ms, border-color 180ms;
+  }
+  .tile:hover .go { background: var(--signal); border-color: var(--signal); color: var(--signal-ink); }
+
+  .vid-dialog { width: min(100% - 2rem, 1080px); padding: 0; border: 1px solid var(--line); border-radius: var(--radius-l); background: var(--surface); color: var(--fg); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); }
+  .vid-dialog::backdrop { background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px); }
   .vid-box { display: grid; gap: var(--space-4); padding: var(--space-4); justify-items: start; }
   .vid-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); width: 100%; padding-inline: var(--space-2); }
   .vid-head h3 { font-size: var(--t-lg); font-weight: 600; }
-  .close { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: transparent; display: grid; place-items: center; cursor: pointer; }
-  .close:hover { border-color: var(--fg); }
-  .vid-box video { width: 100%; aspect-ratio: 16 / 9; background: var(--ink); border-radius: var(--radius-m); }
+  .close { width: 40px; height: 40px; border-radius: var(--radius-s); border: 1px solid var(--line); background: transparent; display: grid; place-items: center; cursor: pointer; color: var(--fg); }
+  .close:hover { border-color: var(--fg-2); }
+  .vid-box video { width: 100%; aspect-ratio: 16 / 9; background: var(--deep); border-radius: var(--radius-m); }
 
-  @media (max-width: 1080px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 520px) {
+  @media (max-width: 860px) {
+    .head { grid-template-columns: 1fr; align-items: start; }
+  }
+  @media (max-width: 640px) {
     .tiles { grid-template-columns: 1fr; }
-    .head { align-items: start; flex-direction: column; gap: var(--space-3); }
+    .info { padding: var(--space-4); }
+    .idx { display: none; }
   }
 </style>
 
@@ -134,7 +179,7 @@ const tiles = spotlight
     for (const e of entries) {
       const v = e.target as HTMLVideoElement;
       if (e.isIntersecting && !reduce.matches) {
-        if (!v.src) { v.src = v.dataset.loop!; }
+        if (!v.src) v.src = v.dataset.loop!;
         v.play().catch(() => {});
       } else v.pause();
     }

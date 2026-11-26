@@ -21,11 +21,11 @@ const specs = keySpecs(p, 2);
   .card { display: block; min-width: 0; }
   .link { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-2); text-decoration: none; color: var(--ink); height: 100%; align-content: start; }
   .img {
-    aspect-ratio: 1; background: var(--studio-card); border: 1px solid var(--studio-line); border-radius: var(--radius-m);
+    aspect-ratio: 1; background: var(--well); border: 1px solid var(--studio-line); border-radius: var(--radius-m);
     display: grid; place-items: center; padding: var(--space-6); transition: border-color 180ms;
   }
-  .img img { width: 100%; height: 100%; object-fit: contain; }
-  .link:hover .img { border-color: var(--ink); }
+  .img img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+  .link:hover .img { border-color: var(--signal); }
   .meta { font-size: var(--t-xs); color: var(--graphite); font-weight: 600; margin-top: var(--space-2); display: flex; gap: 6px; }
   .meta span { color: var(--studio-line); }
   h3 { font-size: var(--t-base); font-weight: 600; line-height: 1.3; }

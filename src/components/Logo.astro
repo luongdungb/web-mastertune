@@ -15,8 +15,6 @@ const { variant = 'inline', height = 36, class: cls = '' } = Astro.props;
 
 <style>
   .logo { display: inline-flex; align-items: center; gap: calc(var(--h) * 0.22); height: var(--h); }
-  /* chrome on light surfaces: a hairline shadow gives the bevel an edge */
-  .logo, .logo-stacked { filter: drop-shadow(0 1px 1px rgba(13, 17, 23, 0.28)) drop-shadow(0 3px 8px rgba(13, 17, 23, 0.12)); }
   .logo img { height: 100%; width: auto; }
   .logo .word { height: 92%; }
   .logo-stacked { display: block; }

@@ -26,10 +26,10 @@
 <style is:global>
   .cmp-picker {
     width: min(720px, calc(100vw - 2rem)); max-height: min(86vh, 900px); padding: 0;
-    border: 1px solid var(--studio-line); border-radius: var(--radius-m); background: var(--studio); color: var(--ink); color-scheme: light;
+    border: 1px solid var(--studio-line); border-radius: var(--radius-m); background: var(--studio); color: var(--ink); color-scheme: dark;
   }
   .cmp-picker[open] { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; }
-  .cmp-picker::backdrop { background: rgba(30, 44, 58, 0.5); backdrop-filter: blur(6px); }
+  .cmp-picker::backdrop { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px); }
   .cmp-head { display: flex; justify-content: space-between; align-items: start; gap: var(--space-4); padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--studio-line); }
   .cmp-head h2 { font-size: var(--t-lg); font-weight: 600; }
   .cmp-sub { font-size: var(--t-sm); color: var(--graphite); }
@@ -39,7 +39,7 @@
   .cmp-search input { width: 100%; min-height: 44px; padding: 0 var(--space-3); border: 1px solid var(--studio-line); border-radius: var(--radius-s); background: var(--studio-card); font-size: var(--t-sm); }
   .cmp-list { list-style: none; margin: 0; padding: 0 var(--space-6); overflow-y: auto; }
   .cmp-list li { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: var(--space-3); align-items: center; padding: var(--space-3) 0; border-top: 1px solid var(--studio-line); }
-  .cmp-list img { width: 64px; height: 64px; object-fit: contain; background: #fff; border-radius: var(--radius-s); }
+  .cmp-list img { width: 64px; height: 64px; object-fit: contain; background: var(--well); border-radius: var(--radius-s); padding: 4px; }
   .cmp-list .nm { font-weight: 600; font-size: var(--t-sm); line-height: 1.3; }
   .cmp-list .sub { font-size: var(--t-xs); color: var(--graphite); }
   .cmp-list button {
@@ -47,7 +47,7 @@
     background: transparent; color: var(--ink); cursor: pointer; font-size: var(--t-xs); font-weight: 600; white-space: nowrap;
   }
   .cmp-list button:hover:not([disabled]) { border-color: var(--ink); }
-  .cmp-list button[aria-pressed='true'] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .cmp-list button[aria-pressed='true'] { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
   .cmp-list button[disabled] { opacity: 0.4; cursor: not-allowed; }
   .cmp-list .none { display: block; color: var(--graphite); padding: var(--space-8) 0; border: 0; }
   .cmp-foot { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); padding: var(--space-4) var(--space-6); border-top: 1px solid var(--studio-line); }

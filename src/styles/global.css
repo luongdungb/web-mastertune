@@ -1,32 +1,36 @@
-@import '@fontsource-variable/saira/standard.css';
+@import '@fontsource-variable/exo-2/index.css';
+@import '@fontsource-variable/jetbrains-mono/index.css';
 
 /* ============ MASTERTUNE design tokens ============
-   Light "mist" look: cool blue-grey gradients, airy white surfaces, thin wide display type,
-   black pill for the main action, chrome logo. */
+   Dark technical look: near-black stage, charcoal panels, hairline grid with crosshair marks,
+   pale lime for the one main action, chrome logo. Product photos (shot on white) sit in light
+   "light-box" wells so they read like studio pedestals in the dark.
+   Type: Exo 2 (automotive, full Vietnamese) + JetBrains Mono for [// labels] and spec readouts. */
 :root {
-  --bg: #eef2f5;             /* page background */
-  --surface: #ffffff;        /* cards, raised surfaces */
-  --surface-2: #f5f8fa;      /* nested / hover surfaces */
-  --line: #d5dde4;           /* hairlines */
-  --fg: #0d1117;             /* primary text */
-  --fg-2: #56616d;           /* secondary text */
-  --signal: #2b5c86;         /* links, accents, focus (steel blue) */
-  --signal-hover: #1f4a6e;
-  --signal-ink: #ffffff;
-  --studio: #f7f9fb;         /* alternate section background */
-  --studio-card: #ffffff;
-  --graphite: #56616d;
-  --ink: #0d1117;
-  --studio-line: #d5dde4;
+  --bg: #0b0c0e;             /* page background */
+  --surface: #141518;        /* cards, panels */
+  --surface-2: #1c1e22;      /* nested / hover */
+  --line: #272a30;           /* hairlines */
+  --grid: rgba(255, 255, 255, 0.06); /* decorative grid lines */
+  --fg: #ecedef;             /* primary text */
+  --fg-2: #9ba0a8;           /* secondary text */
+  --signal: #d6f5b8;         /* accent: pale lime (main action, active states) */
+  --signal-hover: #e6fbd2;
+  --signal-ink: #0b0c0e;     /* text on the accent */
+  --deep: #050506;           /* media backgrounds */
+  --studio: #0f1012;         /* alternate section background */
+  --studio-card: #141518;
+  --graphite: #9ba0a8;
+  --ink: #ecedef;            /* primary text inside sections (kept for older rules) */
+  --studio-line: #272a30;
+  /* light-box well for product photos shot on white */
+  --well: radial-gradient(120% 100% at 50% 25%, #ffffff 0%, #eceef1 55%, #d9dce1 100%);
+  --on-mist: #ecedef;
+  --shadow-soft: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-lift: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 20px 50px rgba(0, 0, 0, 0.55);
 
-  /* the mist: hero cards and media frames */
-  --mist: linear-gradient(135deg, #c6d4de 0%, #a3b8c8 42%, #b4c6d3 70%, #d5e0e8 100%);
-  --mist-deep: #8fa7b9;
-  --on-mist: #10202e;        /* readable text on the mist (white only for the giant display words) */
-  --shadow-soft: 0 1px 2px rgba(13, 17, 23, 0.04), 0 8px 24px rgba(13, 17, 23, 0.06);
-  --shadow-lift: 0 2px 4px rgba(13, 17, 23, 0.05), 0 18px 40px rgba(13, 17, 23, 0.10);
-
-  --font: 'Saira Variable', 'Saira', system-ui, sans-serif;
+  --font: 'Exo 2 Variable', 'Exo 2', system-ui, sans-serif;
+  --mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
   --t-xs: 0.8125rem;
   --t-sm: 0.9375rem;
   --t-base: 1.0625rem;
@@ -34,7 +38,7 @@
   --t-xl: 1.75rem;
   --t-2xl: clamp(2rem, 1.4rem + 2.4vw, 3rem);
   --t-3xl: clamp(2.5rem, 1.6rem + 3.6vw, 4.25rem);
-  --t-hero: clamp(3.5rem, 0.5rem + 11vw, 12rem);
+  --t-hero: clamp(3rem, 1rem + 7.5vw, 8rem);
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -49,14 +53,14 @@
 
   --wrap: 1280px;
   --gutter: clamp(1.25rem, 4vw, 3rem);
-  --frame: clamp(0.5rem, 1vw, 0.875rem);  /* inset of the big rounded hero cards */
-  --radius-s: 10px;
-  --radius-m: 18px;
-  --radius-l: 28px;
+  --frame: clamp(0.5rem, 1vw, 0.875rem);
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 16px;
   --radius-pill: 999px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --header-h: 76px;
-  color-scheme: light;
+  --header-h: 72px;
+  color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -69,7 +73,6 @@ body {
   font-family: var(--font);
   font-size: var(--t-base);
   line-height: 1.6;
-  font-stretch: 100%;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -79,12 +82,12 @@ a { color: inherit; }
 button, input, select, textarea { font: inherit; color: inherit; }
 h1, h2, h3, h4 { margin: 0; line-height: 1.1; font-weight: 600; }
 p { margin: 0; }
+::selection { background: var(--signal); color: var(--signal-ink); }
 
-/* Display: thin and wide, the brand voice. Headings only. */
+/* Display: confident, slightly tight. Headings only. */
 .display {
-  font-stretch: 112%;
-  font-weight: 300;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  letter-spacing: -0.015em;
   line-height: 1.04;
   text-wrap: balance;
 }
@@ -92,7 +95,11 @@ p { margin: 0; }
 .wrap { width: min(100% - 2 * var(--gutter), var(--wrap)); margin-inline: auto; }
 .measure { max-width: 62ch; }
 .muted { color: var(--fg-2); }
-.eyebrow { font-size: var(--t-xs); font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-2); }
+/* [// LABEL] — the technical caption voice */
+.eyebrow { font-family: var(--mono); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
+.eyebrow::before { content: '[// '; color: var(--signal); }
+.eyebrow::after { content: ']'; color: var(--signal); }
+.mono { font-family: var(--mono); }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -100,47 +107,56 @@ p { margin: 0; }
 }
 .skip-link {
   position: absolute; left: var(--space-4); top: -100px; z-index: 100;
-  background: var(--ink); color: #fff; padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-pill); text-decoration: none;
+  background: var(--signal); color: var(--signal-ink); padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-s); text-decoration: none;
 }
 .skip-link:focus { top: var(--space-4); }
 
-:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; border-radius: 6px; }
+:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; border-radius: 4px; }
 
-/* Buttons: pills. Black for the one main action, outlines for the rest. */
+/* Buttons: compact, squared. Lime for the one main action. */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
-  min-height: 48px; padding: 0 var(--space-6);
-  border-radius: var(--radius-pill); border: 1px solid transparent;
-  font-weight: 500; font-size: var(--t-sm); text-decoration: none; cursor: pointer; white-space: nowrap;
-  transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out), border-color 180ms var(--ease-out), box-shadow 180ms var(--ease-out);
+  min-height: 46px; padding: 0 var(--space-6);
+  border-radius: var(--radius-s); border: 1px solid transparent;
+  font-weight: 600; font-size: var(--t-sm); text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out), border-color 180ms var(--ease-out);
 }
-.btn-primary, .btn-ink { background: var(--ink); color: #fff; box-shadow: 0 6px 18px rgba(13, 17, 23, 0.18); }
-.btn-primary:hover, .btn-ink:hover { background: #26303c; }
-.btn-light { background: #fff; color: var(--ink); box-shadow: var(--shadow-soft); }
-.btn-light:hover { background: var(--surface-2); }
-.btn-ghost { border-color: rgba(13, 17, 23, 0.22); color: var(--fg); background: transparent; }
-.btn-ghost:hover { border-color: var(--fg); }
-/* on the mist / photos */
-.btn-glass { border-color: rgba(255, 255, 255, 0.75); color: #fff; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-.btn-glass:hover { background: rgba(255, 255, 255, 0.2); }
+.btn-primary { background: var(--signal); color: var(--signal-ink); }
+.btn-primary:hover { background: var(--signal-hover); }
+.btn-ink, .btn-light { background: var(--fg); color: var(--bg); }
+.btn-ink:hover, .btn-light:hover { background: #ffffff; }
+.btn-ghost, .btn-glass { border-color: var(--line); color: var(--fg); background: rgba(255, 255, 255, 0.02); }
+.btn-ghost:hover, .btn-glass:hover { border-color: var(--fg-2); background: rgba(255, 255, 255, 0.05); }
 
-/* Inner-page title block: a smaller mist card from the same family as the home hero.
-   Re-pointing the text tokens turns every page's own title styles white without touching them. */
+/* Product photos shot on white: a light-box well, the white melts into the gradient */
+.well { background: var(--well); }
+.well img, img.well { mix-blend-mode: multiply; }
+
+/* Hairline grid with crosshair marks: section backdrops and title blocks */
+.gridded {
+  position: relative; isolation: isolate;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 100% 25%, 25% 100%;
+}
+.cross { position: absolute; width: 15px; height: 15px; pointer-events: none; }
+.cross::before, .cross::after { content: ''; position: absolute; background: rgba(255, 255, 255, 0.45); }
+.cross::before { left: 7px; top: 0; width: 1px; height: 15px; }
+.cross::after { top: 7px; left: 0; height: 1px; width: 15px; }
+
+/* Inner-page title block: a charcoal panel with the grid and a soft light at the top right */
 .page-head {
-  --fg: var(--on-mist); --fg-2: #2f4558; --graphite: #2f4558;
-  --signal: var(--on-mist); --line: rgba(16, 32, 46, 0.18); --studio-line: rgba(16, 32, 46, 0.18);
   position: relative; isolation: isolate; overflow: hidden;
   margin: var(--frame) var(--frame) 0; border-radius: var(--radius-l);
-  background: var(--mist); color: var(--on-mist);
-}
-.page-head::before {
-  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(55% 90% at 82% 0%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 70%),
-    radial-gradient(40% 70% at 0% 100%, rgba(120, 146, 166, 0.35), rgba(120, 146, 166, 0) 70%);
+    radial-gradient(50% 120% at 85% 0%, rgba(214, 245, 184, 0.07), rgba(214, 245, 184, 0) 70%),
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 100% 33.33%,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 12.5% 100%,
+    var(--surface);
+  border: 1px solid var(--line);
 }
-.page-head .display { font-weight: 200; }
 
 /* Alternate sections */
 .studio { background: var(--studio); color: var(--ink); }

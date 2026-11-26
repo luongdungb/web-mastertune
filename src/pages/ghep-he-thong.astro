@@ -129,10 +129,10 @@ const catCount = Object.fromEntries(categories.map((c) => [c.slug, c.count]));
 
   .summary {
     position: sticky; top: calc(var(--header-h) + var(--space-6));
-    background: var(--surface); color: var(--fg); border-radius: var(--radius-l); padding: var(--space-6); box-shadow: var(--shadow-lift);
+    background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: var(--radius-l); padding: var(--space-6);
     display: grid; gap: var(--space-4);
   }
-  .summary h2 { font-size: var(--t-xl); font-stretch: 104%; font-weight: 400; }
+  .summary h2 { font-size: var(--t-xl); font-weight: 600; }
   .total { color: var(--fg-2); font-size: var(--t-sm); margin-top: calc(-1 * var(--space-3)); }
   .customer { display: grid; gap: var(--space-3); }
   .customer label { display: grid; gap: 6px; font-size: var(--t-sm); color: var(--fg-2); }
@@ -152,10 +152,10 @@ const catCount = Object.fromEntries(categories.map((c) => [c.slug, c.count]));
   /* picker dialog */
   .picker {
     width: min(720px, calc(100vw - 2rem)); max-height: min(86vh, 900px); padding: 0;
-    border: 1px solid var(--studio-line); border-radius: var(--radius-m); background: var(--studio); color: var(--ink); color-scheme: light;
+    border: 1px solid var(--studio-line); border-radius: var(--radius-m); background: var(--studio); color: var(--ink); color-scheme: dark;
   }
   .picker[open] { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; }
-  .picker::backdrop { background: rgba(30, 44, 58, 0.5); backdrop-filter: blur(6px); }
+  .picker::backdrop { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px); }
   .picker-head { display: flex; justify-content: space-between; align-items: center; padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--studio-line); }
   .picker-head h2 { font-size: var(--t-lg); font-weight: 600; }
   .close { width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; border-radius: 50%; display: grid; place-items: center; color: var(--ink); }
@@ -165,11 +165,11 @@ const catCount = Object.fromEntries(categories.map((c) => [c.slug, c.count]));
   .picker-filters input { flex: 1; min-width: 0; }
   .picker-list { list-style: none; margin: 0; padding: 0 var(--space-6); overflow-y: auto; }
   .picker-list li { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: var(--space-3); align-items: center; padding: var(--space-3) 0; border-top: 1px solid var(--studio-line); }
-  .picker-list img { width: 64px; height: 64px; object-fit: contain; background: #fff; border-radius: var(--radius-s); }
+  .picker-list img { width: 64px; height: 64px; object-fit: contain; background: var(--well); border-radius: var(--radius-s); padding: 4px; }
   .picker-list .nm { font-weight: 600; font-size: var(--t-sm); line-height: 1.3; }
   .picker-list .sub { font-size: var(--t-xs); color: var(--graphite); }
   .picker-list .pick { min-height: 40px; }
-  .picker-list .pick[aria-pressed='true'] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .picker-list .pick[aria-pressed='true'] { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
   .picker-list .none { display: block; color: var(--graphite); padding: var(--space-8) 0; border: 0; }
   .picker-foot { padding: var(--space-4) var(--space-6); border-top: 1px solid var(--studio-line); display: flex; justify-content: flex-end; }
 
