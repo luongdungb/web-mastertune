@@ -28,7 +28,7 @@ const total = String(tiles.length).padStart(2, '0');
         <Heading id="spot-title" class="display">Âm thanh xe hơi hi-end, phân phối chính hãng</Heading>
       </div>
       <div class="head-r">
-        <p class="muted">Bốn thiết bị đang được chọn nhiều nhất. Bấm vào ô có video để xem phim sản phẩm.</p>
+        <p class="muted">Bốn thiết bị đang được chọn nhiều nhất. Bấm “Xem phim” để xem phim sản phẩm.</p>
         <a class="all" href="/san-pham">Tất cả sản phẩm <span aria-hidden="true">›</span></a>
       </div>
     </div>
@@ -39,10 +39,10 @@ const total = String(tiles.length).padStart(2, '0');
           <span class="cross k-tl" aria-hidden="true"></span>
           <span class="cross k-br" aria-hidden="true"></span>
           {t.video ? (
-            <button type="button" class="media has-video" data-open-video={t.video.src} data-title={t.p.name} data-href={`/san-pham/${t.p.slug}`} aria-label={`Xem video ${t.p.name}`}>
+            <div class="media has-video" data-media>
               <video muted loop playsinline preload="none" poster={t.video.poster} data-loop={t.video.loop ?? t.video.src} aria-hidden="true"></video>
-              <span class="play" aria-hidden="true"><span>Xem phim</span></span>
-            </button>
+              <button type="button" class="play" data-open-video={t.video.src} data-title={t.p.name} data-href={`/san-pham/${t.p.slug}`} aria-label={`Xem video ${t.p.name}`}><span>Xem phim</span></button>
+            </div>
           ) : (
             <a class="media has-photo well" href={`/san-pham/${t.p.slug}`} tabindex="-1" aria-hidden="true">
               <img src={t.p.image} alt="" width="900" height="900" loading="lazy" decoding="async" />
@@ -104,7 +104,9 @@ const total = String(tiles.length).padStart(2, '0');
   .k-tl { top: 12px; right: 12px; }
   .k-br { bottom: 12px; right: 12px; }
 
-  .media { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; padding: 0; border: 0; margin: 0; width: 100%; cursor: pointer; background: var(--deep); }
+  .media { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; padding: 0; border: 0; margin: 0; width: 100%; background: var(--deep); }
+  .has-photo { cursor: pointer; }
+  @media (hover: hover) and (pointer: fine) { .has-video { cursor: pointer; } }
   .media video { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease-out); }
   .tile:hover .media video { transform: scale(1.03); }
   .has-photo { background: var(--well); }
@@ -117,8 +119,9 @@ const total = String(tiles.length).padStart(2, '0');
     position: absolute; left: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: var(--space-2);
     padding: 6px 12px 6px 8px; border-radius: var(--radius-s); background: rgba(11, 12, 14, 0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.14); font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg);
-    transition: background-color 200ms, color 200ms;
+    min-height: 40px; cursor: pointer; transition: background-color 200ms, color 200ms;
   }
+  .play:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
   .play::before { content: ''; width: 0; height: 0; border-style: solid; border-width: 5px 0 5px 8px; border-color: transparent transparent transparent var(--signal); margin-left: 4px; }
   .media:hover .play { background: var(--signal); color: var(--signal-ink); }
   .media:hover .play::before { border-left-color: var(--signal-ink); }
@@ -199,16 +202,23 @@ const total = String(tiles.length).padStart(2, '0');
   const player = dialog?.querySelector<HTMLVideoElement>('[data-vid-player]');
   const title = dialog?.querySelector<HTMLElement>('[data-vid-title]');
   const link = dialog?.querySelector<HTMLAnchorElement>('[data-vid-link]');
-  document.querySelectorAll<HTMLButtonElement>('[data-open-video]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      if (!dialog || !player) return;
-      player.src = btn.dataset.openVideo!;
-      title!.textContent = btn.dataset.title!;
-      link!.href = btn.dataset.href!;
-      dialog.showModal();
-      player.play().catch(() => {});
-    });
-  });
+  const open = (btn: HTMLButtonElement) => {
+    if (!dialog || !player) return;
+    player.src = btn.dataset.openVideo!;
+    title!.textContent = btn.dataset.title!;
+    link!.href = btn.dataset.href!;
+    dialog.showModal();
+    player.play().catch(() => {});
+  };
+  document.querySelectorAll<HTMLButtonElement>('[data-open-video]').forEach((btn) => btn.addEventListener('click', () => open(btn)));
+  // The loop picture itself is not a button: on phones a finger scrolling past kept opening the
+  // film. Touch screens open it only with "Xem phim"; with a mouse the whole picture opens it too.
+  const mouse = matchMedia('(hover: hover) and (pointer: fine)');
+  document.querySelectorAll<HTMLElement>('[data-media]').forEach((m) => m.addEventListener('click', (e) => {
+    const btn = m.querySelector<HTMLButtonElement>('[data-open-video]');
+    if (!mouse.matches || !btn || (e.target as Element).closest('[data-open-video]')) return;
+    open(btn);
+  }));
   const shut = () => { player?.pause(); dialog?.close(); };
   dialog?.querySelector('[data-vid-close]')?.addEventListener('click', shut);
   dialog?.addEventListener('click', (e) => { if (e.target === dialog) shut(); });
